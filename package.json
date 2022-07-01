@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "files": [
-    "dist"
+    "dist",
+    "src/**/**.scss"
   ],
   "main": "./dist/esm/main.js",
   "module": "./dist/esm/main.js",
