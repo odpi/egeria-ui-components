@@ -74,7 +74,7 @@ __MACOSX
 .java-version
 *.graphml
 
-# Ignore private maven repo 
+# Ignore private maven repo
 .repository
 
 # exclude temporary lock files
@@ -104,3 +104,5 @@ jitdump*dmp
 !gradle/**
 .gradle/
 build/
+
+node_modules

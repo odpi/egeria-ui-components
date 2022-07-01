@@ -1,11 +1,15 @@
-import React from 'react';
+import { EgeriaLineage } from '../Lineage';
 
 import './index.scss';
 
 export function App() {
   return (
     <div className="container">
-      <h1>Egeria UI Components</h1>
+      <div>
+        <h1>EgeriaLineage</h1>
+
+        <EgeriaLineage lineage="end-to-end" />
+      </div>
     </div>
   );
 }
