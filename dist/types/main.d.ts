@@ -1,2 +1,3 @@
 import { EgeriaLineage } from './components/Lineage';
-export { EgeriaLineage };
+import { Tex } from './components/Tex';
+export { EgeriaLineage, Tex };
