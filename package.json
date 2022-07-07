@@ -10,7 +10,7 @@
   "module": "./dist/esm/main.js",
   "types": "./dist/types/main.d.ts",
   "dependencies": {
-    "@mantine/core": "^4.2.9",
+    "@mantine/core": "^4.2.12",
     "@mantine/hooks": "^4.2.9",
     "@mantine/next": "^4.2.9",
     "d3": "^7.4.4",
