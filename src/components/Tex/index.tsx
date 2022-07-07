@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './index.scss';
-
 export function Tex() {
   return <>
     <div className="container">
