@@ -1,8 +1,8 @@
-import { EgeriaLineage } from './components/Lineage';
-import { Tex } from './components/Tex';
+import { EgeriaLineage } from './components/Lineage/EgeriaLineage';
+import { EgeriaGlossary } from './components/Glossary';
 
 export {
   // components
   EgeriaLineage,
-  Tex
+  EgeriaGlossary
 }

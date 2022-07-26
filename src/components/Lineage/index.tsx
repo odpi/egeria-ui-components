@@ -1,40 +1,44 @@
-import { Tabs } from '@mantine/core';
-import { useState } from 'react';
+import React from "react";
 
-enum LINEAGE {
-  END_TO_END = 'end-to-end',
-  VERTICAL_LINEAGE = 'vertical-lineage',
-  ULTIMATE_SOURCE = 'ultimate-source',
-  ULTIMATE_DESTINATION = 'ultimate-destination'
-}
+import {
+  HappiGraph,
+  HappiGraphActions
+} from 'happi-graph';
+
+import 'happi-graph/src/components/HappiGraph/happi-graph.scss';
+
+
+import { mockData } from "./mockData";
+
+
+const rawData = {
+  ...mockData
+};
 
 interface Props {
-  lineage: string;
 }
 
-export function EgeriaLineage(props: Props) {
-  const { lineage } = props;
-
-  const indexOfLineage = Object.values(LINEAGE).indexOf(lineage as LINEAGE)
-
-  const [activeTab, setActiveTab] = useState(indexOfLineage);
-
-  return (
-    <>
-      <Tabs grow active={activeTab} onTabChange={(tabIndex: number) => { setActiveTab(tabIndex) }}>
-        <Tabs.Tab label={LINEAGE.END_TO_END}>
-
-        </Tabs.Tab>
-        <Tabs.Tab label={LINEAGE.VERTICAL_LINEAGE} disabled>
-
-        </Tabs.Tab>
-        <Tabs.Tab label={LINEAGE.ULTIMATE_SOURCE}>
-
-        </Tabs.Tab>
-        <Tabs.Tab label={LINEAGE.ULTIMATE_DESTINATION}>
-
-        </Tabs.Tab>
-      </Tabs>
-    </>
-  );
+interface State {
 }
+
+/**
+ *
+ * React component used for displaying the Home page.
+ *
+ * @since      0.1.0
+ * @access     public
+ *
+ */
+class Lineage extends React.Component<Props, State> {
+  render() {
+    return (<>
+      <HappiGraph rawData={{...rawData}}
+                  algorithm={""}
+                  graphDirection={"VERTICAL"}
+                  selectedNodeId={"term@68e36496-7167-4af7-abdd-a0cd36e24084:6662c0f2.e1b1ec6c.66k78i6du.uchsna1.rn2epa.rfn2fjqf7h4qvmt5lflm8"}
+                  actions={<HappiGraphActions rawData={{...rawData}}/>} />
+    </>);
+  }
+}
+
+export default Lineage;

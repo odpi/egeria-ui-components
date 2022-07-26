@@ -2,7 +2,7 @@ import { EgeriaLineage } from '../Lineage';
 
 import './index.scss';
 
-export function App() {
+export function Demo() {
   return (
     <div className="container">
       <div>
