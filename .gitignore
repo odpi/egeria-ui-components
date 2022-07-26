@@ -105,4 +105,7 @@ jitdump*dmp
 .gradle/
 build/
 
+# dist folder
+#dist/
+
 node_modules
