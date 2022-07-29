@@ -9,11 +9,13 @@
   "main": "./dist/esm/main.js",
   "module": "./dist/esm/main.js",
   "types": "./dist/types/main.d.ts",
+  "dependencies": {
+    "egeria-ui-core": "github:sarbull/egeria-ui-core#main"
+  },
   "peerDependencies": {
     "@mantine/core": "4.2.9",
     "@mantine/hooks": "4.2.9",
     "@mantine/next": "4.2.9",
-    "egeria-ui-core": "github:sarbull/egeria-ui-core#main",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tabler-icons-react": "1.54.0",
