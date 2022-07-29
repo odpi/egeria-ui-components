@@ -10,21 +10,17 @@
   "module": "./dist/esm/main.js",
   "types": "./dist/types/main.d.ts",
   "dependencies": {
-    "@mantine/core": "^4.2.9",
-    "@mantine/hooks": "^4.2.9",
-    "@mantine/next": "^4.2.9",
-    "d3": "^7.4.4",
-    "egeria-ui-core": "github:odpi/egeria-ui-core#main",
-    "elkjs": "^0.7.1",
-    "happi-graph": "github:odpi/happi-graph#react",
+    "egeria-ui-core": "github:sarbull/egeria-ui-core#main"
+  },
+  "peerDependencies": {
+    "@mantine/core": "4.2.9",
+    "@mantine/hooks": "4.2.9",
+    "@mantine/next": "4.2.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.4.0",
-    "rxjs": "^7.5.5",
-    "tabler-icons-react": "^1.51.0",
-    "typescript": "^4.7.3",
-    "web-vitals": "^2.1.4",
-    "web-worker": "^1.2.0"
+    "tabler-icons-react": "1.54.0",
+    "web-vitals": "2.1.4",
+    "web-worker": "1.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -55,12 +51,12 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
-    "@types/d3": "^7.4.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.11.40",
     "@types/react": "^18.0.12",
     "@types/react-dom": "^18.0.5",
     "node-sass": "^7.0.1",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "typescript": "^4.7.3"
   }
 }

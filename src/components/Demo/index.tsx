@@ -1,4 +1,4 @@
-import { EgeriaLineage } from '../Lineage';
+import { EgeriaLineage } from '../Lineage/EgeriaLineage';
 
 import './index.scss';
 
