@@ -2,13 +2,13 @@ import React from "react";
 import { getComponent } from 'egeria-js-commons';
 import { NameSuggestions } from "./name-suggestions";
 import { TypesSuggestions } from "./types-suggestions";
-import {IconButton, Tooltip} from "@mui/material";
-import HelpIcon from '@mui/icons-material/Help';
-import { authHeaderWithContentType, egeriaFetch } from 'egeria-ui-core';
+// import {IconButton, Tooltip} from "@mui/material";
+// import HelpIcon from '@mui/icons-material/Help';
+import { authHeaderWithContentType, egeriaFetch } from 'egeria-js-commons';
 
 import { Button } from '@mantine/core';
 
-import { AgGridReact } from 'ag-grid-react';
+// import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 
@@ -172,11 +172,11 @@ class LineageViewer extends React.Component<Props, State> {
             </div>
 
             <div className="m5 flex column">
-              <Tooltip title="Select a type before entering the name of the entity">
+              {/* <Tooltip title="Select a type before entering the name of the entity">
                 <IconButton>
                   <HelpIcon />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
             </div>
           </div>
 
@@ -214,10 +214,10 @@ class LineageViewer extends React.Component<Props, State> {
 
           <div className="content flex row flex-1">
             <div className="ag-theme-alpine" style={{height: 400, width: 600}}>
-              <AgGridReact className="full-height"
+              {/* <AgGridReact className="full-height"
                           rowData={data}
                           columnDefs={columnDefs}>
-              </AgGridReact>
+              </AgGridReact> */}
             </div>
           </div>
         </div>

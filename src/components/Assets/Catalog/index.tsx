@@ -10,8 +10,7 @@ import ReactDOM from "react-dom";
 import { getComponent } from 'egeria-js-commons';
 import { itemDescription, itemName } from "./helpers";
 import QualifiedName from "./qualified-name";
-import {authHeader, egeriaFetch } from 'egeria-ui-core';
-import { types } from '../../api/types';
+import {authHeader, egeriaFetch, types } from 'egeria-js-commons';
 interface Props {
   location: any;
 }

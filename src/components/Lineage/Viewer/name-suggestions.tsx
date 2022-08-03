@@ -1,10 +1,9 @@
 import * as React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+// import TextField from '@mui/material/TextField';
+// import Autocomplete from '@mui/material/Autocomplete';
 import { Loader } from '@mantine/core';
 import {SyntheticEvent} from "react";
-import {getComponent} from "../../../commons";
-import {lineage} from "../../api/lineage";
+import { getComponent, lineage } from "egeria-js-commons";
 
 export function NameSuggestions(props: any) {
 
@@ -46,33 +45,34 @@ export function NameSuggestions(props: any) {
 
 
     return (
-        <Autocomplete
-            freeSolo
-            id={props.itemId}
-            sx={{width: 300}}
-            open={open}
-            onOpen={() => {setOpen(true);}}
-            onClose={() => {setOpen(false);}}
-            getOptionLabel={(option: any) => option}
-            onInputChange={onInputChange}
-            options={options}
-            loading={loading}
-            filterOptions={(x: any) => x}
-            renderInput={(params: any) => (
-                <TextField
-                    {...params}
-                    label={props.searchedItem ? "Searched Name" : "Related Name"}
-                    InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                            <React.Fragment>
-                                {loading ? <Loader size="sm" /> : null}
-                                {params.InputProps.endAdornment}
-                            </React.Fragment>
-                        ),
-                    }}
-                />
-            )}
-        />
+      <></>
+        // <Autocomplete
+        //     freeSolo
+        //     id={props.itemId}
+        //     sx={{width: 300}}
+        //     open={open}
+        //     onOpen={() => {setOpen(true);}}
+        //     onClose={() => {setOpen(false);}}
+        //     getOptionLabel={(option: any) => option}
+        //     onInputChange={onInputChange}
+        //     options={options}
+        //     loading={loading}
+        //     filterOptions={(x: any) => x}
+        //     renderInput={(params: any) => (
+        //         <TextField
+        //             {...params}
+        //             label={props.searchedItem ? "Searched Name" : "Related Name"}
+        //             InputProps={{
+        //                 ...params.InputProps,
+        //                 endAdornment: (
+        //                     <React.Fragment>
+        //                         {loading ? <Loader size="sm" /> : null}
+        //                         {params.InputProps.endAdornment}
+        //                     </React.Fragment>
+        //                 ),
+        //             }}
+        //         />
+        //     )}
+        // />
     );
 }
