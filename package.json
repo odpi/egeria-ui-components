@@ -10,7 +10,7 @@
   "module": "./dist/esm/main.js",
   "types": "./dist/types/main.d.ts",
   "dependencies": {
-    "egeria-ui-core": "github:sarbull/egeria-ui-core#main"
+    "egeria-ui-core": "github:odpi/egeria-ui-core#main"
   },
   "peerDependencies": {
     "@mantine/core": "4.2.9",
