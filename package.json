@@ -16,6 +16,7 @@
     "@mantine/core": "4.2.9",
     "@mantine/hooks": "4.2.9",
     "@mantine/next": "4.2.9",
+    "happi-graph": "github:odpi/happi-graph#react",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tabler-icons-react": "1.54.0",

@@ -1,8 +1,8 @@
-import { EgeriaLineage } from './components/Lineage/EgeriaLineage';
+import { EgeriaLineageGraph } from './components/Lineage/Graph';
 import { EgeriaGlossary } from './components/Glossary';
 
 export {
   // components
-  EgeriaLineage,
+  EgeriaLineageGraph,
   EgeriaGlossary
 }
