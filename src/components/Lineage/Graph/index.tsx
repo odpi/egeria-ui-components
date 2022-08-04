@@ -37,6 +37,7 @@ export function EgeriaLineageGraph(props: Props) {
         <Tabs.Tab label={LINEAGE.END_TO_END}>
           <HappiGraph rawData={{...rawData}}
                       algorithm={"VISJS"}
+                      debug={false}
                       graphDirection={"HORIZONTAL"}
                       selectedNodeId={selectedNodeId}
                       actions={<HappiGraphActions rawData={{...rawData}}/>} />
@@ -44,6 +45,7 @@ export function EgeriaLineageGraph(props: Props) {
         <Tabs.Tab label={LINEAGE.VERTICAL_LINEAGE}>
           <HappiGraph rawData={{...rawData}}
                         algorithm={"ELK"}
+                        debug={false}
                         graphDirection={"VERTICAL"}
                         selectedNodeId={selectedNodeId}
                         actions={<HappiGraphActions rawData={{...rawData}}/>} />
@@ -51,6 +53,7 @@ export function EgeriaLineageGraph(props: Props) {
         <Tabs.Tab label={LINEAGE.ULTIMATE_SOURCE}>
           <HappiGraph rawData={{...rawData}}
                         algorithm={"VISJS"}
+                        debug={false}
                         graphDirection={"HORIZONTAL"}
                         selectedNodeId={selectedNodeId}
                         actions={<HappiGraphActions rawData={{...rawData}}/>} />
@@ -58,6 +61,7 @@ export function EgeriaLineageGraph(props: Props) {
         <Tabs.Tab label={LINEAGE.ULTIMATE_DESTINATION}>
           <HappiGraph rawData={{...rawData}}
                         algorithm={"VISJS"}
+                        debug={false}
                         graphDirection={"HORIZONTAL"}
                         selectedNodeId={selectedNodeId}
                         actions={<HappiGraphActions rawData={{...rawData}}/>} />
