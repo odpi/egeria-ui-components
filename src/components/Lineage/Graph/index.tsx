@@ -82,12 +82,12 @@ export function EgeriaLineageGraph(props: Props) {
   return (
     <div className="egeria-lineage">
      <Tabs grow
-            style={{height: '100%', position: 'relative'}}
+            style={{height: '100%'}}
             initialTab={getIndexOfLineage(lineageType)}
             active={getIndexOfLineage(lineageType)}
             onTabChange={(value) => onTabChange(value)}>
           <Tabs.Tab label={LINEAGE.END_TO_END}>
-            { loading && <LoadingOverlay visible/> }
+            { loading && <div style={{height: '100%', position: 'relative'}}><LoadingOverlay visible/></div> }
             { !loading && <HappiGraph rawData={{...rawData}}
                           algorithm={"VISJS"}
                           debug={false}
@@ -96,7 +96,7 @@ export function EgeriaLineageGraph(props: Props) {
                           actions={<HappiGraphActions rawData={{...rawData}}/>} /> }
           </Tabs.Tab>
           <Tabs.Tab label={LINEAGE.VERTICAL_LINEAGE}>
-          { loading && <LoadingOverlay visible/> }
+          { loading && <div style={{height: '100%', position: 'relative'}}><LoadingOverlay visible/></div> }
           { !loading && <HappiGraph rawData={{...rawData}}
                           algorithm={"ELK"}
                           debug={false}
@@ -105,7 +105,7 @@ export function EgeriaLineageGraph(props: Props) {
                           actions={<HappiGraphActions rawData={{...rawData}}/>} /> }
           </Tabs.Tab>
           <Tabs.Tab label={LINEAGE.ULTIMATE_SOURCE}>
-          { loading && <LoadingOverlay visible/> }
+          { loading && <div style={{height: '100%', position: 'relative'}}><LoadingOverlay visible/></div> }
           { !loading && <HappiGraph rawData={{...rawData}}
                           algorithm={"VISJS"}
                           debug={false}
@@ -114,7 +114,7 @@ export function EgeriaLineageGraph(props: Props) {
                           actions={<HappiGraphActions rawData={{...rawData}}/>} /> }
           </Tabs.Tab>
           <Tabs.Tab label={LINEAGE.ULTIMATE_DESTINATION}>
-          { loading && <LoadingOverlay visible/> }
+          { loading && <div style={{height: '100%', position: 'relative'}}><LoadingOverlay visible/></div> }
           { !loading && <HappiGraph rawData={{...rawData}}
                           algorithm={"VISJS"}
                           debug={false}
