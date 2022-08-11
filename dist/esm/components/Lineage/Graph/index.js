@@ -8,12 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { LoadingOverlay, Tabs } from '@mantine/core';
+import { Modal, LoadingOverlay, Tabs } from '@mantine/core';
 import { egeriaFetch, authHeader } from 'egeria-js-commons';
 import { HappiGraph, HappiGraphActions } from 'happi-graph';
 import 'happi-graph/src/components/HappiGraph/happi-graph.scss';
 import './index.scss';
 import { useEffect, useState } from 'react';
+import { EgeriaSelectedNode } from './SelectedNode';
 var LINEAGE;
 (function (LINEAGE) {
     LINEAGE["END_TO_END"] = "end-to-end";
@@ -32,6 +33,8 @@ export function EgeriaLineageGraph(props) {
     const initialData = { nodes: [], edges: [] };
     const [rawData, setRawData] = useState(initialData);
     const [loading, setLoading] = useState(false);
+    const [opened, setOpened] = useState(false);
+    const [selectedNodeData, setSelectedNodeData] = useState(undefined);
     // TODO: extract URL to URL Map
     const uri = (lineageType) => `${apiUrl}/api/lineage/entities/${guid}/${lineageType}`;
     const fetchData = (uri) => __awaiter(this, void 0, void 0, function* () {
@@ -51,5 +54,5 @@ export function EgeriaLineageGraph(props) {
         setLoading(true);
         fetchData(uri(lineageType));
     }, []);
-    return (_jsx("div", Object.assign({ className: "egeria-lineage" }, { children: _jsxs(Tabs, Object.assign({ grow: true, style: { height: '100%' }, initialTab: getIndexOfLineage(lineageType), active: getIndexOfLineage(lineageType), onTabChange: (value) => onTabChange(value) }, { children: [_jsxs(Tabs.Tab, Object.assign({ label: LINEAGE.END_TO_END }, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && _jsx(HappiGraph, { rawData: Object.assign({}, rawData), algorithm: "VISJS", debug: false, graphDirection: "HORIZONTAL", selectedNodeId: guid, actions: _jsx(HappiGraphActions, { rawData: Object.assign({}, rawData) }) })] })), _jsxs(Tabs.Tab, Object.assign({ label: LINEAGE.VERTICAL_LINEAGE }, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && _jsx(HappiGraph, { rawData: Object.assign({}, rawData), algorithm: "ELK", debug: false, graphDirection: "VERTICAL", selectedNodeId: guid, actions: _jsx(HappiGraphActions, { rawData: Object.assign({}, rawData) }) })] })), _jsxs(Tabs.Tab, Object.assign({ label: LINEAGE.ULTIMATE_SOURCE }, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && _jsx(HappiGraph, { rawData: Object.assign({}, rawData), algorithm: "VISJS", debug: false, graphDirection: "HORIZONTAL", selectedNodeId: guid, actions: _jsx(HappiGraphActions, { rawData: Object.assign({}, rawData) }) })] })), _jsxs(Tabs.Tab, Object.assign({ label: LINEAGE.ULTIMATE_DESTINATION }, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && _jsx(HappiGraph, { rawData: Object.assign({}, rawData), algorithm: "VISJS", debug: false, graphDirection: "HORIZONTAL", selectedNodeId: guid, actions: _jsx(HappiGraphActions, { rawData: Object.assign({}, rawData) }) })] }))] })) })));
+    return (_jsxs("div", Object.assign({ className: "egeria-lineage" }, { children: [_jsx(Modal, Object.assign({ opened: opened, onClose: () => setOpened(false), withCloseButton: false, centered: true, size: "50%" }, { children: _jsx(EgeriaSelectedNode, { selectedNode: selectedNodeData }) })), _jsxs(Tabs, Object.assign({ grow: true, style: { height: '100%' }, initialTab: getIndexOfLineage(lineageType), active: getIndexOfLineage(lineageType), onTabChange: (value) => onTabChange(value) }, { children: [_jsxs(Tabs.Tab, Object.assign({ label: LINEAGE.END_TO_END }, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && _jsx(HappiGraph, { rawData: Object.assign({}, rawData), algorithm: "VISJS", debug: false, graphDirection: "HORIZONTAL", selectedNodeId: guid, actions: _jsx(HappiGraphActions, { rawData: Object.assign({}, rawData) }), onNodeClick: (d) => { setSelectedNodeData(d); setOpened(true); } })] })), _jsxs(Tabs.Tab, Object.assign({ label: LINEAGE.VERTICAL_LINEAGE }, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && _jsx(HappiGraph, { rawData: Object.assign({}, rawData), algorithm: "ELK", debug: false, graphDirection: "VERTICAL", selectedNodeId: guid, actions: _jsx(HappiGraphActions, { rawData: Object.assign({}, rawData) }), onNodeClick: (d) => { setSelectedNodeData(d); setOpened(true); } })] })), _jsxs(Tabs.Tab, Object.assign({ label: LINEAGE.ULTIMATE_SOURCE }, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && _jsx(HappiGraph, { rawData: Object.assign({}, rawData), algorithm: "VISJS", debug: false, graphDirection: "HORIZONTAL", selectedNodeId: guid, actions: _jsx(HappiGraphActions, { rawData: Object.assign({}, rawData) }), onNodeClick: (d) => { setSelectedNodeData(d); setOpened(true); } })] })), _jsxs(Tabs.Tab, Object.assign({ label: LINEAGE.ULTIMATE_DESTINATION }, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && _jsx(HappiGraph, { rawData: Object.assign({}, rawData), algorithm: "VISJS", debug: false, graphDirection: "HORIZONTAL", selectedNodeId: guid, actions: _jsx(HappiGraphActions, { rawData: Object.assign({}, rawData) }), onNodeClick: (d) => { setSelectedNodeData(d); setOpened(true); } })] }))] }))] })));
 }
