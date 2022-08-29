@@ -21,12 +21,14 @@ const getProperties = (object, key) => {
     }
 };
 const renderTable = (column, object, key) => {
-    return (_jsxs(Table, Object.assign({ striped: true }, { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: column }), _jsx("th", {})] }) }), _jsx("tbody", { children: object &&
-                    object[key] &&
-                    getProperties(object, key)
+    let properties = [];
+    if (object && object[key]) {
+        properties = getProperties(object, key);
+    }
+    return _jsx(_Fragment, { children: properties.length > 0 && _jsxs(Table, Object.assign({ striped: true }, { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: column }), _jsx("th", {})] }) }), _jsx("tbody", { children: properties
                         .map((p, index) => {
                         return (_jsxs("tr", { children: [_jsx("td", { children: _jsx("strong", { children: p }) }), _jsx("td", { children: object[key][p] })] }, index));
-                    }) })] })));
+                    }) })] })) });
 };
 export function EgeriaAssetDetails(props) {
     const [loading, setLoading] = useState(false);

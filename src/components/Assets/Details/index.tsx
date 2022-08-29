@@ -12,7 +12,13 @@ const getProperties = (object: any, key: string) => {
 };
 
 const renderTable = (column: string, object: any, key: string) => {
-  return (<Table striped>
+  let properties: any = [];
+
+  if(object && object[key]) {
+    properties = getProperties(object, key);
+  }
+
+  return <>{ properties.length > 0 && <Table striped>
     <thead>
       <tr>
         <th>{ column }</th>
@@ -20,9 +26,7 @@ const renderTable = (column: string, object: any, key: string) => {
       </tr>
     </thead>
     <tbody>
-      { object &&
-        object[key] &&
-        getProperties(object, key)
+      { properties
           .map((p: any, index: number) => {
             return (
               <tr key={index}>
@@ -30,10 +34,9 @@ const renderTable = (column: string, object: any, key: string) => {
                 <td>{ object[key][p] }</td>
               </tr>
             );
-          })
-      }
+          }) }
     </tbody>
-  </Table>);
+  </Table> }</>;
 };
 
 interface Props {
