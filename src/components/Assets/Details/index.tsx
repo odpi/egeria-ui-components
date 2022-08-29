@@ -1,122 +1,78 @@
-import React from "react";
-// import 'carbon-web-components/es/components/data-table';
-// import 'carbon-web-components/es/components/breadcrumb';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { egeriaFetch, authHeader } from 'egeria-js-commons';
+import { LoadingOverlay, Table } from '@mantine/core';
+
+const getProperties = (object: any, key: string) => {
+  if(object && object[key]) {
+    return Object.keys(object[key]);
+  } else {
+    return [];
+  }
+};
+
+const renderTable = (column: string, object: any, key: string) => {
+  return (<Table striped>
+    <thead>
+      <tr>
+        <th>{ column }</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      { object &&
+        object[key] &&
+        getProperties(object, key)
+          .map((p: any, index: number) => {
+            return (
+              <tr key={index}>
+                <td><strong>{ p }</strong></td>
+                <td>{ object[key][p] }</td>
+              </tr>
+            );
+          })
+      }
+    </tbody>
+  </Table>);
+};
 
 interface Props {
-  match: any;
+  guid?: any;
+  apiUrl?: any;
 }
 
-interface State {
-  asset: any;
+export function EgeriaAssetDetails(props: Props) {
+  const [loading, setLoading] = useState(false);
+  const [asset, setAsset] = useState(undefined);
+
+  const { apiUrl } = props;
+  const { guid: guidFromParams } = useParams();
+  let { guid } = props;
+
+  if(!guid) {
+    guid = guidFromParams;
+  }
+
+  const fetchData = async (uri: string) => {
+    const res = await egeriaFetch(uri, 'GET', authHeader(), {});
+    const data = await res.json();
+
+    setAsset(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    setLoading(true);
+
+    fetchData(`${apiUrl}/api/assets/${ guid }`);
+  }, [apiUrl, guid]);
+
+  return <>
+    { loading && <div style={{height: '100%', position: 'relative'}}><LoadingOverlay visible/></div> }
+    { !loading && <>
+      { renderTable('Properties', asset, 'properties') }
+      { renderTable('Type', asset, 'type') }
+      { renderTable('Origin', asset, 'origin') }
+    </> }
+  </>;
 }
-
-/**
- *
- * React component used for AssetDetails.
- *
- * @since      0.1.0
- * @access     public
- *
- */
-class AssetDetails extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {
-      asset: null
-    };
-  }
-
-  componentDidMount() {
-    const { match } = this.props;
-
-    egeriaFetch(`/api/assets/${ match.params.uuid }`, 'GET', authHeader(), {}).then(data => {
-      return data.json();
-    }).then(data => {
-      this.setState({
-        asset: data
-      });
-    });
-  }
-
-  getProperties(object: any, key: string) {
-    if(object && object[key]) {
-      return Object.keys(object[key]);
-    } else {
-      return [];
-    }
-  }
-
-  renderTable(column: string, object: any, key: string) {
-    if(object && object[key]) {
-      return (<></>
-        // <bx-data-table>
-        //   <bx-table>
-        //     <bx-table-head>
-        //       <bx-table-header-row>
-        //         <bx-table-header-cell>{ column }</bx-table-header-cell>
-        //         <bx-table-header-cell></bx-table-header-cell>
-        //       </bx-table-header-row>
-        //     </bx-table-head>
-        //     <bx-table-body>
-        //       { object && this.getProperties(object, key).map((p: any) => {
-        //           return (
-        //             <bx-table-row key={p}>
-        //               <bx-table-cell><strong>{ p }</strong></bx-table-cell>
-        //               <bx-table-cell>{ object[key][p] }</bx-table-cell>
-        //             </bx-table-row>
-        //           );
-        //         })
-        //       }
-        //     </bx-table-body>
-        //   </bx-table>
-        // </bx-data-table>
-      );
-    }
-  }
-
-  renderBreadcrumbSample() {
-    // const { match } = this.props;
-
-    return(<></>
-    //   <bx-breadcrumb role="nav">
-    //     <bx-breadcrumb-item role="listitem">
-    //       <bx-breadcrumb-link href={`${process.env.REACT_APP_ROOT_PATH}`} size="">Home</bx-breadcrumb-link>
-    //     </bx-breadcrumb-item>
-
-    //     <bx-breadcrumb-item role="listitem">
-    //       <bx-breadcrumb-link href={`${process.env.REACT_APP_ROOT_PATH}/assets/catalog`} size="">Catalog</bx-breadcrumb-link>
-    //     </bx-breadcrumb-item>
-
-    //     <bx-breadcrumb-item role="listitem">
-    //       <bx-breadcrumb-link href={`${process.env.REACT_APP_ROOT_PATH}/assets/${ match.params.uuid }/details`}>{ match.params.uuid }</bx-breadcrumb-link>
-    //     </bx-breadcrumb-item>
-
-    //     <bx-breadcrumb-item role="listitem">
-    //       <bx-breadcrumb-link aria-current="page" size="">details</bx-breadcrumb-link>
-    //     </bx-breadcrumb-item>
-    // </bx-breadcrumb>
-    );
-  }
-
-  render() {
-    // const { asset } = this.state;
-
-    return (<></>
-      // <div>
-      //   { this.renderBreadcrumbSample() }
-      //   <br/>
-      //   { this.renderTable('Properties', asset, 'properties') }
-      //   <br/>
-      //   <br/>
-      //   { this.renderTable('Type', asset, 'type') }
-      //   <br/>
-      //   <br/>
-      //   { this.renderTable('Origin', asset, 'origin') }
-      // </div>
-    );
-  }
-}
-
-export default AssetDetails;
