@@ -9,6 +9,7 @@ import {
 import 'happi-graph/src/components/HappiGraph/happi-graph.scss';
 
 import './index.scss';
+
 import { useEffect, useState } from 'react';
 import { EgeriaSelectedNode } from './SelectedNode';
 
@@ -55,7 +56,7 @@ export function EgeriaLineageGraph(props: Props) {
   const [selectedNodeData, setSelectedNodeData] = useState(undefined);
 
   // TODO: extract URL to URL Map
-  const uri = (lineageType: any) => `${apiUrl}/api/lineage/entities/${ guid }/${ lineageType }`;
+  const uri = (lineageType: any) => `${apiUrl}/api/lineage/entities/${ guid }/${ lineageType }?includeProcesses=true`;
 
   const fetchData = async (uri: string) => {
     const res = await egeriaFetch(uri, 'GET', { ...authHeader() }, {});

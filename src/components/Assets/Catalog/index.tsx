@@ -266,7 +266,7 @@ export function EgeriaAssetCatalog(props: Props) {
       </div>
 
       <div>
-        <Button size="xs" compact fullWidth onClick={() => loadMore()} style={{marginBottom:1}}>
+        <Button size="xs" compact fullWidth onClick={() => loadMore()} style={{marginBottom:1, marginTop:10}}>
           Load more...
         </Button>
       </div>

@@ -36,7 +36,7 @@ export function EgeriaLineageGraph(props) {
     const [opened, setOpened] = useState(false);
     const [selectedNodeData, setSelectedNodeData] = useState(undefined);
     // TODO: extract URL to URL Map
-    const uri = (lineageType) => `${apiUrl}/api/lineage/entities/${guid}/${lineageType}`;
+    const uri = (lineageType) => `${apiUrl}/api/lineage/entities/${guid}/${lineageType}?includeProcesses=true`;
     const fetchData = (uri) => __awaiter(this, void 0, void 0, function* () {
         const res = yield egeriaFetch(uri, 'GET', Object.assign({}, authHeader()), {});
         const data = yield res.json();
