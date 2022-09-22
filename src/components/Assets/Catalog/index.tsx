@@ -1,359 +1,276 @@
-import React from "react";
-import ReactDOM from "react-dom";
-// import '@vaadin/vaadin-grid/vaadin-grid.js';
-// import '@vaadin/vaadin-grid/vaadin-grid-column.js';
-// import '@vaadin/vaadin-grid/vaadin-grid-filter.js';
-// import '@vaadin/vaadin-grid/vaadin-grid-sorter.js';
-// import '@vaadin/vaadin-grid/vaadin-grid-sort-column.js';
-// import '@vaadin/vaadin-grid/vaadin-grid-filter-column.js';
-// import '@vaadin/vaadin-checkbox/vaadin-checkbox.js';
-import { getComponent } from 'egeria-js-commons';
-import { itemDescription, itemName } from "./helpers";
-import QualifiedName from "./qualified-name";
-import {authHeader, egeriaFetch, types } from 'egeria-js-commons';
-interface Props {
-  location: any;
+import { useState, useEffect } from 'react';
+import { Checkbox, TextInput, MultiSelect, Button, LoadingOverlay } from '@mantine/core';
+import { authHeader, egeriaFetch } from 'egeria-js-commons';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+import QualifiedName from './qualified-name';
+import DisplayNameCellRenderer from './displayNameCellRenderer';
+
+const QUERY_MIN_LENGTH = 3;
+const TYPES_MIN_SELECTED = 1;
+const PAGE_SIZE_INCREASE_VALUE = 25;
+
+interface formData {
+  caseSensitive: boolean,
+  exactMatch: boolean,
+  pageSize: number,
+  q: string,
+  types: Array<string>
 }
 
-interface State {
-  data: any;
-  q: String;
-  types: Array<String>;
-  selectedTypes: Array<String>;
-  exactMatch: Boolean;
-  caseSensitive: Boolean;
-  pageSize: number;
-  isLoading: Boolean;
-}
+const emptyForm: formData = {
+  caseSensitive: false,
+  exactMatch: false,
+  pageSize: 25,
+  q: '',
+  types: []
+};
 
-/**
- *
- * React component used for AssetCatalog.
- *
- * @since      0.1.0
- * @access     public
- *
- */
-class AssetCatalog extends React.Component<Props, State> {
-  constructor(props: any) {
-    super(props);
+const emptyTypesData: Array<any> = [];
 
-    this.state = {
-      data: [],
-      q: '',
-      types: [],
-      selectedTypes: [],
-      exactMatch: false,
-      caseSensitive: false,
-      pageSize: 25,
-      isLoading: false
-    };
+const getQueryParams = (searchParams: any) => {
+  return {
+    q: searchParams.get('q') || '',
+    types: searchParams.get('types')?.split(',') || [],
+    exactMatch: searchParams.get('exactMatch') === "true" ? true : false,
+    caseSensitive: searchParams.get('caseSensitive') === "true" ? true : false,
+    pageSize: searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')) : PAGE_SIZE_INCREASE_VALUE
+  };
+};
+
+const getQueryParamsPath = (formData: formData) => {
+  const {q, exactMatch, caseSensitive, types, pageSize } = formData;
+
+  let queryParams = [];
+
+  if(q) {
+    queryParams.push(`q=${q}`);
   }
 
-  generateAssetSearchUrl() {
-    const {
-      q,
-      selectedTypes,
-      exactMatch,
-      caseSensitive,
-      pageSize
-    } = this.state;
-
-    let url = '/api/assets/search';
-
-    if(q) {
-      url = `${url}?q=${ q.trim() }`;
-    }
-
-    if(selectedTypes.length > 0) {
-      url = `${url}&types=${ selectedTypes.join(',') }`;
-    }
-
-    if(exactMatch) {
-      url = `${url}&exactMatch=${ exactMatch }`;
-    }
-
-    if(caseSensitive) {
-      url = `${url}&caseSensitive=${ caseSensitive }`;
-    }
-
-    if (pageSize > 25) {
-      url = `${url}&pageSize=${pageSize}`;
-    }
-
-    return url;
+  if(types && types.length > 0) {
+    queryParams.push(`types=${types.join(',')}`);
   }
 
-  loadMore() {
-    const { pageSize } = this.state;
-
-    this.setState({
-      pageSize: pageSize + 25
-    }, () => {
-      this.submit();
-    });
+  if(exactMatch) {
+    queryParams.push(`exactMatch=true`);
   }
 
-  handleSearchHistory() {
-    const {
-      q,
-      selectedTypes,
-      exactMatch,
-      caseSensitive,
-      pageSize
-    } = this.state;
-
-    let searchParams = [];
-
-    if(q) {
-      searchParams.push({'key': 'q', 'value': q.trim()});
-    }
-
-    if(selectedTypes.length) {
-      searchParams.push({'key': 'selectedTypes', 'value': selectedTypes.join(',')});
-    }
-
-    if(exactMatch) {
-      searchParams.push({'key': 'exactMatch', 'value': 'true' });
-    }
-
-    if(caseSensitive) {
-      searchParams.push({'key': 'caseSensitive', 'value': 'true' });
-    }
-
-    if(pageSize) {
-      searchParams.push({'key': 'pageSize', 'value': pageSize });
-    }
-
-    if (window.history.replaceState) {
-        const url = window.location.protocol
-                    + '//' + window.location.host
-                    + window.location.pathname
-                    + '?'
-                    + searchParams.map(s => `${s.key}=${s.value}`).join('&');
-
-        window.history.replaceState({
-          path: url
-        }, '', url)
-    }
+  if(caseSensitive) {
+    queryParams.push(`caseSensitive=true`);
   }
 
-  submit() {
-    const combobox: any = getComponent('#types');
-    const search: any = getComponent('#user-search');
-    const exactMatch: any = getComponent('#exact-match');
-    const caseSensitive: any = getComponent('#case-sensitive');
-    const { q, selectedTypes } = this.state;
-    const willSearch = q !== '' && selectedTypes.length > 0;
-
-    this.setState({
-      isLoading: willSearch ? true : false,
-      selectedTypes: combobox.selectedItems.map((i: any) => i.id) || [],
-      caseSensitive: caseSensitive.checked || false,
-      exactMatch: exactMatch.checked || false,
-      q: search.value || ''
-    }, () => {
-      const url = this.generateAssetSearchUrl();
-      if(willSearch) {
-        this.handleSearchHistory();
-
-        egeriaFetch(url, 'GET', authHeader(), {}).then(response => {
-          return response.json();
-        }).then(data => {
-          this.setState({
-            data: data,
-            isLoading: false
-          });
-        }).catch(() => {
-          // TODO: handle event for future generic alert implementation
-          this.setState({
-            isLoading: false
-          });
-        });
-      }
-    });
+  if(types) {
+    queryParams.push(`pageSize=${pageSize}`);
   }
 
-  componentDidMount() {
-    const displayName: any = getComponent('#display-name');
-    const description: any = getComponent('#description');
-    const qualifiedName: any = getComponent('#qualified-name');
+  return queryParams;
+};
 
-    displayName.renderer = (root: any, grid: any, rowData: any) => {
-      root.innerHTML = `<a href="${process.env.REACT_APP_ROOT_PATH}/assets/${rowData.item.guid}/details" target="_blank">${ itemName(rowData.item) }</a>`;
-    };
+const fetchData = async (uri: string, method: string, callback?: Function) => {
+  const res = await egeriaFetch(uri, method, {...authHeader()}, {});
+  const data = await res.json();
 
-    description.renderer = (root: any, grid: any, rowData: any) => {
-      root.textContent = itemDescription(rowData.item);
-    };
-
-    qualifiedName.renderer = (root: any, grid: any, rowData: any) => {
-      ReactDOM.render(<QualifiedName qualified={rowData.item.properties.qualifiedName}/>, root);
-    };
-
-    this.setState({isLoading: true});
-
-    types.getAll().then(response => response.json()).then(data => {
-      this.setState({
-        isLoading: false,
-        types: [
-          ...data.map((d: any, i: number) => {
-            return {
-              id: d.name,
-              name: d.name
-            };
-          })
-        ]
-      }, () => {
-        this.readQueryParams();
-        console.log(this.state);
-      });
-    });
+  if(callback) {
+    callback(data);
+  } else {
+    return data;
   }
+};
 
-  componentDidUpdate(prevProps: any, prevState: any) {
-    const combobox: any = getComponent('#types');
-    combobox.items = this.state.types;
-    combobox.selectedItems = this.state.selectedTypes.map((d: any, i: number) => {
+const fetchRawData = async (formData: formData, apiUrl?: string) => {
+  const {q, types} = formData;
+
+  if(q.length >= QUERY_MIN_LENGTH && types.length >= TYPES_MIN_SELECTED) {
+    const _queryParams = getQueryParamsPath(formData);
+    const path = `${apiUrl || ''}/api/assets/search${_queryParams.length ? `?${_queryParams.join('&')}` : ``}`;
+
+    const rawData = await fetchData(path, 'GET');
+
+    return rawData;
+  } else {
+    return [];
+  }
+};
+
+const fetchTypes = async (apiUrl?: string) => {
+  let typesData = await fetchData(`${apiUrl || ''}/api/assets/types`, 'GET');
+
+  typesData = [
+    ...typesData.map((d: any) => {
       return {
-        id: d,
-        name: d
+        value: d.name,
+        label: d.name
       };
-    });
+    })
+  ];
 
-    const search: any = getComponent('#user-search');
-    search.value = this.state.q;
+  return typesData;
+};
 
-    const exactMatch: any = getComponent('#exact-match');
-    exactMatch.checked = this.state.exactMatch;
+const initData = async (formData: formData, callback: Function, apiUrl?: string) => {
+  const typesData = await fetchTypes(apiUrl);
+  const rawData = await fetchRawData(formData, apiUrl);
 
-    const caseSensitive: any = getComponent('#case-sensitive');
-    caseSensitive.checked = this.state.caseSensitive;
+  if(callback) {
+    callback({types: typesData, rawData: rawData});
   }
+};
 
-  readQueryParams() {
-    const { location } = this.props;
-    const { search } = location;
-    let newState = {};
-
-    search.replace('?', '').split('&').forEach((e: any) => {
-      const data: Array<any> = e.split('=');
-      const prop = data[0];
-      const value = data[1];
-
-      switch(prop) {
-        case 'q':
-          newState = {
-            ...newState,
-            q: value
-          };
-          break;
-        case 'selectedTypes':
-          newState = {
-            ...newState,
-            selectedTypes: value.split(',')
-          };
-          break;
-        case 'exactMatch':
-          newState = {
-            ...newState,
-            exactMatch: value === 'true' ? true : false
-          };
-          break;
-        case 'caseSensitive':
-          newState = {
-            ...newState,
-            caseSensitive: value === 'true' ? true : false
-          };
-          break;
-        case 'pageSize':
-          newState = {
-            ...newState,
-            pageSize: value
-          };
-          break;
-        default:
-          console.log('NOT_FOUND');
-      }
-    });
-
-    this.setState({
-      ...newState
-    }, () => {
-      this.submit();
-    });
-  }
-
-  renderBreadcrumb() {
-    return(<></>
-      // <bx-breadcrumb role="nav">
-      //   <bx-breadcrumb-item role="listitem">
-      //     <bx-breadcrumb-link href={process.env.REACT_APP_ROOT_PATH}>Home</bx-breadcrumb-link>
-      //   </bx-breadcrumb-item>
-
-      //   <bx-breadcrumb-item role="listitem">
-      //     <bx-breadcrumb>Assets</bx-breadcrumb>
-      //   </bx-breadcrumb-item>
-
-      //   <bx-breadcrumb-item role="listitem">
-      //     <bx-breadcrumb-link href={`${process.env.REACT_APP_ROOT_PATH}/assets/catalog`} size="">Catalog</bx-breadcrumb-link>
-      //   </bx-breadcrumb-item>
-      // </bx-breadcrumb>
-    );
-  }
-
-  render() {
-    const { data, q, isLoading } = this.state;
-
-    return (
-      <div className={`flex-column${ isLoading ? ' is-loading' : ''}`}>
-        { this.renderBreadcrumb() }
-
-        <div className="content flex row">
-          <div className="m5 row">
-            {/* <multiselect-combo-box id="types"
-                                   placeholder="Select one or more"
-                                   label="Types"
-                                   item-id-path="id"
-                                   item-value-path="id"
-                                   item-label-path="name"
-                                   onChange={ () => alert('da') }></multiselect-combo-box> */}
-          </div>
-
-          <div className="m5">
-            {/* <vaadin-text-field id="user-search" label="Search" value={q}></vaadin-text-field> */}
-          </div>
-
-          <div className="m5" style={{paddingTop: 32}}>
-            {/* <vaadin-checkbox id="exact-match" label="Exact match"></vaadin-checkbox> */}
-          </div>
-
-          <div className="m5" style={{paddingTop: 32}}>
-            {/* <vaadin-checkbox id="case-sensitive" label="Case sensitive"></vaadin-checkbox> */}
-          </div>
-
-          <div className="m5" style={{paddingTop: 32}}>
-            {/* <vaadin-button id="submit" onClick={ () => this.submit() }>Submit</vaadin-button> */}
-          </div>
-        </div>
-
-        <div className="content flex row flex-1">
-          {/* <vaadin-grid items={ JSON.stringify(data) } class="full-height">
-            <vaadin-grid-sort-column id="display-name" path="properties.displayName" header="Name"></vaadin-grid-sort-column>
-            <vaadin-grid-sort-column id="origin" path="origin.metadataCollectionName" header="Origin"></vaadin-grid-sort-column>
-            <vaadin-grid-sort-column id="type" path="type.name" header="Type"></vaadin-grid-sort-column>
-            <vaadin-grid-sort-column id="qualified-name" path="properties.qualifiedName" header="Context Info"></vaadin-grid-sort-column>
-            <vaadin-grid-sort-column id="description" path="properties.summary" header="Description"></vaadin-grid-sort-column>
-          </vaadin-grid> */}
-        </div>
-        <div className="content flex row">
-          <div className="m5">
-            {/* <vaadin-button id="load-more" onClick={ () => this.loadMore() }>Load more</vaadin-button> */}
-          </div>
-        </div>
-      </div>
-    );
-  }
+interface Props {
+  apiUrl?: string;
 }
 
-export default AssetCatalog;
+export function EgeriaAssetCatalog(props: Props) {
+  const { apiUrl } = props;
+  const navigate = useNavigate();
+
+  const [ URLSearchParams ] = useSearchParams();
+  const queryParams = getQueryParams(URLSearchParams);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [typesData, setTypesData] = useState([...emptyTypesData, ...queryParams.types]);
+
+  const [formData, setFormData] = useState({...emptyForm, ...queryParams});
+  const [userFormData, setUserFormData] = useState({...emptyForm, ...queryParams});
+
+  const { exactMatch, caseSensitive, q, types } = userFormData;
+  const { pageSize } = formData;
+
+  const [rowData, setRowData]: any = useState([]);
+
+  const gridOptions = {
+    suppressCellFocus: true,
+    defaultColDef: {
+      sortable: true,
+      resizable: true,
+      minWidth: 150
+    },
+    columnDefs: [
+      {
+        field: 'properties.displayName',
+        filter: true,
+        headerName: 'Name',
+        cellRenderer: (params: any) => {
+          return <DisplayNameCellRenderer apiUrl={apiUrl} data={params.data}/>;
+        }
+      },
+      {field: 'origin.metadataCollectionName', filter: true, headerName: 'Origin' },
+      {field: 'type.name', filter: true, headerName: 'Type' },
+      {
+        field: 'properties.qualifiedName',
+        filter: true,
+        headerName: 'Context Info',
+        cellRenderer: (params: any) => {
+          return <QualifiedName qualified={params.value}/>;
+        }
+      },
+      {field: 'properties.summary', filter: true, headerName: 'Description' }
+    ],
+    onFirstDataRendered: (params: any) => {
+      const allColumnIds: string[] = [];
+
+      params.columnApi.getColumns()!.forEach((column: any) => {
+        allColumnIds.push(column.getId());
+      });
+
+      params.columnApi.autoSizeColumns(allColumnIds, true);
+    }
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    initData(formData, (data: any) => {
+      const { types, rawData } = data;
+
+      // TODO: handle types request only once
+      setTypesData(types);
+      setRowData(rawData);
+
+      setIsLoading(false);
+    }, apiUrl);
+  }, [apiUrl, formData, pageSize]);
+
+  const submit = () => {
+    setFormData({
+      ...userFormData
+    });
+
+    goTo(userFormData);
+  };
+
+  const handleEnterPress = (e: any) => {
+    if(e.key === 'Enter') {
+      submit();
+    }
+  };
+
+  const loadMore = () => {
+    const newPageSize = formData.pageSize + PAGE_SIZE_INCREASE_VALUE;
+    const newFormData = {...formData, pageSize: newPageSize};
+
+    // TODO: check if last page (new array === last data array)
+    setFormData(newFormData);
+    goTo(newFormData);
+  };
+
+  const goTo = (formData: formData) => {
+    const path = `/assets/catalog`;
+    const queryParams = getQueryParamsPath(formData);
+
+    navigate(`${path}${queryParams.length ? `?${queryParams.join('&')}` : ``}` );
+  };
+
+  return (
+    <>
+    <div style={{ display: 'flex', alignItems: 'stretch', flexDirection: 'column', position: 'relative', height: '100%', }}>
+      <LoadingOverlay visible={isLoading} />
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10}}>
+        <TextInput mr="xl"
+                   style={{minWidth: 180}}
+                   placeholder="Search"
+                   value={q}
+                   onKeyPress={handleEnterPress}
+                   onChange={(event: any) => setUserFormData({...userFormData, q: event.currentTarget.value})} />
+
+        <MultiSelect mr="xl"
+                     style={{minWidth: 230}}
+                     data={typesData}
+                     value={types}
+                     placeholder="Types"
+                     onChange={(value) => setUserFormData({...userFormData, types: [...value]})} />
+
+        <Checkbox mr="xl"
+                  label={'Exact match'}
+                  checked={exactMatch}
+                  onChange={(event) => setUserFormData({...userFormData, exactMatch: event.currentTarget.checked})} />
+
+        <Checkbox mr="xl"
+                  label={'Case sensitive'}
+                  checked={caseSensitive}
+                  onChange={(event) => setUserFormData({...userFormData, caseSensitive: event.currentTarget.checked})} />
+
+        <Button onClick={() => submit()}>
+          Search
+        </Button>
+      </div>
+
+      <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
+        <AgGridReact gridOptions={gridOptions}
+                     rowData={rowData} />
+      </div>
+
+      <div>
+        <Button size="xs" compact fullWidth onClick={() => loadMore()} style={{marginBottom:1}}>
+          Load more...
+        </Button>
+      </div>
+    </div>
+    </>
+  );
+}

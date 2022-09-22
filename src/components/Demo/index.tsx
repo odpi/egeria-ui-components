@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { EgeriaAssetCatalog } from '../Assets/Catalog';
 import { EgeriaAssetDetails } from '../Assets/Details';
+import { EgeriaGlossary } from '../Glossary';
 import { EgeriaLineageGraphRouteWrapper } from '../Lineage/Graph/RouteWrapper';
 
 import './index.scss';
@@ -11,6 +13,8 @@ export function Demo() {
         <Routes>
           <Route path={`/asset-lineage/:guid/:lineageType`} element={<EgeriaLineageGraphRouteWrapper apiUrl={'http://localhost:9000'} />} />
           <Route path={'/assets/:guid/details'} element={<EgeriaAssetDetails apiUrl={'http://localhost:9000'}/>} />
+          <Route path={'/assets/catalog'} element={<EgeriaAssetCatalog apiUrl={'http://localhost:9000'} />} />
+          <Route path={'/glossary'} element={<EgeriaGlossary />} />
         </Routes>
       </Router>
     </div>
