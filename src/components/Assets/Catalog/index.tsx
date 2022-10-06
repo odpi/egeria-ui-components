@@ -23,11 +23,11 @@ interface formData {
 }
 
 const emptyForm: formData = {
-  caseSensitive: false,
-  exactMatch: false,
-  pageSize: 25,
   q: '',
-  types: []
+  types: [],
+  exactMatch: false,
+  caseSensitive: false,
+  pageSize: 25
 };
 
 const emptyTypesData: Array<any> = [];
@@ -125,22 +125,50 @@ interface Props {
 }
 
 export function EgeriaAssetCatalog(props: Props) {
-  const { apiUrl } = props;
+  // const [ URLSearchParams ] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryParams = getQueryParams(searchParams);
+
+  // const { q, types, exactMatch, caseSensitive, pageSize } = searchParams;
+
+  // console.log(q, types, exactMatch, caseSensitive, pageSize);
+
   const navigate = useNavigate();
 
-  const [ URLSearchParams ] = useSearchParams();
-  const queryParams = getQueryParams(URLSearchParams);
+  const [data, setData] = useState({
+    isLoading: false,
+    typesData: [...emptyTypesData, ...queryParams.types],
+    form: {
+      ...emptyForm,
+      ...queryParams
+    },
+    rowData: []
+  } as any);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [typesData, setTypesData] = useState([...emptyTypesData, ...queryParams.types]);
+  const { isLoading, rowData, typesData } = data;
 
-  const [formData, setFormData] = useState({...emptyForm, ...queryParams});
-  const [userFormData, setUserFormData] = useState({...emptyForm, ...queryParams});
+  useEffect(() => {
+    const _queryParams = getQueryParams(searchParams);
 
-  const { exactMatch, caseSensitive, q, types } = userFormData;
-  const { pageSize } = formData;
+    setData({
+      ...data,
+      form: {
+        ..._queryParams
+      }
+    });
 
-  const [rowData, setRowData]: any = useState([]);
+  }, [searchParams]);
+
+
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [typesData, setTypesData] = useState([...emptyTypesData, ...queryParams.types]);
+  // const [formData, setFormData] = useState({...emptyForm, ...queryParams});
+  // const [userFormData, setUserFormData] = useState({...emptyForm, ...queryParams});
+  // const [rowData, setRowData]: any = useState([]);
+
+  const { apiUrl } = props;
+  // const { exactMatch, caseSensitive, q, types } = userFormData;
+  // const { pageSize } = formData;
 
   const gridOptions = {
     suppressCellFocus: true,
@@ -181,26 +209,65 @@ export function EgeriaAssetCatalog(props: Props) {
     }
   };
 
-  useEffect(() => {
-    setIsLoading(true);
+  // useEffect(() => {
+  //   const bringTypes = async () => {
+  //     const rawTypesData = await fetchTypes(apiUrl);
 
-    initData(formData, (data: any) => {
-      const { types, rawData } = data;
+  //     setData({...data, typesData: [...rawTypesData]});
+  //   };
 
-      // TODO: handle types request only once
-      setTypesData(types);
-      setRowData(rawData);
+  //   bringTypes();
+  // }, []);
 
-      setIsLoading(false);
-    }, apiUrl);
-  }, [apiUrl, formData, pageSize]);
+  // useEffect(() => {
+  //   const { form } = data;
+
+  //   setData({...data, isLoading: true});
+
+  //   const queryData = async () => {
+  //     const rowData = await fetchRawData(form, apiUrl);
+
+  //     setData({
+  //       ...data,
+  //       isLoading: false,
+  //       rowData: [...rowData],
+  //       form: {
+  //         ...queryParams
+  //       }
+  //     });
+  //   };
+
+  //   queryData();
+  // }, [URLSearchParams]);
+
+  // const submit = async () => {
+  //   const { form } = data;
+
+  //   goTo(form);
+
+  //   // setData({
+  //   //   ...data,
+  //   //   isLoading: true,
+  //   //   form: {
+  //   //     ...form
+  //   //   }
+  //   // });
+
+  //   // const rowData = await fetchRawData(form, apiUrl);
+
+  //   // setData({
+  //   //   ...data,
+  //   //   isLoading: false,
+  //   //   rowData: [...rowData]
+  //   // });
+  // };
 
   const submit = () => {
-    setFormData({
-      ...userFormData
-    });
+    const { form } = data;
 
-    goTo(userFormData);
+    setSearchParams(form);
+
+    console.log('submitted');
   };
 
   const handleEnterPress = (e: any) => {
@@ -209,21 +276,33 @@ export function EgeriaAssetCatalog(props: Props) {
     }
   };
 
-  const loadMore = () => {
-    const newPageSize = formData.pageSize + PAGE_SIZE_INCREASE_VALUE;
-    const newFormData = {...formData, pageSize: newPageSize};
+  const loadMore = () => { };
 
-    // TODO: check if last page (new array === last data array)
-    setFormData(newFormData);
-    goTo(newFormData);
-  };
+  // const loadMore = () => {
+  //   const { form } = data;
 
-  const goTo = (formData: formData) => {
-    const path = `/assets/catalog`;
-    const queryParams = getQueryParamsPath(formData);
+  //   const newPageSize = form.pageSize + PAGE_SIZE_INCREASE_VALUE;
+  //   const newFormData = {...form, pageSize: newPageSize};
 
-    navigate(`${path}${queryParams.length ? `?${queryParams.join('&')}` : ``}` );
-  };
+  //   // TODO: check if last page (new array === last data array)
+  //   setData({
+  //     ...data,
+  //     form: {
+  //       ...newFormData
+  //     }
+  //   });
+
+  //   goTo(newFormData);
+  // };
+
+  // const goTo = (formData: formData) => {
+  //   const path = `/assets/catalog`;
+  //   const queryParams = getQueryParamsPath(formData);
+
+  //   navigate(`${path}${queryParams.length ? `?${queryParams.join('&')}` : ``}` );
+  // };
+
+  console.log('data = ', data);
 
   return (
     <>
@@ -234,26 +313,26 @@ export function EgeriaAssetCatalog(props: Props) {
         <TextInput mr="xl"
                    style={{minWidth: 180}}
                    placeholder="Search"
-                   value={q}
+                   value={data.form.q}
                    onKeyPress={handleEnterPress}
-                   onChange={(event: any) => setUserFormData({...userFormData, q: event.currentTarget.value})} />
+                   onChange={(event: any) => setData({...data, form: {...data.form, q: event.currentTarget.value}})} />
 
         <MultiSelect mr="xl"
                      style={{minWidth: 230}}
                      data={typesData}
-                     value={types}
+                     value={data.form.types}
                      placeholder="Types"
-                     onChange={(value) => setUserFormData({...userFormData, types: [...value]})} />
+                     onChange={(value) => setData({...data, form: {...data.form, types: [...value]}})} />
 
         <Checkbox mr="xl"
                   label={'Exact match'}
-                  checked={exactMatch}
-                  onChange={(event) => setUserFormData({...userFormData, exactMatch: event.currentTarget.checked})} />
+                  checked={data.form.exactMatch}
+                  onChange={(event) => setData({...data, form: {...data.form, exactMatch: event.currentTarget.checked}})} />
 
         <Checkbox mr="xl"
                   label={'Case sensitive'}
-                  checked={caseSensitive}
-                  onChange={(event) => setUserFormData({...userFormData, caseSensitive: event.currentTarget.checked})} />
+                  checked={data.form.caseSensitive}
+                  onChange={(event) => setData({...data, form: {...data.form, caseSensitive: event.currentTarget.checked}})} />
 
         <Button onClick={() => submit()}>
           Search
