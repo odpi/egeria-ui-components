@@ -21,11 +21,11 @@ const QUERY_MIN_LENGTH = 3;
 const TYPES_MIN_SELECTED = 1;
 const PAGE_SIZE_INCREASE_VALUE = 25;
 const emptyForm = {
-    caseSensitive: false,
-    exactMatch: false,
-    pageSize: 25,
     q: '',
-    types: []
+    types: [],
+    exactMatch: false,
+    caseSensitive: false,
+    pageSize: 25
 };
 const emptyTypesData = [];
 const getQueryParams = (searchParams) => {
@@ -100,17 +100,31 @@ const initData = (formData, callback, apiUrl) => __awaiter(void 0, void 0, void 
     }
 });
 export function EgeriaAssetCatalog(props) {
-    const { apiUrl } = props;
+    // const [ URLSearchParams ] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const queryParams = getQueryParams(searchParams);
+    // const { q, types, exactMatch, caseSensitive, pageSize } = searchParams;
+    // console.log(q, types, exactMatch, caseSensitive, pageSize);
     const navigate = useNavigate();
-    const [URLSearchParams] = useSearchParams();
-    const queryParams = getQueryParams(URLSearchParams);
-    const [isLoading, setIsLoading] = useState(false);
-    const [typesData, setTypesData] = useState([...emptyTypesData, ...queryParams.types]);
-    const [formData, setFormData] = useState(Object.assign(Object.assign({}, emptyForm), queryParams));
-    const [userFormData, setUserFormData] = useState(Object.assign(Object.assign({}, emptyForm), queryParams));
-    const { exactMatch, caseSensitive, q, types } = userFormData;
-    const { pageSize } = formData;
-    const [rowData, setRowData] = useState([]);
+    const [data, setData] = useState({
+        isLoading: false,
+        typesData: [...emptyTypesData, ...queryParams.types],
+        form: Object.assign(Object.assign({}, emptyForm), queryParams),
+        rowData: []
+    });
+    const { isLoading, rowData, typesData } = data;
+    useEffect(() => {
+        const _queryParams = getQueryParams(searchParams);
+        setData(Object.assign(Object.assign({}, data), { form: Object.assign({}, _queryParams) }));
+    }, [searchParams]);
+    // const [isLoading, setIsLoading] = useState(false);
+    // const [typesData, setTypesData] = useState([...emptyTypesData, ...queryParams.types]);
+    // const [formData, setFormData] = useState({...emptyForm, ...queryParams});
+    // const [userFormData, setUserFormData] = useState({...emptyForm, ...queryParams});
+    // const [rowData, setRowData]: any = useState([]);
+    const { apiUrl } = props;
+    // const { exactMatch, caseSensitive, q, types } = userFormData;
+    // const { pageSize } = formData;
     const gridOptions = {
         suppressCellFocus: true,
         defaultColDef: {
@@ -147,36 +161,75 @@ export function EgeriaAssetCatalog(props) {
             params.columnApi.autoSizeColumns(allColumnIds, true);
         }
     };
-    useEffect(() => {
-        setIsLoading(true);
-        initData(formData, (data) => {
-            const { types, rawData } = data;
-            // TODO: handle types request only once
-            setTypesData(types);
-            setRowData(rawData);
-            setIsLoading(false);
-        }, apiUrl);
-    }, [apiUrl, formData, pageSize]);
+    // useEffect(() => {
+    //   const bringTypes = async () => {
+    //     const rawTypesData = await fetchTypes(apiUrl);
+    //     setData({...data, typesData: [...rawTypesData]});
+    //   };
+    //   bringTypes();
+    // }, []);
+    // useEffect(() => {
+    //   const { form } = data;
+    //   setData({...data, isLoading: true});
+    //   const queryData = async () => {
+    //     const rowData = await fetchRawData(form, apiUrl);
+    //     setData({
+    //       ...data,
+    //       isLoading: false,
+    //       rowData: [...rowData],
+    //       form: {
+    //         ...queryParams
+    //       }
+    //     });
+    //   };
+    //   queryData();
+    // }, [URLSearchParams]);
+    // const submit = async () => {
+    //   const { form } = data;
+    //   goTo(form);
+    //   // setData({
+    //   //   ...data,
+    //   //   isLoading: true,
+    //   //   form: {
+    //   //     ...form
+    //   //   }
+    //   // });
+    //   // const rowData = await fetchRawData(form, apiUrl);
+    //   // setData({
+    //   //   ...data,
+    //   //   isLoading: false,
+    //   //   rowData: [...rowData]
+    //   // });
+    // };
     const submit = () => {
-        setFormData(Object.assign({}, userFormData));
-        goTo(userFormData);
+        const { form } = data;
+        setSearchParams(form);
+        console.log('submitted');
     };
     const handleEnterPress = (e) => {
         if (e.key === 'Enter') {
             submit();
         }
     };
-    const loadMore = () => {
-        const newPageSize = formData.pageSize + PAGE_SIZE_INCREASE_VALUE;
-        const newFormData = Object.assign(Object.assign({}, formData), { pageSize: newPageSize });
-        // TODO: check if last page (new array === last data array)
-        setFormData(newFormData);
-        goTo(newFormData);
-    };
-    const goTo = (formData) => {
-        const path = `/assets/catalog`;
-        const queryParams = getQueryParamsPath(formData);
-        navigate(`${path}${queryParams.length ? `?${queryParams.join('&')}` : ``}`);
-    };
-    return (_jsx(_Fragment, { children: _jsxs("div", Object.assign({ style: { display: 'flex', alignItems: 'stretch', flexDirection: 'column', position: 'relative', height: '100%', } }, { children: [_jsx(LoadingOverlay, { visible: isLoading }), _jsxs("div", Object.assign({ style: { display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 } }, { children: [_jsx(TextInput, { mr: "xl", style: { minWidth: 180 }, placeholder: "Search", value: q, onKeyPress: handleEnterPress, onChange: (event) => setUserFormData(Object.assign(Object.assign({}, userFormData), { q: event.currentTarget.value })) }), _jsx(MultiSelect, { mr: "xl", style: { minWidth: 230 }, data: typesData, value: types, placeholder: "Types", onChange: (value) => setUserFormData(Object.assign(Object.assign({}, userFormData), { types: [...value] })) }), _jsx(Checkbox, { mr: "xl", label: 'Exact match', checked: exactMatch, onChange: (event) => setUserFormData(Object.assign(Object.assign({}, userFormData), { exactMatch: event.currentTarget.checked })) }), _jsx(Checkbox, { mr: "xl", label: 'Case sensitive', checked: caseSensitive, onChange: (event) => setUserFormData(Object.assign(Object.assign({}, userFormData), { caseSensitive: event.currentTarget.checked })) }), _jsx(Button, Object.assign({ onClick: () => submit() }, { children: "Search" }))] })), _jsx("div", Object.assign({ className: "ag-theme-alpine", style: { width: '100%', height: '100%' } }, { children: _jsx(AgGridReact, { gridOptions: gridOptions, rowData: rowData }) })), _jsx("div", { children: _jsx(Button, Object.assign({ size: "xs", compact: true, fullWidth: true, onClick: () => loadMore(), style: { marginBottom: 1, marginTop: 10 } }, { children: "Load more..." })) })] })) }));
+    const loadMore = () => { };
+    // const loadMore = () => {
+    //   const { form } = data;
+    //   const newPageSize = form.pageSize + PAGE_SIZE_INCREASE_VALUE;
+    //   const newFormData = {...form, pageSize: newPageSize};
+    //   // TODO: check if last page (new array === last data array)
+    //   setData({
+    //     ...data,
+    //     form: {
+    //       ...newFormData
+    //     }
+    //   });
+    //   goTo(newFormData);
+    // };
+    // const goTo = (formData: formData) => {
+    //   const path = `/assets/catalog`;
+    //   const queryParams = getQueryParamsPath(formData);
+    //   navigate(`${path}${queryParams.length ? `?${queryParams.join('&')}` : ``}` );
+    // };
+    console.log('data = ', data);
+    return (_jsx(_Fragment, { children: _jsxs("div", Object.assign({ style: { display: 'flex', alignItems: 'stretch', flexDirection: 'column', position: 'relative', height: '100%', } }, { children: [_jsx(LoadingOverlay, { visible: isLoading }), _jsxs("div", Object.assign({ style: { display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 } }, { children: [_jsx(TextInput, { mr: "xl", style: { minWidth: 180 }, placeholder: "Search", value: data.form.q, onKeyPress: handleEnterPress, onChange: (event) => setData(Object.assign(Object.assign({}, data), { form: Object.assign(Object.assign({}, data.form), { q: event.currentTarget.value }) })) }), _jsx(MultiSelect, { mr: "xl", style: { minWidth: 230 }, data: typesData, value: data.form.types, placeholder: "Types", onChange: (value) => setData(Object.assign(Object.assign({}, data), { form: Object.assign(Object.assign({}, data.form), { types: [...value] }) })) }), _jsx(Checkbox, { mr: "xl", label: 'Exact match', checked: data.form.exactMatch, onChange: (event) => setData(Object.assign(Object.assign({}, data), { form: Object.assign(Object.assign({}, data.form), { exactMatch: event.currentTarget.checked }) })) }), _jsx(Checkbox, { mr: "xl", label: 'Case sensitive', checked: data.form.caseSensitive, onChange: (event) => setData(Object.assign(Object.assign({}, data), { form: Object.assign(Object.assign({}, data.form), { caseSensitive: event.currentTarget.checked }) })) }), _jsx(Button, Object.assign({ onClick: () => submit() }, { children: "Search" }))] })), _jsx("div", Object.assign({ className: "ag-theme-alpine", style: { width: '100%', height: '100%' } }, { children: _jsx(AgGridReact, { gridOptions: gridOptions, rowData: rowData }) })), _jsx("div", { children: _jsx(Button, Object.assign({ size: "xs", compact: true, fullWidth: true, onClick: () => loadMore(), style: { marginBottom: 1, marginTop: 10 } }, { children: "Load more..." })) })] })) }));
 }
