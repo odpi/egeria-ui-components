@@ -1,0 +1,43 @@
+name: egeria-ui-components dist
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.repository == 'odpi/egeria-ui-components'
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3.1.0
+      - name: Check if version has been updated
+        id: check
+        uses: EndBug/version-check@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.5.0
+        with:
+          node-version: "16.13.0"
+      - name: Report npm and node version
+        run: |
+          node -v
+          npm -v
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+        env:
+          NODE_OPTIONS: "--max_old_space_size=6144"
+      - name: Commit files
+        continue-on-error: true
+        id: commit
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Update dist folder" -a
+      - name: Push changes
+        if: steps.commit.outcome == 'success'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
