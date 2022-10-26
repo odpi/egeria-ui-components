@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { egeriaFetch, authHeader } from 'egeria-js-commons';
+import { egeriaFetch, authHeader } from '@lfai/egeria-js-commons';
 import { Accordion, LoadingOverlay, Table, Paper, Divider } from '@mantine/core';
 import { EgeriaAssetTools } from '../../Lineage/Graph/AssetTools';
 

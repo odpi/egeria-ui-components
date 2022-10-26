@@ -1,5 +1,5 @@
 import { Modal, LoadingOverlay, Tabs } from '@mantine/core';
-import { egeriaFetch, authHeader } from 'egeria-js-commons';
+import { egeriaFetch, authHeader } from '@lfai/egeria-js-commons';
 
 import {
   HappiGraph,

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { Modal, LoadingOverlay, Tabs } from '@mantine/core';
-import { egeriaFetch, authHeader } from 'egeria-js-commons';
+import { egeriaFetch, authHeader } from '@lfai/egeria-js-commons';
 import { HappiGraph, HappiGraphActions } from '@lfai/happi-graph';
 import 'happi-graph/src/components/HappiGraph/happi-graph.scss';
 import './index.scss';
