@@ -11,26 +11,35 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { egeriaFetch, authHeader } from 'egeria-js-commons';
-import { LoadingOverlay, Table } from '@mantine/core';
-const getProperties = (object, key) => {
-    if (object && object[key]) {
-        return Object.keys(object[key]);
+import { Accordion, LoadingOverlay, Table, Paper, Divider } from '@mantine/core';
+import { EgeriaAssetTools } from '../../Lineage/Graph/AssetTools';
+const getProperties = (object) => {
+    if (object) {
+        return Object.keys(object).map((k) => {
+            return {
+                key: k,
+                value: object[k]
+            };
+        }).filter((k) => {
+            return typeof k.value !== 'object';
+        });
     }
     else {
         return [];
     }
 };
-const renderTable = (column, object, key) => {
-    let properties = [];
-    if (object && object[key]) {
-        properties = getProperties(object, key);
-    }
-    return _jsx(_Fragment, { children: properties.length > 0 && _jsxs(Table, Object.assign({ striped: true }, { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: column }), _jsx("th", {})] }) }), _jsx("tbody", { children: properties
-                        .map((p, index) => {
-                        return (_jsxs("tr", { children: [_jsx("td", { children: _jsx("strong", { children: p }) }), _jsx("td", { children: object[key][p] })] }, index));
-                    }) })] })) });
+const renderHTMLTable = (title, properties) => {
+    return _jsxs(_Fragment, { children: [properties && properties.length > 0 && _jsxs(_Fragment, { children: [_jsx(Paper, Object.assign({ shadow: "xs" }, { children: _jsxs(Table, Object.assign({ striped: true }, { children: [title && _jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", Object.assign({ style: { width: '25%' } }, { children: title })), _jsx("th", {})] }) }), _jsx("tbody", { children: properties
+                                        .map((p, index) => {
+                                        return (_jsxs("tr", { children: [_jsx("td", { children: _jsx("strong", { children: p.key }) }), _jsx("td", { children: p.value })] }, index));
+                                    }) })] })) })), _jsx(Divider, { my: "sm", variant: "dashed" })] }), " "] });
+};
+const renderTable = (title, object) => {
+    let properties = getProperties(object);
+    return renderHTMLTable(title, properties);
 };
 export function EgeriaAssetDetails(props) {
+    var _a;
     const [loading, setLoading] = useState(false);
     const [asset, setAsset] = useState(undefined);
     const { apiUrl } = props;
@@ -49,5 +58,11 @@ export function EgeriaAssetDetails(props) {
         setLoading(true);
         fetchData(`${apiUrl}/api/assets/${guid}`);
     }, [apiUrl, guid]);
-    return _jsxs(_Fragment, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && _jsxs(_Fragment, { children: [renderTable('Properties', asset, 'properties'), renderTable('Type', asset, 'type'), renderTable('Origin', asset, 'origin')] })] });
+    const selectedNode = {
+        id: asset === null || asset === void 0 ? void 0 : asset.guid,
+        label: (_a = asset === null || asset === void 0 ? void 0 : asset.type) === null || _a === void 0 ? void 0 : _a.name
+    };
+    return _jsxs(_Fragment, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && _jsx("div", Object.assign({ style: { margin: 0 } }, { children: asset && _jsx(EgeriaAssetTools, { selectedNode: selectedNode }) })), !loading && asset && _jsxs(_Fragment, { children: [renderTable('General', asset), renderTable('Properties', asset.properties), renderTable('Type', asset.type), renderTable('Origin', asset.origin), renderTable('Aditional Properties', asset.additionalProperties), !loading && asset && asset.classifications && asset.classifications.length > 0 && _jsx(_Fragment, { children: _jsx(Paper, { children: _jsx(Accordion, { children: asset.classifications.map((c, index) => {
+                                    return _jsx(Accordion.Item, Object.assign({ label: `Classification ${c.name}` }, { children: renderTable('', c) }), index);
+                                }) }) }) })] })] });
 }
