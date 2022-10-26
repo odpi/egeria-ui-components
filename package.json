@@ -8,20 +8,6 @@
   "main": "./dist/esm/main.js",
   "module": "./dist/esm/main.js",
   "types": "./dist/types/main.d.ts",
-  "peerDependencies": {
-    "@mantine/core": "4.2.9",
-    "@mantine/hooks": "4.2.9",
-    "@mantine/next": "4.2.9",
-    "ag-grid-community": "^28.1.1",
-    "ag-grid-react": "^28.1.1",
-    "egeria-ui-core": "github:odpi/egeria-ui-core#4.0.1",
-    "happi-graph": "github:odpi/happi-graph#4.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "tabler-icons-react": "1.54.0",
-    "web-vitals": "2.1.4",
-    "web-worker": "1.2.0"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build:demo": "react-scripts build",
@@ -49,6 +35,21 @@
       "last 1 safari version"
     ]
   },
+  "dependencies": {
+    "@lfai/egeria-js-commons": "^4.0.3",
+    "@mantine/core": "4.2.9",
+    "@mantine/hooks": "4.2.9",
+    "@mantine/next": "4.2.9",
+    "ag-grid-community": "^28.1.1",
+    "ag-grid-react": "^28.1.1",
+    "egeria-ui-core": "github:odpi/egeria-ui-core#4.0.1",
+    "@lfai/happi-graph": "^4.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tabler-icons-react": "1.54.0",
+    "web-vitals": "2.1.4",
+    "web-worker": "1.2.0"
+  },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -61,8 +62,5 @@
     "node-sass": "^7.0.1",
     "react-scripts": "^5.0.1",
     "typescript": "^4.8.4"
-  },
-  "dependencies": {
-    "egeria-js-commons": "github:odpi/egeria-js-commons#4.0.1"
   }
 }
