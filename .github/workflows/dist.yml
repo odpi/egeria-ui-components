@@ -32,9 +32,9 @@ jobs:
         continue-on-error: true
         id: commit
         run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "Update dist folder" -a
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -m "Update dist folder" -a --signoff
       - name: Push changes
         if: steps.commit.outcome == 'success'
         uses: ad-m/github-push-action@master
