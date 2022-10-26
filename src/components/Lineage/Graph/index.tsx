@@ -4,7 +4,7 @@ import { egeriaFetch, authHeader } from 'egeria-js-commons';
 import {
   HappiGraph,
   HappiGraphActions
-} from 'happi-graph';
+} from '@lfai/happi-graph';
 
 import 'happi-graph/src/components/HappiGraph/happi-graph.scss';
 
