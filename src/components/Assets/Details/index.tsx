@@ -1,42 +1,55 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { egeriaFetch, authHeader } from 'egeria-js-commons';
-import { LoadingOverlay, Table } from '@mantine/core';
+import { Accordion, LoadingOverlay, Table, Paper, Divider } from '@mantine/core';
+import { EgeriaAssetTools } from '../../Lineage/Graph/AssetTools';
 
-const getProperties = (object: any, key: string) => {
-  if(object && object[key]) {
-    return Object.keys(object[key]);
+const getProperties = (object: any) => {
+  if(object) {
+    return Object.keys(object).map((k: any) => {
+      return {
+        key: k,
+        value: object[k]
+      }
+    }).filter((k: any) => {
+      return typeof k.value !== 'object';
+    });
   } else {
     return [];
   }
 };
 
-const renderTable = (column: string, object: any, key: string) => {
-  let properties: any = [];
+const renderHTMLTable = (title: string, properties: any) => {
+  return <>{ properties && properties.length > 0 && <>
+    <Paper shadow="xs">
+      <Table striped>
+        { title && <thead>
+          <tr>
+            <th style={{width: '25%'}}>{ title }</th>
+            <th></th>
+          </tr>
+        </thead> }
+        <tbody>
+          { properties
+              .map((p: any, index: number) => {
+                return (
+                  <tr key={index}>
+                    <td><strong>{ p.key }</strong></td>
+                    <td>{ p.value }</td>
+                  </tr>
+                );
+              }) }
+        </tbody>
+      </Table>
+    </Paper>
+    <Divider my="sm" variant="dashed" />
+    </> } </>
+}
 
-  if(object && object[key]) {
-    properties = getProperties(object, key);
-  }
+const renderTable = (title: string, object: any) => {
+  let properties: any = getProperties(object);
 
-  return <>{ properties.length > 0 && <Table striped>
-    <thead>
-      <tr>
-        <th>{ column }</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      { properties
-          .map((p: any, index: number) => {
-            return (
-              <tr key={index}>
-                <td><strong>{ p }</strong></td>
-                <td>{ object[key][p] }</td>
-              </tr>
-            );
-          }) }
-    </tbody>
-  </Table> }</>;
+  return renderHTMLTable(title, properties);
 };
 
 interface Props {
@@ -46,7 +59,7 @@ interface Props {
 
 export function EgeriaAssetDetails(props: Props) {
   const [loading, setLoading] = useState(false);
-  const [asset, setAsset] = useState(undefined);
+  const [asset, setAsset]: [any, Function] = useState(undefined);
 
   const { apiUrl } = props;
   const { guid: guidFromParams } = useParams();
@@ -70,12 +83,36 @@ export function EgeriaAssetDetails(props: Props) {
     fetchData(`${apiUrl}/api/assets/${ guid }`);
   }, [apiUrl, guid]);
 
-  return <>
+  const selectedNode = {
+    id: asset?.guid,
+    label: asset?.type?.name
+  };
+
+return <>
     { loading && <div style={{height: '100%', position: 'relative'}}><LoadingOverlay visible/></div> }
-    { !loading && <>
-      { renderTable('Properties', asset, 'properties') }
-      { renderTable('Type', asset, 'type') }
-      { renderTable('Origin', asset, 'origin') }
+
+    { !loading && <div style={{margin:0}}>
+      { asset && <EgeriaAssetTools selectedNode={selectedNode} /> }
+    </div> }
+
+    { !loading && asset && <>
+      { renderTable('General', asset) }
+      { renderTable('Properties', asset.properties) }
+      { renderTable('Type', asset.type) }
+      { renderTable('Origin', asset.origin) }
+      { renderTable('Aditional Properties', asset.additionalProperties) }
+
+      { !loading && asset && asset.classifications && asset.classifications.length > 0 && <>
+        <Paper>
+          <Accordion>
+            { asset.classifications.map((c: any, index: any) => {
+              return <Accordion.Item label={`Classification ${c.name}`} key={index}>
+                      { renderTable('', c) }
+                    </Accordion.Item>
+            }) }
+          </Accordion>
+        </Paper>
+      </> }
     </> }
   </>;
 }
