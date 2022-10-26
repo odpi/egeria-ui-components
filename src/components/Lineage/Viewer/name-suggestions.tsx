@@ -3,7 +3,7 @@ import * as React from 'react';
 // import Autocomplete from '@mui/material/Autocomplete';
 import { Loader } from '@mantine/core';
 import {SyntheticEvent} from "react";
-import { getComponent, lineage } from "egeria-js-commons";
+import { getComponent, lineage } from "@lfai/egeria-js-commons";
 
 export function NameSuggestions(props: any) {
 
