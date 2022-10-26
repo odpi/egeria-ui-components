@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import 'happi-graph/src/components/HappiGraph/happi-graph.scss';
+import '@lfai/happi-graph/src/components/HappiGraph/happi-graph.scss';
 import './index.scss';
 interface Props {
     apiUrl: any;

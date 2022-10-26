@@ -11,7 +11,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { Modal, LoadingOverlay, Tabs } from '@mantine/core';
 import { egeriaFetch, authHeader } from '@lfai/egeria-js-commons';
 import { HappiGraph, HappiGraphActions } from '@lfai/happi-graph';
-import 'happi-graph/src/components/HappiGraph/happi-graph.scss';
+import '@lfai/happi-graph/src/components/HappiGraph/happi-graph.scss';
 import './index.scss';
 import { useEffect, useState } from 'react';
 import { EgeriaSelectedNode } from './SelectedNode';
