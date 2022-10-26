@@ -6,7 +6,7 @@ import {
   HappiGraphActions
 } from '@lfai/happi-graph';
 
-import 'happi-graph/src/components/HappiGraph/happi-graph.scss';
+import '@lfai/happi-graph/src/components/HappiGraph/happi-graph.scss';
 
 import './index.scss';
 

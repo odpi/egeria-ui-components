@@ -1,6 +1,6 @@
 {
   "name": "@lfai/egeria-ui-components",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "files": [
     "dist",
     "src/**/**.scss"
@@ -37,13 +37,13 @@
   },
   "dependencies": {
     "@lfai/egeria-js-commons": "^4.0.3",
+    "@lfai/egeria-ui-core": "^4.0.3",
+    "@lfai/happi-graph": "^4.0.1",
     "@mantine/core": "4.2.9",
     "@mantine/hooks": "4.2.9",
     "@mantine/next": "4.2.9",
     "ag-grid-community": "^28.1.1",
     "ag-grid-react": "^28.1.1",
-    "egeria-ui-core": "github:odpi/egeria-ui-core#4.0.1",
-    "@lfai/happi-graph": "^4.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tabler-icons-react": "1.54.0",
