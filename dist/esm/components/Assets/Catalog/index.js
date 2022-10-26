@@ -16,7 +16,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import QualifiedName from './qualified-name';
 import DisplayNameCellRenderer from './displayNameCellRenderer';
-import { ASSET_CATALOG_PATH, PAGE_SIZE_INCREASE_VALUE, getQueryParams, getQueryParamsPath, fetchTypes, fetchRawData } from 'egeria-js-commons';
+import { ASSET_CATALOG_PATH, PAGE_SIZE_INCREASE_VALUE, getQueryParams, getQueryParamsPath, fetchTypes, fetchRawData } from '@lfai/egeria-js-commons';
 /**
  * Initial empty form value.
  */

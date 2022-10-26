@@ -17,7 +17,7 @@ import {
   getQueryParamsPath,
   fetchTypes,
   fetchRawData
-} from 'egeria-js-commons';
+} from '@lfai/egeria-js-commons';
 
 /**
  * Initial empty form value.

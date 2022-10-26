@@ -1,4 +1,4 @@
-import { getIconByGroup } from 'egeria-js-commons';
+import { getIconByGroup } from '@lfai/egeria-js-commons';
 const itemDescription = (item) => {
     if (item.properties.description && item.properties.description != null) {
         return item.properties.description;

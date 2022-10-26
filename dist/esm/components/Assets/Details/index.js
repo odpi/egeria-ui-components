@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { egeriaFetch, authHeader } from 'egeria-js-commons';
+import { egeriaFetch, authHeader } from '@lfai/egeria-js-commons';
 import { Accordion, LoadingOverlay, Table, Paper, Divider } from '@mantine/core';
 import { EgeriaAssetTools } from '../../Lineage/Graph/AssetTools';
 const getProperties = (object) => {

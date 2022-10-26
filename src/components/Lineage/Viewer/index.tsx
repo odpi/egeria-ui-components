@@ -1,10 +1,9 @@
 import React from "react";
-import { getComponent } from 'egeria-js-commons';
 import { NameSuggestions } from "./name-suggestions";
 import { TypesSuggestions } from "./types-suggestions";
 // import {IconButton, Tooltip} from "@mui/material";
 // import HelpIcon from '@mui/icons-material/Help';
-import { authHeaderWithContentType, egeriaFetch } from 'egeria-js-commons';
+import { authHeaderWithContentType, egeriaFetch, getComponent } from '@lfai/egeria-js-commons';
 
 import { Button } from '@mantine/core';
 

@@ -1,5 +1,5 @@
 import { Button, SimpleGrid } from '@mantine/core';
-import { lineageViewsTypesMapping } from 'egeria-js-commons';
+import { lineageViewsTypesMapping } from '@lfai/egeria-js-commons';
 
 interface Props {
   selectedNode: any;

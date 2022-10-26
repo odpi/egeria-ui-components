@@ -1,7 +1,7 @@
 import { ActionIcon, Grid, LoadingOverlay, Paper, Table } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { ListDetails } from 'tabler-icons-react';
-import { glossaries } from 'egeria-js-commons';
+import { glossaries } from '@lfai/egeria-js-commons';
 
 export function EgeriaGlossary() {
   const [glossariesData, setGlossariesData] = useState([]);

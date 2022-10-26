@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { Button, SimpleGrid } from '@mantine/core';
-import { lineageViewsTypesMapping } from 'egeria-js-commons';
+import { lineageViewsTypesMapping } from '@lfai/egeria-js-commons';
 const hasTab = (type, tabName) => {
     if (Object.keys(lineageViewsTypesMapping).includes(type)) {
         return lineageViewsTypesMapping[type].includes(tabName);
