@@ -1,7 +1,6 @@
 {
   "name": "egeria-ui-components",
-  "version": "4.0.3",
-  "private": true,
+  "version": "4.0.4",
   "files": [
     "dist",
     "src/**/**.scss"
