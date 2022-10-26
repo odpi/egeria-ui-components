@@ -1,6 +1,6 @@
 {
   "name": "@lfai/egeria-ui-components",
-  "version": "4.0.6",
+  "version": "4.0.7",
   "files": [
     "dist",
     "src/**/**.scss"
