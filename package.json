@@ -1,6 +1,12 @@
 {
   "name": "@lfai/egeria-ui-components",
-  "version": "4.0.9",
+  "version": "4.0.10",
+  "description": "Encapsulated reactjs components with business logic inside.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/odpi/egeria-ui-components.git"
+  },
   "files": [
     "dist",
     "src/**/**.scss"
@@ -36,9 +42,9 @@
     ]
   },
   "dependencies": {
-    "@lfai/egeria-js-commons": "^4.0.3",
-    "@lfai/egeria-ui-core": "^4.0.3",
-    "@lfai/happi-graph": "^4.0.2",
+    "@lfai/egeria-js-commons": "^4.0.4",
+    "@lfai/egeria-ui-core": "^4.0.4",
+    "@lfai/happi-graph": "^4.0.4",
     "@mantine/core": "4.2.9",
     "@mantine/hooks": "4.2.9",
     "@mantine/next": "4.2.9",
