@@ -41,7 +41,7 @@ export function EgeriaAssetDetailsPrint(props: Props) {
     }
   }, [asset]);
 
-  return <>
+  return <div style={{background:'#fff'}}>
     { loading && <div style={{height: '100%', position: 'relative'}}><LoadingOverlay visible/></div> }
 
     { !loading && asset && <>
@@ -59,5 +59,5 @@ export function EgeriaAssetDetailsPrint(props: Props) {
           }) }
       </> }
     </> }
-  </>;
+  </div>;
 }

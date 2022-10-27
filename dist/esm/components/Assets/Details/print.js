@@ -37,7 +37,7 @@ export function EgeriaAssetDetailsPrint(props) {
             window.print();
         }
     }, [asset]);
-    return _jsxs(_Fragment, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && asset && _jsxs(_Fragment, { children: [renderTable('General', asset), renderTable('Properties', asset.properties), renderTable('Type', asset.type), renderTable('Origin', asset.origin), renderTable('Aditional Properties', asset.additionalProperties), !loading && asset && asset.classifications && asset.classifications.length > 0 && _jsx(_Fragment, { children: asset.classifications.map((c, index) => {
+    return _jsxs("div", Object.assign({ style: { background: '#fff' } }, { children: [loading && _jsx("div", Object.assign({ style: { height: '100%', position: 'relative' } }, { children: _jsx(LoadingOverlay, { visible: true }) })), !loading && asset && _jsxs(_Fragment, { children: [renderTable('General', asset), renderTable('Properties', asset.properties), renderTable('Type', asset.type), renderTable('Origin', asset.origin), renderTable('Aditional Properties', asset.additionalProperties), !loading && asset && asset.classifications && asset.classifications.length > 0 && _jsx(_Fragment, { children: asset.classifications.map((c, index) => {
                             return _jsx(Paper, { children: renderTable(`Classification ${c.name}`, c) }, index);
-                        }) })] })] });
+                        }) })] })] }));
 }
