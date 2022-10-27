@@ -5,11 +5,13 @@ html, body {
 }
 
 .container {
-  margin:0 auto;
-  margin-top:50px;
-  width:1024px;
-  height:700px;
-  border:1px solid #ccc;
+  margin: 0 auto;
+  margin-top: 50px;
+  width: 1024px;
+  height: 700px;
+  border: 1px solid #000;
   overflow: auto;
-  background-color: #e6e6e6;
+  background-image: url(../../../public/transparent.svg);
+  background-repeat: repeat;
+  background-position: top left;
 }
