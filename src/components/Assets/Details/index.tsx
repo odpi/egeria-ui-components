@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { egeriaFetch, authHeader } from '@lfai/egeria-js-commons';
-import { Accordion, LoadingOverlay, Table, Paper, Divider } from '@mantine/core';
+import { Accordion, LoadingOverlay, Table, Paper, Divider, Button, SimpleGrid } from '@mantine/core';
 import { EgeriaAssetTools } from '../../Lineage/Graph/AssetTools';
+import { Printer } from 'tabler-icons-react';
 
 const getProperties = (object: any) => {
   if(object) {
@@ -25,7 +26,7 @@ const renderHTMLTable = (title: string, properties: any) => {
       <Table striped>
         { title && <thead>
           <tr>
-            <th style={{width: '25%'}}>{ title }</th>
+            <th style={{width: '30%'}}>{ title }</th>
             <th></th>
           </tr>
         </thead> }
@@ -46,7 +47,7 @@ const renderHTMLTable = (title: string, properties: any) => {
     </> } </>
 }
 
-const renderTable = (title: string, object: any) => {
+export const renderTable = (title: string, object: any) => {
   let properties: any = getProperties(object);
 
   return renderHTMLTable(title, properties);
@@ -88,11 +89,27 @@ export function EgeriaAssetDetails(props: Props) {
     label: asset?.type?.name
   };
 
-return <>
+  return <>
     { loading && <div style={{height: '100%', position: 'relative'}}><LoadingOverlay visible/></div> }
 
     { !loading && <div style={{margin:0}}>
-      { asset && <EgeriaAssetTools selectedNode={selectedNode} /> }
+      { asset && <>
+        <EgeriaAssetTools selectedNode={selectedNode} />
+
+        <Divider my="sm" variant="dashed" />
+
+        <SimpleGrid cols={4}>
+          <Button leftIcon={<Printer size={20} />}
+                  color="gray"
+                  component="a"
+                  target="_blank"
+                  href={`/assets/${guid}/details/print`}>
+            Print
+          </Button>
+        </SimpleGrid>
+
+        <Divider my="sm" variant="dashed" />
+      </> }
     </div> }
 
     { !loading && asset && <>
