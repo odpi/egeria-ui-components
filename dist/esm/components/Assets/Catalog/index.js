@@ -77,8 +77,9 @@ export function EgeriaAssetCatalog(props) {
             { field: 'properties.summary', filter: true, headerName: 'Description' }
         ],
         onFirstDataRendered: (params) => {
+            var _a;
             const allColumnIds = [];
-            params.columnApi.getColumns().forEach((column) => {
+            (_a = params.columnApi.getColumns()) === null || _a === void 0 ? void 0 : _a.forEach((column) => {
                 allColumnIds.push(column.getId());
             });
             params.columnApi.autoSizeColumns(allColumnIds, true);
@@ -143,7 +144,7 @@ export function EgeriaAssetCatalog(props) {
     const goTo = (formData) => {
         const path = ASSET_CATALOG_PATH;
         const queryParams = getQueryParamsPath(formData);
-        navigate(`${path}${queryParams.length ? `?${queryParams.join('&')}` : ``}`);
+        navigate(`${path}${queryParams.length ? `?${queryParams.join('&')}` : ''}`);
     };
     return (_jsx(_Fragment, { children: _jsxs("div", Object.assign({ style: { display: 'flex', alignItems: 'stretch', flexDirection: 'column', position: 'relative', height: '100%', } }, { children: [_jsx(LoadingOverlay, { visible: rowData.isLoading || typesData.isLoading }), _jsxs("div", Object.assign({ style: { display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 } }, { children: [_jsx(TextInput, { mr: "xl", style: { minWidth: 180 }, placeholder: "Search", value: form.q, onKeyPress: handleEnterPress, onChange: (event) => setForm(Object.assign(Object.assign({}, form), { q: event.currentTarget.value })) }), _jsx(MultiSelect, { mr: "xl", style: { minWidth: 230 }, data: typesData.typesData, value: form.types, placeholder: "Types", onChange: (value) => setForm(Object.assign(Object.assign({}, form), { types: [...value] })) }), _jsx(Checkbox, { mr: "xl", label: 'Exact match', checked: form.exactMatch, onChange: (event) => setForm(Object.assign(Object.assign({}, form), { exactMatch: event.currentTarget.checked })) }), _jsx(Checkbox, { mr: "xl", label: 'Case sensitive', checked: form.caseSensitive, onChange: (event) => setForm(Object.assign(Object.assign({}, form), { caseSensitive: event.currentTarget.checked })) }), _jsx(Button, Object.assign({ onClick: () => submit() }, { children: "Search" }))] })), _jsx("div", Object.assign({ className: "ag-theme-alpine", style: { width: '100%', height: '100%' } }, { children: _jsx(AgGridReact, { gridOptions: gridOptions, rowData: rowData.rowData }) })), _jsx("div", { children: _jsx(Button, Object.assign({ size: "xs", compact: true, fullWidth: true, onClick: () => loadMore(), style: { marginBottom: 1, marginTop: 10 } }, { children: "Load more..." })) })] })) }));
 }

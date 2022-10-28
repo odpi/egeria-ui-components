@@ -1,12 +1,11 @@
 import * as React from 'react';
 // import TextField from '@mui/material/TextField';
 // import Autocomplete from '@mui/material/Autocomplete';
-import { Loader } from '@mantine/core';
-import { lineage } from "@lfai/egeria-js-commons";
+import { lineage } from '@lfai/egeria-js-commons';
 
-export function TypesSuggestions(props: any) {
-  const [open, setOpen] = React.useState(false);
-  const [options, setOptions] = React.useState([]);
+export function TypesSuggestions() {
+  const [open] = React.useState(false);
+  const [options, setOptions]: [any, any] = React.useState([]);
   const loading = open && options.length === 0;
 
   React.useEffect(() => {
@@ -15,7 +14,6 @@ export function TypesSuggestions(props: any) {
     }
 
     lineage.getLineageTypes().then(response => response.json()).then(data => {
-      // @ts-ignore
       setOptions([...data]);
     });
   }, [loading]);

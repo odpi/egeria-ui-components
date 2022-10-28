@@ -5,7 +5,7 @@ interface Props {
     apiUrl: any;
     guid: any;
     lineageType: any;
-    navigateTo: Function;
+    navigateTo: any;
 }
 export declare function EgeriaLineageGraph(props: Props): JSX.Element;
 export {};

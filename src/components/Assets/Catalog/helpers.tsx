@@ -23,8 +23,8 @@ const itemName = (item: any) => {
 };
 
 const parseQualifiedName = (str: any) => {
-  let regexpNames = /\((?<key>\w+)\)=(?<value>[a-zA-Z0-9_ ]+)/mg;
-  let response = [];
+  const regexpNames = /\((?<key>\w+)\)=(?<value>[a-zA-Z0-9_ ]+)/mg;
+  const response = [];
   let match = regexpNames.exec(str);
 
   do {

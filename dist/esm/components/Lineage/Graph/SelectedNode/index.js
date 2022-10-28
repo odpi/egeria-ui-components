@@ -23,11 +23,11 @@ const attributes = (items) => {
     return arr;
 };
 const getPropertiesForDisplay = (item) => {
-    let displayName = item.label;
-    let guid = item.id;
-    let summary = item.summary;
-    let description = item.description;
-    let displayProperties = [
+    const displayName = item.label;
+    const guid = item.id;
+    const summary = item.summary;
+    const description = item.description;
+    const displayProperties = [
         { displayName: displayName },
         { guid: guid }
     ];

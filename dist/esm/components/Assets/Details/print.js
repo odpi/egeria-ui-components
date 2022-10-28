@@ -8,11 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
-import { authHeader, egeriaFetch } from "@lfai/egeria-js-commons";
-import { LoadingOverlay, Paper } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { authHeader, egeriaFetch } from '@lfai/egeria-js-commons';
+import { LoadingOverlay, Paper } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { renderTable } from ".";
+import { renderTable } from '.';
 export function EgeriaAssetDetailsPrint(props) {
     const [loading, setLoading] = useState(false);
     const [asset, setAsset] = useState(undefined);

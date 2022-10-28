@@ -36,7 +36,7 @@ const renderHTMLTable = (title, properties) => {
                                     }) })] })) })), _jsx(Divider, { my: "sm", variant: "dashed" })] }), " "] });
 };
 export const renderTable = (title, object) => {
-    let properties = getProperties(object);
+    const properties = getProperties(object);
     return renderHTMLTable(title, properties);
 };
 export function EgeriaAssetDetails(props) {
