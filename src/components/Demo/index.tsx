@@ -12,7 +12,7 @@ export function Demo() {
     <div className="container">
       <Router basename={process.env.REACT_APP_ROOT_PATH}>
         <Routes>
-          <Route path={`/asset-lineage/:guid/:lineageType`} element={<EgeriaLineageGraphRouteWrapper apiUrl={'http://localhost:9000'} />} />
+          <Route path={'/asset-lineage/:guid/:lineageType'} element={<EgeriaLineageGraphRouteWrapper apiUrl={'http://localhost:9000'} />} />
           <Route path={'/assets/:guid/details'} element={<EgeriaAssetDetails apiUrl={'http://localhost:9000'}/>} />
           <Route path={'/assets/:guid/details/print'} element={<EgeriaAssetDetailsPrint apiUrl={'http://localhost:9000'}/>} />
           <Route path={'/assets/catalog'} element={<EgeriaAssetCatalog apiUrl={'http://localhost:9000'} />} />

@@ -35,12 +35,12 @@ const attributes = (items: any) => {
 };
 
 const getPropertiesForDisplay = (item: any) => {
-  let displayName = item.label;
-  let guid = item.id;
-  let summary = item.summary;
-  let description = item.description;
+  const displayName = item.label;
+  const guid = item.id;
+  const summary = item.summary;
+  const description = item.description;
 
-  let displayProperties: any = [
+  const displayProperties: any = [
     { displayName: displayName },
     { guid: guid }
   ];

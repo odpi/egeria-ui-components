@@ -48,7 +48,7 @@ const renderHTMLTable = (title: string, properties: any) => {
 }
 
 export const renderTable = (title: string, object: any) => {
-  let properties: any = getProperties(object);
+  const properties: any = getProperties(object);
 
   return renderHTMLTable(title, properties);
 };
@@ -60,7 +60,7 @@ interface Props {
 
 export function EgeriaAssetDetails(props: Props) {
   const [loading, setLoading] = useState(false);
-  const [asset, setAsset]: [any, Function] = useState(undefined);
+  const [asset, setAsset]: [any, any] = useState(undefined);
 
   const { apiUrl } = props;
   const { guid: guidFromParams } = useParams();

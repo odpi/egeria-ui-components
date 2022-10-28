@@ -1,8 +1,8 @@
-import { authHeader, egeriaFetch } from "@lfai/egeria-js-commons";
-import { LoadingOverlay, Paper } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { authHeader, egeriaFetch } from '@lfai/egeria-js-commons';
+import { LoadingOverlay, Paper } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { renderTable } from ".";
+import { renderTable } from '.';
 
 interface Props {
   guid?: any;
@@ -11,7 +11,7 @@ interface Props {
 
 export function EgeriaAssetDetailsPrint(props: Props) {
   const [loading, setLoading] = useState(false);
-  const [asset, setAsset]: [any, Function] = useState(undefined);
+  const [asset, setAsset]: [any, any] = useState(undefined);
 
   const { apiUrl } = props;
   const { guid: guidFromParams } = useParams();

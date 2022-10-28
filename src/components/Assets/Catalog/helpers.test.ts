@@ -2,12 +2,11 @@ import {
   itemDescription,
   itemName,
   parseQualifiedName,
-  capitalizeFirstLetter,
-  getIcon
+  capitalizeFirstLetter
 } from './helpers';
 
-describe("AssetCatalog Helpers", () => {
-  it("itemDescription()", () => {
+describe('AssetCatalog Helpers', () => {
+  it('itemDescription()', () => {
     const data1 = {
       properties: {
         description: 'description'
@@ -24,7 +23,7 @@ describe("AssetCatalog Helpers", () => {
     expect(itemDescription(data2)).toBe('summary');
   });
 
-  it("itemName()", () => {
+  it('itemName()', () => {
     const data1 = {
       properties: {
         displayName: 'displayName'
@@ -40,18 +39,18 @@ describe("AssetCatalog Helpers", () => {
     expect(itemName(data2)).toBe('name');
   });
 
-  it("parseQualifiedName()", () => {
+  it('parseQualifiedName()', () => {
     const qualifiedName = '(category)=Egeria Container::(category)=Egeria Container Terms::(category)=Other Data::(term)=Filename';
 
     expect(parseQualifiedName(qualifiedName)).toEqual([
-      {"key": "category", "value": "Egeria Container"},
-      {"key": "category", "value": "Egeria Container Terms"},
-      {"key": "category", "value": "Other Data"},
-      {"key": "term", "value": "Filename"}
+      {'key': 'category', 'value': 'Egeria Container'},
+      {'key': 'category', 'value': 'Egeria Container Terms'},
+      {'key': 'category', 'value': 'Other Data'},
+      {'key': 'term', 'value': 'Filename'}
     ]);
   });
 
-  it("capitalizeFirstLetter()", () => {
+  it('capitalizeFirstLetter()', () => {
     expect(capitalizeFirstLetter('egeria')).toBe('Egeria');
   });
 });

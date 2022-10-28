@@ -94,7 +94,7 @@ export function EgeriaAssetCatalog(props: Props) {
     onFirstDataRendered: (params: any) => {
       const allColumnIds: string[] = [];
 
-      params.columnApi.getColumns()!.forEach((column: any) => {
+      params.columnApi.getColumns()?.forEach((column: any) => {
         allColumnIds.push(column.getId());
       });
 
@@ -184,7 +184,7 @@ export function EgeriaAssetCatalog(props: Props) {
     const path = ASSET_CATALOG_PATH;
     const queryParams = getQueryParamsPath(formData);
 
-    navigate(`${path}${queryParams.length ? `?${queryParams.join('&')}` : ``}` );
+    navigate(`${path}${queryParams.length ? `?${queryParams.join('&')}` : ''}` );
   };
 
   return (
