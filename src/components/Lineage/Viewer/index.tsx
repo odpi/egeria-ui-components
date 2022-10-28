@@ -47,10 +47,10 @@ class LineageViewer extends React.Component<Props, State> {
     const div =
       <div className="content flex row">
         <div className="m5 flex column">
-          <TypesSuggestions itemId={typeId} searchedItem={false} />
+          <TypesSuggestions item-id={typeId} searched-item={false} />
         </div>
         <div className="m5 flex column">
-          <NameSuggestions itemId={nameId} searchedItem={false} />
+          <NameSuggestions item-id={nameId} searched-item={false} />
         </div>
       </div>;
 
@@ -173,19 +173,19 @@ class LineageViewer extends React.Component<Props, State> {
 
           <div className="content flex row">
             <div className="m5 flex-column">
-              <TypesSuggestions itemId="type-name-looking" searchedItem={true} />
+              <TypesSuggestions item-id="type-name-looking" searched-item={true} />
             </div>
             <div className="m5 flex-column">
-              <NameSuggestions itemId="name-looking" searchedItem={true} />
+              <NameSuggestions item-id="name-looking" searched-item={true} />
             </div>
           </div>
 
           <div className="content flex row">
             <div className="m5 flex-column">
-              <TypesSuggestions itemId="type-name-related" searchedItem={false} />
+              <TypesSuggestions item-id="type-name-related" searched-item={false} />
             </div>
             <div className="m5 flex-column">
-              <NameSuggestions itemId="name-related" searchedItem={false} />
+              <NameSuggestions item-id="name-related" searched-item={false} />
             </div>
           </div>
 
