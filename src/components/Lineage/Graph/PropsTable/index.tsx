@@ -16,17 +16,20 @@ export function EgeriaPropsTable(props: Props) {
   ));
 
   return (<>
-    <Accordion initialItem={0}>
-      <Accordion.Item label={title}>
-        <Table>
-          <thead>
-            <tr>
-              <th>Property</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </Table>
+    <Accordion defaultValue={`${0}`}>
+      <Accordion.Item value={title}>
+        <Accordion.Control>{title}</Accordion.Control>
+        <Accordion.Panel>
+          <Table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>{rows}</tbody>
+          </Table>
+        </Accordion.Panel>
       </Accordion.Item>
     </Accordion>
   </>);

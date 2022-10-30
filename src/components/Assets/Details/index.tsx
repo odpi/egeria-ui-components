@@ -121,9 +121,12 @@ export function EgeriaAssetDetails(props: Props) {
         <Paper>
           <Accordion>
             { asset.classifications.map((c: any, index: any) => {
-              return <Accordion.Item label={`Classification ${c.name}`} key={index}>
-                      { renderTable('', c) }
-                    </Accordion.Item>
+              return <Accordion.Item value={c.name} key={index}>
+                <Accordion.Control>{ `Classification ${c.name}` }</Accordion.Control>
+                <Accordion.Panel>
+                  { renderTable('', c) }
+                </Accordion.Panel>
+              </Accordion.Item>
             }) }
           </Accordion>
         </Paper>
