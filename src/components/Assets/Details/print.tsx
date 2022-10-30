@@ -6,14 +6,12 @@ import { renderTable } from '.';
 
 interface Props {
   guid?: any;
-  apiUrl?: any;
 }
 
 export function EgeriaAssetDetailsPrint(props: Props) {
   const [loading, setLoading] = useState(false);
   const [asset, setAsset]: [any, any] = useState(undefined);
 
-  const { apiUrl } = props;
   const { guid: guidFromParams } = useParams();
   let { guid } = props;
 
@@ -32,8 +30,8 @@ export function EgeriaAssetDetailsPrint(props: Props) {
   useEffect(() => {
     setLoading(true);
 
-    fetchData(`${apiUrl}/api/assets/${ guid }`);
-  }, [apiUrl, guid]);
+    fetchData(`/api/assets/${ guid }`);
+  }, [guid]);
 
   useEffect(() => {
     if(asset) {

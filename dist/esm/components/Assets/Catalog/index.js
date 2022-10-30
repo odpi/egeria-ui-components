@@ -31,8 +31,7 @@ const emptyForm = {
  * Initial types data value.
  */
 const emptyTypesData = [];
-export function EgeriaAssetCatalog(props) {
-    const { apiUrl } = props;
+export function EgeriaAssetCatalog() {
     const [searchParams, setSearchParams] = useSearchParams();
     const queryParams = getQueryParams(searchParams);
     const navigate = useNavigate();
@@ -61,7 +60,7 @@ export function EgeriaAssetCatalog(props) {
                 filter: true,
                 headerName: 'Name',
                 cellRenderer: (params) => {
-                    return _jsx(DisplayNameCellRenderer, { apiUrl: apiUrl, data: params.data });
+                    return _jsx(DisplayNameCellRenderer, { data: params.data });
                 }
             },
             { field: 'origin.metadataCollectionName', filter: true, headerName: 'Origin' },
@@ -92,7 +91,7 @@ export function EgeriaAssetCatalog(props) {
     useEffect(() => {
         setTypesData(Object.assign(Object.assign({}, typesData), { isLoading: true }));
         const bringTypes = () => __awaiter(this, void 0, void 0, function* () {
-            const rawTypesData = yield fetchTypes(apiUrl);
+            const rawTypesData = yield fetchTypes();
             setTypesData({
                 isLoading: false,
                 typesData: [...rawTypesData]
@@ -104,7 +103,7 @@ export function EgeriaAssetCatalog(props) {
         const _queryParams = getQueryParams(searchParams);
         setRowData(Object.assign(Object.assign({}, rowData), { isLoading: true }));
         const queryData = () => __awaiter(this, void 0, void 0, function* () {
-            const _rowData = yield fetchRawData(Object.assign(Object.assign({}, form), _queryParams), apiUrl);
+            const _rowData = yield fetchRawData(Object.assign(Object.assign({}, form), _queryParams));
             setRowData({
                 isLoading: false,
                 rowData: [

@@ -35,12 +35,7 @@ const emptyForm: formData = {
  */
 const emptyTypesData: Array<any> = [];
 
-interface Props {
-  apiUrl?: string;
-}
-
-export function EgeriaAssetCatalog(props: Props) {
-  const { apiUrl } = props;
+export function EgeriaAssetCatalog() {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = getQueryParams(searchParams);
   const navigate = useNavigate();
@@ -76,7 +71,7 @@ export function EgeriaAssetCatalog(props: Props) {
         filter: true,
         headerName: 'Name',
         cellRenderer: (params: any) => {
-          return <DisplayNameCellRenderer apiUrl={apiUrl} data={params.data}/>;
+          return <DisplayNameCellRenderer data={params.data}/>;
         }
       },
       {field: 'origin.metadataCollectionName', filter: true, headerName: 'Origin' },
@@ -116,7 +111,7 @@ export function EgeriaAssetCatalog(props: Props) {
     setTypesData({...typesData, isLoading: true});
 
     const bringTypes = async () => {
-      const rawTypesData = await fetchTypes(apiUrl);
+      const rawTypesData = await fetchTypes();
 
       setTypesData({
         isLoading: false,
@@ -133,7 +128,7 @@ export function EgeriaAssetCatalog(props: Props) {
     setRowData({...rowData, isLoading: true});
 
     const queryData = async () => {
-      const _rowData = await fetchRawData({...form, ..._queryParams}, apiUrl);
+      const _rowData = await fetchRawData({...form, ..._queryParams});
 
       setRowData({
         isLoading: false,

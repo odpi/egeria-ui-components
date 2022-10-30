@@ -16,7 +16,6 @@ import { renderTable } from '.';
 export function EgeriaAssetDetailsPrint(props) {
     const [loading, setLoading] = useState(false);
     const [asset, setAsset] = useState(undefined);
-    const { apiUrl } = props;
     const { guid: guidFromParams } = useParams();
     let { guid } = props;
     if (!guid) {
@@ -30,8 +29,8 @@ export function EgeriaAssetDetailsPrint(props) {
     });
     useEffect(() => {
         setLoading(true);
-        fetchData(`${apiUrl}/api/assets/${guid}`);
-    }, [apiUrl, guid]);
+        fetchData(`/api/assets/${guid}`);
+    }, [guid]);
     useEffect(() => {
         if (asset) {
             window.print();
