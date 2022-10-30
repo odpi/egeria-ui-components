@@ -26,7 +26,6 @@ interface IGraphData {
 }
 
 interface Props {
-  apiUrl: any;
   guid: any;
   lineageType: any;
   navigateTo: any;
@@ -42,7 +41,6 @@ const getLineageOfIndex = (lineageIndex: number) => {
 
 export function EgeriaLineageGraph(props: Props) {
   const {
-    apiUrl,
     guid,
     lineageType,
     navigateTo
@@ -56,7 +54,7 @@ export function EgeriaLineageGraph(props: Props) {
   const [selectedNodeData, setSelectedNodeData] = useState(undefined);
 
   // TODO: extract URL to URL Map
-  const uri = (lineageType: any) => `${apiUrl}/api/lineage/entities/${ guid }/${ lineageType }?includeProcesses=true`;
+  const uri = (lineageType: any) => `/api/lineage/entities/${ guid }/${ lineageType }?includeProcesses=true`;
 
   const fetchData = async (uri: string) => {
     const res = await egeriaFetch(uri, 'GET', { ...authHeader() }, {});

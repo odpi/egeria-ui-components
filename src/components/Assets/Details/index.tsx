@@ -55,14 +55,12 @@ export const renderTable = (title: string, object: any) => {
 
 interface Props {
   guid?: any;
-  apiUrl?: any;
 }
 
 export function EgeriaAssetDetails(props: Props) {
   const [loading, setLoading] = useState(false);
   const [asset, setAsset]: [any, any] = useState(undefined);
 
-  const { apiUrl } = props;
   const { guid: guidFromParams } = useParams();
   let { guid } = props;
 
@@ -81,8 +79,8 @@ export function EgeriaAssetDetails(props: Props) {
   useEffect(() => {
     setLoading(true);
 
-    fetchData(`${apiUrl}/api/assets/${ guid }`);
-  }, [apiUrl, guid]);
+    fetchData(`/api/assets/${ guid }`);
+  }, [guid]);
 
   const selectedNode = {
     id: asset?.guid,

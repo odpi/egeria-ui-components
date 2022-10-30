@@ -43,7 +43,6 @@ export function EgeriaAssetDetails(props) {
     var _a;
     const [loading, setLoading] = useState(false);
     const [asset, setAsset] = useState(undefined);
-    const { apiUrl } = props;
     const { guid: guidFromParams } = useParams();
     let { guid } = props;
     if (!guid) {
@@ -57,8 +56,8 @@ export function EgeriaAssetDetails(props) {
     });
     useEffect(() => {
         setLoading(true);
-        fetchData(`${apiUrl}/api/assets/${guid}`);
-    }, [apiUrl, guid]);
+        fetchData(`/api/assets/${guid}`);
+    }, [guid]);
     const selectedNode = {
         id: asset === null || asset === void 0 ? void 0 : asset.guid,
         label: (_a = asset === null || asset === void 0 ? void 0 : asset.type) === null || _a === void 0 ? void 0 : _a.name
