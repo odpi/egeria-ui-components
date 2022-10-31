@@ -30,4 +30,6 @@ jobs:
         run: npm run build
       - name: Publish package to NPM
         if: steps.check.outputs.changed == 'true'
-        run: npm token && npm publish . --access=public
+        run: |
+          npm login --scope=@lfai --registry=https://registry.npmjs.org/
+          npm publish . --access=public
