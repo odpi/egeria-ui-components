@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'odpi/egeria-ui-components'
     steps:
+      - name: Checkout source
+        uses: actions/checkout@v3.1.0
       - name: Check if version has been updated
         id: check
         uses: EndBug/version-check@v1
