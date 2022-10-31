@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Checkbox, TextInput, MultiSelect, Button, LoadingOverlay } from '@mantine/core';
+import {Checkbox, TextInput, MultiSelect, Button, LoadingOverlay, Alert} from '@mantine/core';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import { AgGridReact } from 'ag-grid-react';
@@ -18,6 +18,7 @@ import {
   fetchTypes,
   fetchRawData
 } from '@lfai/egeria-js-commons';
+import {AlertCircle} from 'tabler-icons-react';
 
 /**
  * Initial empty form value.
@@ -44,6 +45,14 @@ export function EgeriaAssetCatalog() {
     isLoading: false,
     typesData: [...emptyTypesData, ...queryParams.types]
   } as any);
+
+  const [searchValidationInfo, setErrorSearchValidationInfo] = useState(
+      {
+        isError: false,
+        errorMessage: ''
+      } as any
+  );
+
 
   const [form, setForm] = useState({
     ...emptyForm,
@@ -141,11 +150,41 @@ export function EgeriaAssetCatalog() {
     queryData();
   }, [searchParams]);
 
+
+  const areParamsValid = ()  => {
+    const query: string = form.q
+    if (query.length < 3) {
+      setErrorSearchValidationInfo({
+        isError :true,
+        errorMessage : 'The query must be at least 3 characters long'
+      });
+      return false;
+    }
+    const types : Array<string> = form.types;
+    if (!types || types.length === 0) {
+      setErrorSearchValidationInfo({
+        isError :true,
+        errorMessage : 'You must select at least one type'
+      })
+      return false;
+    }
+    return true;
+  }
+
   /*
    * Submit handler for the main form.
    */
   const submit = () => {
-    setSearchParams(form);
+
+    if (areParamsValid() && searchValidationInfo.isError) {
+      setErrorSearchValidationInfo({
+        isError :false,
+        errorMessage : ''
+      })
+    }
+    if (areParamsValid()) {
+      setSearchParams(form);
+    }
   };
 
   /*
@@ -215,8 +254,15 @@ export function EgeriaAssetCatalog() {
         <Button onClick={() => submit()}>
           Search
         </Button>
-      </div>
 
+      </div>
+      <div>
+        {searchValidationInfo.isError &&
+        <Alert icon={<AlertCircle size={16}/>} color="red">
+          {<p>{searchValidationInfo.errorMessage}</p>}
+        </Alert>
+        }
+      </div>
       <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
         <AgGridReact gridOptions={gridOptions}
                      rowData={rowData.rowData} />
