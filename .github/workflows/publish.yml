@@ -25,8 +25,9 @@ jobs:
       - name: Run tests
         if: steps.check.outputs.changed == 'true'
         run: npm run test
+      - name: Run build
+        if: steps.check.outputs.changed == 'true'
+        run: npm run build
       - name: Publish package to NPM
         if: steps.check.outputs.changed == 'true'
-        run: npm publish . --access=public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm token && npm publish . --access=public
