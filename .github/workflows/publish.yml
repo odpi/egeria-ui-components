@@ -1,0 +1,30 @@
+name: egeria-ui-components publish
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: github.repository == 'odpi/egeria-ui-components'
+    steps:
+      - name: Check if version has been updated
+        id: check
+        uses: EndBug/version-check@v1
+      - name: Set up Node.js for NPM
+        if: steps.check.outputs.changed == 'true'
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.13.0
+      - name: Install dependencies
+        if: steps.check.outputs.changed == 'true'
+        run: npm install
+      - name: Run tests
+        if: steps.check.outputs.changed == 'true'
+        run: npm run test
+      - name: Publish package to NPM
+        if: steps.check.outputs.changed == 'true'
+        run: npm publish . --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
