@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import {Checkbox, TextInput, MultiSelect, Button, LoadingOverlay, Alert} from '@mantine/core';
+import {Checkbox, TextInput, MultiSelect, Button, LoadingOverlay} from '@mantine/core';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import { AgGridReact } from 'ag-grid-react';
@@ -12,20 +12,23 @@ import DisplayNameCellRenderer from './displayNameCellRenderer';
 import {
   ASSET_CATALOG_PATH,
   PAGE_SIZE_INCREASE_VALUE,
+  QUERY_MIN_LENGTH,
   formData,
   getQueryParams,
   getQueryParamsPath,
   fetchTypes,
-  fetchRawData
+  fetchRawData,
+  isStringLonger,
+  isArrayEmpty
 } from '@lfai/egeria-js-commons';
-import {AlertCircle} from 'tabler-icons-react';
+
 
 /**
  * Initial empty form value.
  */
 const emptyForm: formData = {
   q: '',
-  types: [] as any,
+  types: [] as Array<string>,
   exactMatch: false,
   caseSensitive: false,
   pageSize: 25
@@ -45,14 +48,6 @@ export function EgeriaAssetCatalog() {
     isLoading: false,
     typesData: [...emptyTypesData, ...queryParams.types]
   } as any);
-
-  const [searchValidationInfo, setErrorSearchValidationInfo] = useState(
-      {
-        isError: false,
-        errorMessage: ''
-      } as any
-  );
-
 
   const [form, setForm] = useState({
     ...emptyForm,
@@ -150,39 +145,11 @@ export function EgeriaAssetCatalog() {
     queryData();
   }, [searchParams]);
 
-
-  const areParamsValid = ()  => {
-    const query: string = form.q
-    if (query.length < 3) {
-      setErrorSearchValidationInfo({
-        isError :true,
-        errorMessage : 'The query must be at least 3 characters long'
-      });
-      return false;
-    }
-    const types : Array<string> = form.types;
-    if (!types || types.length === 0) {
-      setErrorSearchValidationInfo({
-        isError :true,
-        errorMessage : 'You must select at least one type'
-      })
-      return false;
-    }
-    return true;
-  }
-
   /*
    * Submit handler for the main form.
    */
   const submit = () => {
-
-    if (areParamsValid() && searchValidationInfo.isError) {
-      setErrorSearchValidationInfo({
-        isError :false,
-        errorMessage : ''
-      })
-    }
-    if (areParamsValid()) {
+    if (isStringLonger(form.q, QUERY_MIN_LENGTH) && !isArrayEmpty(form.types)) {
       setSearchParams(form);
     }
   };
@@ -231,6 +198,8 @@ export function EgeriaAssetCatalog() {
                    style={{minWidth: 180}}
                    placeholder="Search"
                    value={form.q}
+                   required
+                   error={ !isStringLonger(form.q, QUERY_MIN_LENGTH)  ? 'Query must be at least ' + QUERY_MIN_LENGTH + ' characters' : ''}
                    onKeyPress={handleEnterPress}
                    onChange={(event: any) => setForm({...form, q: event.currentTarget.value})} />
 
@@ -238,6 +207,7 @@ export function EgeriaAssetCatalog() {
                      style={{minWidth: 230}}
                      data={typesData.typesData}
                      value={form.types}
+                     error={ isArrayEmpty(form.types) ? 'At least one type has to be selected' : ''}
                      placeholder="Types"
                      onChange={(value) => setForm({...form, types: [...value]})} />
 
@@ -255,13 +225,6 @@ export function EgeriaAssetCatalog() {
           Search
         </Button>
 
-      </div>
-      <div>
-        {searchValidationInfo.isError &&
-        <Alert icon={<AlertCircle size={16}/>} color="red">
-          {<p>{searchValidationInfo.errorMessage}</p>}
-        </Alert>
-        }
       </div>
       <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
         <AgGridReact gridOptions={gridOptions}
