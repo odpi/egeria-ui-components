@@ -1,6 +1,6 @@
 {
   "name": "@lfai/egeria-ui-components",
-  "version": "4.1.5",
+  "version": "4.2.0",
   "description": "Encapsulated reactjs components with business logic inside.",
   "license": "Apache-2.0",
   "repository": {
@@ -48,17 +48,17 @@
     "@emotion/cache": "^11.10.5",
     "@emotion/react": "^11.10.5",
     "@emotion/serialize": "^1.1.1",
-    "@lfai/egeria-js-commons": "^4.0.10",
-    "@lfai/egeria-ui-core": "^4.0.8",
-    "@lfai/happi-graph": "^4.0.5",
+    "@lfai/egeria-js-commons": "^4.2.0",
+    "@lfai/egeria-ui-core": "^4.2.0",
+    "@lfai/happi-graph": "^4.1.0",
     "@mantine/core": "^5.6.3",
     "@mantine/hooks": "^5.6.3",
     "ag-grid-community": "^28.1.1",
     "ag-grid-react": "^28.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tabler-icons-react": "1.54.0",
-    "web-vitals": "2.1.4",
+    "tabler-icons-react": "1.55.0",
+    "web-vitals": "3.0.4",
     "web-worker": "1.2.0"
   },
   "devDependencies": {
