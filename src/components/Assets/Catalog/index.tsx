@@ -27,8 +27,16 @@ import {
  * Initial empty form value.
  */
 const emptyForm: formData = {
-  q: '',
-  types: [] as Array<string>,
+  q: {
+    value : '',
+    isValid : false,
+    isPristine : true
+  },
+  types: {
+    value : [] as Array<string>,
+    isValid : false,
+    isPristine : true
+  },
   exactMatch: false,
   caseSensitive: false,
   pageSize: 25
@@ -51,10 +59,6 @@ export function EgeriaAssetCatalog() {
 
   const [form, setForm] = useState({
     ...emptyForm,
-    qIsPristine : true,
-    qIsValid : false,
-    typesIsPristine : true,
-    typesIsValid : false,
     ...queryParams
   } as any);
 
@@ -107,26 +111,31 @@ export function EgeriaAssetCatalog() {
 
   useEffect(() => {
     const _queryParams = getQueryParams(searchParams);
-    let qip = form.qIsPristine
-    let qiv = form.qIsValid
-    let tip = form.typesIsPristine
-    let tiv = form.typesIsValid
-    if (_queryParams.q !== '' && qip) {
-      qip = false;
-      qiv = isStringLonger(_queryParams.q, QUERY_MIN_LENGTH)
+    let qIsPristine = form.q.isPristine
+    let qIsValid = form.q.isValid
+    let typesIsPristine = form.types.isPristine
+    let typesIsValid = form.types.isValid
+    if (_queryParams.q !== '' && qIsPristine) {
+      qIsPristine = false;
+      qIsValid = isStringLonger(_queryParams.q, QUERY_MIN_LENGTH)
     }
-    if (!isArrayEmpty(_queryParams.types) && tip) {
-      tip = false;
-      tiv = !isArrayEmpty(_queryParams.types)
+    if (!isArrayEmpty(_queryParams.types) && typesIsPristine) {
+      typesIsPristine = false;
+      typesIsValid = !isArrayEmpty(_queryParams.types)
     }
     setForm({
       ..._queryParams,
-      qIsPristine : qip,
-      qIsValid : qiv,
-      typesIsPristine : tip,
-      typesIsValid : tiv
+      q: {
+        value: _queryParams.q || '',
+        isPristine : qIsPristine,
+        isValid: qIsValid
+      },
+      types: {
+        value: [..._queryParams.types],
+        isPristine : typesIsPristine,
+        isValid: typesIsValid
+      }
     });
-
   }, [searchParams]);
 
 
@@ -168,14 +177,14 @@ export function EgeriaAssetCatalog() {
    * Submit handler for the main form.
    */
   const submit = () => {
-    if (form.qIsPristine) {
-      form.qIsPrestine = !form.qIsPristine
+    if (form.q.isPristine) {
+      form.q.isPrestine = !form.q.isPristine
     }
-    if (form.typesIsPristine) {
-      form.typesIsPristine = !form.typesIsPristine
+    if (form.types.isPristine) {
+      form.types.isPristine = !form.types.isPristine
     }
 
-    if (form.qIsValid && form.typesIsValid) {
+    if (form.q.isValid && form.types.isValid) {
       setSearchParams(form);
     }
   };
@@ -224,29 +233,33 @@ export function EgeriaAssetCatalog() {
                    style={{minWidth: 180}}
                    disabled={form.types.length === 0}
                    placeholder="Search"
-                   value={form.q}
+                   value={form.q.value}
                    required
-                   error={(!form.qIsPristine) && !form.qIsValid  ? 'Query must be at least ' + QUERY_MIN_LENGTH + ' characters' : ''}
+                   error={(!form.q.isPristine) && !form.q.isValid  ? 'Query must be at least ' + QUERY_MIN_LENGTH + ' characters' : ''}
                    onKeyPress={handleEnterPress}
                    onChange={(event: any) => setForm({
                      ...form,
-                     q: event.currentTarget.value,
-                     qIsPristine : false,
-                     qIsValid : isStringLonger(form.q, QUERY_MIN_LENGTH)
+                     q: {
+                       value : event.currentTarget.value,
+                       isPristine : false,
+                       isValid : isStringLonger(form.q.value, QUERY_MIN_LENGTH)
+                     }
                    })} />
 
         <MultiSelect mr="xl"
                      style={{minWidth: 230}}
                      disabled={form.types.length === 0}
                      data={typesData.typesData}
-                     value={form.types}
-                     error={!form.typesIsPristine && !form.typesIsValid ? 'At least one type has to be selected' : ''}
+                     value={form.types.value}
+                     error={!form.types.isPristine && !form.types.isValid ? 'At least one type has to be selected' : ''}
                      placeholder="Types"
                      onChange={(value) => setForm({
                        ...form,
-                       types: [...value],
-                       typesIsPristine : false,
-                       typesIsValid : !isArrayEmpty(form.types)
+                       types: {
+                         value : [...value],
+                         isPristine : false,
+                         isValid : !isArrayEmpty(form.types.value)
+                       }
                      })} />
 
         <Checkbox mr="xl"
