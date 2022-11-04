@@ -111,17 +111,17 @@ export function EgeriaAssetCatalog() {
 
   useEffect(() => {
     const _queryParams = getQueryParams(searchParams);
-    let qIsPristine = form.q.isPristine
-    let qIsValid = form.q.isValid
-    let typesIsPristine = form.types.isPristine
-    let typesIsValid = form.types.isValid
+    let qIsPristine = form.q.isPristine;
+    let qIsValid = form.q.isValid;
+    let typesIsPristine = form.types.isPristine;
+    let typesIsValid = form.types.isValid;
     if (_queryParams.q !== '' && qIsPristine) {
       qIsPristine = false;
-      qIsValid = isStringLonger(_queryParams.q, QUERY_MIN_LENGTH)
+      qIsValid = isStringLonger(_queryParams.q, QUERY_MIN_LENGTH);
     }
     if (!isArrayEmpty(_queryParams.types) && typesIsPristine) {
       typesIsPristine = false;
-      typesIsValid = !isArrayEmpty(_queryParams.types)
+      typesIsValid = !isArrayEmpty(_queryParams.types);
     }
     setForm({
       ..._queryParams,
@@ -177,13 +177,6 @@ export function EgeriaAssetCatalog() {
    * Submit handler for the main form.
    */
   const submit = () => {
-    if (form.q.isPristine) {
-      form.q.isPrestine = !form.q.isPristine
-    }
-    if (form.types.isPristine) {
-      form.types.isPristine = !form.types.isPristine
-    }
-
     if (form.q.isValid && form.types.isValid) {
       setSearchParams(form);
     }
