@@ -190,6 +190,7 @@ export function EgeriaAssetCatalog() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10}}>
         <TextInput mr="xl"
                    style={{minWidth: 180}}
+                   disabled={form.types.length === 0}
                    placeholder="Search"
                    value={form.q}
                    onKeyPress={handleEnterPress}
@@ -197,6 +198,7 @@ export function EgeriaAssetCatalog() {
 
         <MultiSelect mr="xl"
                      style={{minWidth: 230}}
+                     disabled={form.types.length === 0}
                      data={typesData.typesData}
                      value={form.types}
                      placeholder="Types"
@@ -204,15 +206,18 @@ export function EgeriaAssetCatalog() {
 
         <Checkbox mr="xl"
                   label={'Exact match'}
+                  disabled={form.types.length === 0}
                   checked={form.exactMatch}
                   onChange={(event) => setForm({...form, exactMatch: event.currentTarget.checked})} />
 
         <Checkbox mr="xl"
                   label={'Case sensitive'}
+                  disabled={form.types.length === 0}
                   checked={form.caseSensitive}
                   onChange={(event) => setForm({...form, caseSensitive: event.currentTarget.checked})} />
 
-        <Button onClick={() => submit()}>
+        <Button onClick={() => submit()}
+                disabled={form.types.length === 0}>
           Search
         </Button>
       </div>
@@ -223,7 +228,11 @@ export function EgeriaAssetCatalog() {
       </div>
 
       <div>
-        <Button size="xs" compact fullWidth onClick={() => loadMore()} style={{marginBottom:1, marginTop:10}}>
+        <Button size="xs"
+                compact
+                fullWidth
+                onClick={() => loadMore()} style={{marginBottom:1, marginTop:10}}
+                disabled={form.types.length === 0}>
           Load more...
         </Button>
       </div>
