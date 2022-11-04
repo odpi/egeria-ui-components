@@ -52,7 +52,9 @@ export function EgeriaAssetCatalog() {
   const [form, setForm] = useState({
     ...emptyForm,
     qIsPristine : true,
+    qIsValid : false,
     typesIsPristine : true,
+    typesIsValid : false,
     ...queryParams
   } as any);
 
@@ -106,17 +108,23 @@ export function EgeriaAssetCatalog() {
   useEffect(() => {
     const _queryParams = getQueryParams(searchParams);
     let qip = form.qIsPristine
+    let qiv = form.qIsValid
     let tip = form.typesIsPristine
+    let tiv = form.typesIsValid
     if (_queryParams.q !== '' && qip) {
       qip = false;
+      qiv = isStringLonger(_queryParams.q, QUERY_MIN_LENGTH)
     }
     if (!isArrayEmpty(_queryParams.types) && tip) {
       tip = false;
+      tiv = !isArrayEmpty(_queryParams.types)
     }
     setForm({
       ..._queryParams,
       qIsPristine : qip,
-      typesIsPristine : tip
+      qIsValid : qiv,
+      typesIsPristine : tip,
+      typesIsValid : tiv
     });
 
   }, [searchParams]);
@@ -163,7 +171,11 @@ export function EgeriaAssetCatalog() {
     if (form.qIsPristine) {
       form.qIsPrestine = !form.qIsPristine
     }
-    if (isStringLonger(form.q, QUERY_MIN_LENGTH) && !isArrayEmpty(form.types)) {
+    if (form.typesIsPristine) {
+      form.typesIsPristine = !form.typesIsPristine
+    }
+
+    if (form.qIsValid && form.typesIsValid) {
       setSearchParams(form);
     }
   };
@@ -178,7 +190,7 @@ export function EgeriaAssetCatalog() {
   };
 
   /*
-   * Load more handler for loading more elements, pagintation.
+   * Load more handler for loading more elements, pagination.
    */
   const loadMore = () => {
     const newPageSize = form.pageSize + PAGE_SIZE_INCREASE_VALUE;
@@ -214,18 +226,28 @@ export function EgeriaAssetCatalog() {
                    placeholder="Search"
                    value={form.q}
                    required
-                   error={(!form.qIsPristine) && !isStringLonger(form.q, QUERY_MIN_LENGTH)  ? 'Query must be at least ' + QUERY_MIN_LENGTH + ' characters' : ''}
+                   error={(!form.qIsPristine) && !form.qIsValid  ? 'Query must be at least ' + QUERY_MIN_LENGTH + ' characters' : ''}
                    onKeyPress={handleEnterPress}
-                   onChange={(event: any) => setForm({...form, q: event.currentTarget.value, qIsPristine : false})} />
+                   onChange={(event: any) => setForm({
+                     ...form,
+                     q: event.currentTarget.value,
+                     qIsPristine : false,
+                     qIsValid : isStringLonger(form.q, QUERY_MIN_LENGTH)
+                   })} />
 
         <MultiSelect mr="xl"
                      style={{minWidth: 230}}
                      disabled={form.types.length === 0}
                      data={typesData.typesData}
                      value={form.types}
-                     error={(!form.typesIsPristine) && isArrayEmpty(form.types) ? 'At least one type has to be selected' : ''}
+                     error={!form.typesIsPristine && !form.typesIsValid ? 'At least one type has to be selected' : ''}
                      placeholder="Types"
-                     onChange={(value) => setForm({...form, types: [...value], typesIsPristine : false})} />
+                     onChange={(value) => setForm({
+                       ...form,
+                       types: [...value],
+                       typesIsPristine : false,
+                       typesIsValid : !isArrayEmpty(form.types)
+                     })} />
 
         <Checkbox mr="xl"
                   label={'Exact match'}
