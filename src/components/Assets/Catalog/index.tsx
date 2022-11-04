@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Checkbox, TextInput, MultiSelect, Button, LoadingOverlay } from '@mantine/core';
+import {Checkbox, TextInput, MultiSelect, Button, LoadingOverlay} from '@mantine/core';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import { AgGridReact } from 'ag-grid-react';
@@ -12,19 +12,31 @@ import DisplayNameCellRenderer from './displayNameCellRenderer';
 import {
   ASSET_CATALOG_PATH,
   PAGE_SIZE_INCREASE_VALUE,
+  QUERY_MIN_LENGTH,
   formData,
   getQueryParams,
   getQueryParamsPath,
   fetchTypes,
-  fetchRawData
+  fetchRawData,
+  isStringLonger,
+  isArrayEmpty
 } from '@lfai/egeria-js-commons';
+
 
 /**
  * Initial empty form value.
  */
 const emptyForm: formData = {
-  q: '',
-  types: [] as any,
+  q: {
+    value : '',
+    isValid : false,
+    isPristine : true
+  },
+  types: {
+    value : [] as Array<string>,
+    isValid : false,
+    isPristine : true
+  },
   exactMatch: false,
   caseSensitive: false,
   pageSize: 25
@@ -99,11 +111,31 @@ export function EgeriaAssetCatalog() {
 
   useEffect(() => {
     const _queryParams = getQueryParams(searchParams);
-
+    let qIsPristine = form.q.isPristine;
+    let qIsValid = form.q.isValid;
+    let typesIsPristine = form.types.isPristine;
+    let typesIsValid = form.types.isValid;
+    if (_queryParams.q !== '' && qIsPristine) {
+      qIsPristine = false;
+      qIsValid = isStringLonger(_queryParams.q, QUERY_MIN_LENGTH);
+    }
+    if (!isArrayEmpty(_queryParams.types) && typesIsPristine) {
+      typesIsPristine = false;
+      typesIsValid = !isArrayEmpty(_queryParams.types);
+    }
     setForm({
-      ..._queryParams
+      ..._queryParams,
+      q: {
+        value: _queryParams.q || '',
+        isPristine : qIsPristine,
+        isValid: qIsValid
+      },
+      types: {
+        value: [..._queryParams.types],
+        isPristine : typesIsPristine,
+        isValid: typesIsValid
+      }
     });
-
   }, [searchParams]);
 
 
@@ -145,7 +177,9 @@ export function EgeriaAssetCatalog() {
    * Submit handler for the main form.
    */
   const submit = () => {
-    setSearchParams(form);
+    if (form.q.isValid && form.types.isValid) {
+      setSearchParams(form);
+    }
   };
 
   /*
@@ -158,7 +192,7 @@ export function EgeriaAssetCatalog() {
   };
 
   /*
-   * Load more handler for loading more elements, pagintation.
+   * Load more handler for loading more elements, pagination.
    */
   const loadMore = () => {
     const newPageSize = form.pageSize + PAGE_SIZE_INCREASE_VALUE;
@@ -191,16 +225,33 @@ export function EgeriaAssetCatalog() {
         <TextInput mr="xl"
                    style={{minWidth: 180}}
                    placeholder="Search"
-                   value={form.q}
+                   value={form.q.value}
+                   required
+                   error={(!form.q.isPristine) && !form.q.isValid  ? 'Query must be at least ' + QUERY_MIN_LENGTH + ' characters' : ''}
                    onKeyPress={handleEnterPress}
-                   onChange={(event: any) => setForm({...form, q: event.currentTarget.value})} />
+                   onChange={(event: any) => setForm({
+                     ...form,
+                     q: {
+                       value : event.currentTarget.value,
+                       isPristine : false,
+                       isValid : isStringLonger(form.q.value, QUERY_MIN_LENGTH)
+                     }
+                   })} />
 
         <MultiSelect mr="xl"
                      style={{minWidth: 230}}
                      data={typesData.typesData}
-                     value={form.types}
+                     value={form.types.value}
+                     error={!form.types.isPristine && !form.types.isValid ? 'At least one type has to be selected' : ''}
                      placeholder="Types"
-                     onChange={(value) => setForm({...form, types: [...value]})} />
+                     onChange={(value) => setForm({
+                       ...form,
+                       types: {
+                         value : [...value],
+                         isPristine : false,
+                         isValid : !isArrayEmpty(form.types.value)
+                       }
+                     })} />
 
         <Checkbox mr="xl"
                   label={'Exact match'}
@@ -215,8 +266,8 @@ export function EgeriaAssetCatalog() {
         <Button onClick={() => submit()}>
           Search
         </Button>
-      </div>
 
+      </div>
       <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
         <AgGridReact gridOptions={gridOptions}
                      rowData={rowData.rowData} />
