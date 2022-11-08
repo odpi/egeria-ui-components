@@ -262,8 +262,8 @@ export function EgeriaAssetCatalog() {
                    onChange={(event: any) => setForm({
                      ...form,
                      q: {
+                       ...form.q,
                        value: event.currentTarget.value,
-                       isPristine: true,
                        isValid: isStringLonger(event.currentTarget.value, QUERY_MIN_LENGTH)
                      }
                    })}
