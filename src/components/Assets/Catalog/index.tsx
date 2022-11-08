@@ -3,6 +3,7 @@ import {Checkbox, TextInput, MultiSelect, Button, LoadingOverlay} from '@mantine
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import { AgGridReact } from 'ag-grid-react';
+
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 
@@ -13,15 +14,16 @@ import {
   ASSET_CATALOG_PATH,
   PAGE_SIZE_INCREASE_VALUE,
   QUERY_MIN_LENGTH,
-  formData,
-  getQueryParams,
-  getQueryParamsPath,
-  fetchTypes,
   fetchRawData,
+  fetchTypes,
+  formData,
+  formIsValid,
+  getQueryParamsPath,
+  getQueryParams,
+  isArrayEmpty,
   isStringLonger,
-  isArrayEmpty
+  validateQueryAndTypes
 } from '@lfai/egeria-js-commons';
-
 
 /**
  * Initial empty form value.
@@ -48,24 +50,28 @@ const emptyForm: formData = {
 const emptyTypesData: Array<any> = [];
 
 export function EgeriaAssetCatalog() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const queryParams = getQueryParams(searchParams);
+  const [searchParams]: [any, any] = useSearchParams();
   const navigate = useNavigate();
 
   const [typesData, setTypesData] = useState({
     isLoading: false,
-    typesData: [...emptyTypesData, ...queryParams.types]
+    typesData: [...emptyTypesData]
   } as any);
 
-  const [form, setForm] = useState({
-    ...emptyForm,
-    ...queryParams
-  } as any);
+  const [form, setForm]: [formData, any] = useState({...emptyForm} as formData);
 
   const [rowData, setRowData] = useState({
     isLoading: false,
     rowData: [] as any
   });
+
+  useEffect(() => {
+    if(formIsValid(form)) {
+      console.log('valid form = ', form);
+    } else {
+      console.log('invalid form = ', form);
+    }
+  }, [form]);
 
   /*
    * Contains AGGrid data-table information and config.
@@ -109,76 +115,103 @@ export function EgeriaAssetCatalog() {
     }
   };
 
-  useEffect(() => {
-    const _queryParams = getQueryParams(searchParams);
-    let qIsPristine = form.q.isPristine;
-    let qIsValid = form.q.isValid;
-    let typesIsPristine = form.types.isPristine;
-    let typesIsValid = form.types.isValid;
-    if (_queryParams.q !== '' && qIsPristine) {
-      qIsPristine = false;
-      qIsValid = isStringLonger(_queryParams.q, QUERY_MIN_LENGTH);
-    }
-    if (!isArrayEmpty(_queryParams.types) && typesIsPristine) {
-      typesIsPristine = false;
-      typesIsValid = !isArrayEmpty(_queryParams.types);
-    }
-    setForm({
-      ..._queryParams,
-      q: {
-        value: _queryParams.q || '',
-        isPristine : qIsPristine,
-        isValid: qIsValid
-      },
-      types: {
-        value: [..._queryParams.types],
-        isPristine : typesIsPristine,
-        isValid: typesIsValid
-      }
+  const queryData = async (newForm: formData) => {
+    const _rowData = await fetchRawData({
+      ...newForm
     });
-  }, [searchParams]);
 
+    setRowData({
+      isLoading: false,
+      rowData: [
+        ..._rowData
+      ]
+    });
+
+    setForm({
+      ...newForm
+    });
+  };
 
   useEffect(() => {
     setTypesData({...typesData, isLoading: true});
 
-    const bringTypes = async () => {
-      const rawTypesData = await fetchTypes();
-
+    fetchTypes().then((rawTypesData: any) => {
       setTypesData({
         isLoading: false,
         typesData: [...rawTypesData]
       });
-    };
-
-    bringTypes();
+    });
   }, []);
 
   useEffect(() => {
-    const _queryParams = getQueryParams(searchParams);
+    if (typesData.typesData.length > 0) {
+      const newForm: formData = validateQueryAndTypes(
+        getQueryParams(searchParams),
+        typesData.typesData
+      );
 
-    setRowData({...rowData, isLoading: true});
+      if(formIsValid(newForm)) {
+        setRowData({...rowData, isLoading: true});
 
-    const queryData = async () => {
-      const _rowData = await fetchRawData({...form, ..._queryParams});
+        queryData({
+          ...form,
+          ...newForm
+        });
+      } else {
+        setForm({
+          ...form,
+          ...newForm
+        });
+      }
+    }
+  }, [typesData]);
 
-      setRowData({
-        isLoading: false,
-        rowData: [
-          ..._rowData
-        ]
+  useEffect(() => {
+    const newForm: formData = validateQueryAndTypes(
+      getQueryParams(searchParams),
+      typesData.typesData
+    );
+
+    if(typesData.typesData.length && formIsValid(newForm)) {
+      setRowData({...rowData, isLoading: true});
+
+      queryData({
+        ...form,
+        ...newForm
       });
-    };
-
-    queryData();
+    }
   }, [searchParams]);
 
   /*
    * Submit handler for the main form.
    */
   const submit = () => {
-    if (form.q.isValid && form.types.isValid) {
-      setSearchParams(form);
+    setForm({
+      ...form,
+      q: {
+        ...form.q,
+        isPristine: false
+      },
+      types: {
+        ...form.types,
+        isPristine: false
+      }
+    } as formData);
+
+    if(formIsValid(form)) {
+      goTo(form);
+
+      const currentSearchParams = getQueryParamsPath(validateQueryAndTypes(
+        getQueryParams(searchParams),
+        typesData.typesData
+      ));
+
+      // Trigger new HTTP call if user clicks submit
+      if((getQueryParamsPath(form) === currentSearchParams) && formIsValid(form)) {
+        setRowData({...rowData, isLoading: true});
+
+        queryData(form);
+      }
     }
   };
 
@@ -194,14 +227,9 @@ export function EgeriaAssetCatalog() {
   /*
    * Load more handler for loading more elements, pagination.
    */
-  const loadMore = () => {
-    const newPageSize = form.pageSize + PAGE_SIZE_INCREASE_VALUE;
-    const newFormData = {...form, pageSize: newPageSize};
-
-    // TODO: check if last page (new array === last data array)
-    setForm({
-      ...newFormData
-    });
+  const loadMore = (_form: formData) => {
+    const newPageSize = (_form.pageSize ? _form.pageSize : 0) + PAGE_SIZE_INCREASE_VALUE;
+    const newFormData = {..._form, pageSize: newPageSize};
 
     goTo(newFormData);
   };
@@ -210,10 +238,11 @@ export function EgeriaAssetCatalog() {
    * Method used to update current browser's URL.
    */
   const goTo = (formData: formData) => {
-    const path = ASSET_CATALOG_PATH;
-    const queryParams = getQueryParamsPath(formData);
+    const newPath = getQueryParamsPath(formData);
 
-    navigate(`${path}${queryParams.length ? `?${queryParams.join('&')}` : ''}` );
+    const path = `${ASSET_CATALOG_PATH}${newPath ? `?${newPath}` : ''}`;
+
+    navigate(path);
   };
 
   return (
@@ -224,46 +253,63 @@ export function EgeriaAssetCatalog() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10}}>
         <TextInput mr="xl"
                    style={{minWidth: 180}}
+                   disabled={typesData.typesData.length === 0}
                    placeholder="Search"
-                   value={form.q.value}
+                   value={form.q?.value}
                    required
-                   error={(!form.q.isPristine) && !form.q.isValid  ? 'Query must be at least ' + QUERY_MIN_LENGTH + ' characters' : ''}
+                   error={!form.q?.isPristine && !form.q?.isValid ? 'Query must be at least ' + QUERY_MIN_LENGTH + ' characters' : ''}
                    onKeyPress={handleEnterPress}
                    onChange={(event: any) => setForm({
                      ...form,
                      q: {
-                       value : event.currentTarget.value,
-                       isPristine : false,
-                       isValid : isStringLonger(form.q.value, QUERY_MIN_LENGTH)
+                       ...form.q,
+                       value: event.currentTarget.value,
+                       isValid: isStringLonger(event.currentTarget.value, QUERY_MIN_LENGTH)
                      }
-                   })} />
+                   })}
+                  />
 
         <MultiSelect mr="xl"
                      style={{minWidth: 230}}
+                     disabled={typesData.typesData.length === 0}
                      data={typesData.typesData}
-                     value={form.types.value}
-                     error={!form.types.isPristine && !form.types.isValid ? 'At least one type has to be selected' : ''}
+                     value={form.types?.value}
+                     error={!form.types?.isPristine && !form.types?.isValid ? 'At least one type has to be selected' : ''}
                      placeholder="Types"
                      onChange={(value) => setForm({
                        ...form,
                        types: {
-                         value : [...value],
-                         isPristine : false,
-                         isValid : !isArrayEmpty(form.types.value)
+                         value: [...value],
+                         isPristine: false,
+                         isValid : !isArrayEmpty([...value])
                        }
-                     })} />
+                      })}
+                     />
 
         <Checkbox mr="xl"
                   label={'Exact match'}
+                  disabled={typesData.typesData.length === 0}
                   checked={form.exactMatch}
-                  onChange={(event) => setForm({...form, exactMatch: event.currentTarget.checked})} />
+                  onChange={(event) => setForm({
+                    ...form,
+                    exactMatch: event.currentTarget.checked
+                  })}
+                  />
 
         <Checkbox mr="xl"
                   label={'Case sensitive'}
+                  disabled={typesData.typesData.length === 0}
                   checked={form.caseSensitive}
-                  onChange={(event) => setForm({...form, caseSensitive: event.currentTarget.checked})} />
+                  onChange={(event) => setForm({
+                    ...form,
+                    caseSensitive: event.currentTarget.checked
+                  })}
+                  />
 
-        <Button onClick={() => submit()}>
+        <Button
+                onClick={() => submit()}
+                disabled={typesData.typesData.length === 0}
+                >
           Search
         </Button>
 
@@ -274,7 +320,13 @@ export function EgeriaAssetCatalog() {
       </div>
 
       <div>
-        <Button size="xs" compact fullWidth onClick={() => loadMore()} style={{marginBottom:1, marginTop:10}}>
+        <Button size="xs"
+                compact
+                fullWidth
+                onClick={() => loadMore(form)}
+                style={{marginBottom:1, marginTop:10}}
+                disabled={typesData.typesData.length === 0}
+                >
           Load more...
         </Button>
       </div>
