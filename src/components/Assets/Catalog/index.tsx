@@ -3,6 +3,7 @@ import {Checkbox, TextInput, MultiSelect, Button, LoadingOverlay} from '@mantine
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import { AgGridReact } from 'ag-grid-react';
+
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 
@@ -13,105 +14,16 @@ import {
   ASSET_CATALOG_PATH,
   PAGE_SIZE_INCREASE_VALUE,
   QUERY_MIN_LENGTH,
-  formData,
-  // getQueryParams,
-  // getQueryParamsPath,
-  fetchTypes,
   fetchRawData,
+  fetchTypes,
+  formData,
+  formIsValid,
+  getQueryParamsPath,
+  getQueryParams,
+  isArrayEmpty,
   isStringLonger,
-  isArrayEmpty
+  validateQueryAndTypes
 } from '@lfai/egeria-js-commons';
-
-const formIsValid = (form: formData) => {
-  return form.q?.isValid && form.types?.isValid;
-}
-
-const getNewQueryParamsPath = (form: formData) => {
-  return Object.keys(form).map((key: any, index: number) => {
-    switch(key) {
-      case 'q':
-        return `${key}=${form.q?.value}`;
-      case 'types':
-        return `${key}=${form.types?.value.join(',')}`;
-      default:
-        return `${key}=${form[key as keyof formData]}`;
-    }
-  }).join('&');
-};
-
-const getQueryParams = (searchParams: any) => {
-  let data: any = {};
-
-  const params: any = [];
-
-  searchParams.forEach((value: any, key: string) => {
-    params.push({key: key, value: value});
-  });
-
-  params.forEach((param: any) => {
-    switch(param.key) {
-      case 'q':
-        data = {
-          ...data,
-          q: param.value
-        };
-        break;
-      case 'types':
-        data = {
-          ...data,
-          types: param.value ? param.value.split(',') : []
-        };
-        break;
-      case 'exactMatch':
-        data = {
-          ...data,
-          exactMatch: param.value === 'true'
-        };
-        break;
-      case 'caseSensitive':
-        data = {
-          ...data,
-          caseSensitive: param.value === 'true'
-        };
-        break;
-      case 'pageSize':
-        data = {
-          ...data,
-          pageSize: param.value ? parseInt(param.value) : PAGE_SIZE_INCREASE_VALUE
-        };
-        break;
-      default:
-        console.log('UNKOWN_QUERY_PARAM');
-        break;
-    }
-  });
-
-  return {
-    ...data
-  };
-};
-
-const validateQueryAndTypes = (_queryParams: any, typesData: any) => {
-  const typesIntersection = _queryParams.types ?
-                              typesData.map((t: any) => t.value).filter((value: any) => _queryParams.types.includes(value)) :
-                              [];
-
-  console.log(typesIntersection);
-
-  return {
-    ..._queryParams,
-    q: {
-      value: _queryParams.q || '',
-      isPristine : _queryParams.q === undefined ? true : false,
-      isValid: _queryParams.q ? isStringLonger(_queryParams.q, QUERY_MIN_LENGTH) : false
-    },
-    types: {
-      value: typesIntersection,
-      isPristine : _queryParams.types === undefined ? true : false,
-      isValid: !isArrayEmpty(typesIntersection)
-    }
-  };
-};
 
 /**
  * Initial empty form value.
@@ -138,12 +50,12 @@ const emptyForm: formData = {
 const emptyTypesData: Array<any> = [];
 
 export function EgeriaAssetCatalog() {
-  const [searchParams, setSearchParams]: [any, any] = useSearchParams();
+  const [searchParams]: [any, any] = useSearchParams();
   const navigate = useNavigate();
 
   const [typesData, setTypesData] = useState({
     isLoading: false,
-    typesData: []
+    typesData: [...emptyTypesData]
   } as any);
 
   const [form, setForm]: [formData, any] = useState({...emptyForm} as formData);
@@ -289,13 +201,13 @@ export function EgeriaAssetCatalog() {
     if(formIsValid(form)) {
       goTo(form);
 
-      const currentSearchParams = getNewQueryParamsPath(validateQueryAndTypes(
+      const currentSearchParams = getQueryParamsPath(validateQueryAndTypes(
         getQueryParams(searchParams),
         typesData.typesData
       ));
 
       // Trigger new HTTP call if user clicks submit
-      if((getNewQueryParamsPath(form) === currentSearchParams) && formIsValid(form)) {
+      if((getQueryParamsPath(form) === currentSearchParams) && formIsValid(form)) {
         setRowData({...rowData, isLoading: true});
 
         queryData(form);
@@ -326,7 +238,7 @@ export function EgeriaAssetCatalog() {
    * Method used to update current browser's URL.
    */
   const goTo = (formData: formData) => {
-    const newPath = getNewQueryParamsPath(formData);
+    const newPath = getQueryParamsPath(formData);
 
     const path = `${ASSET_CATALOG_PATH}${newPath ? `?${newPath}` : ''}`;
 
