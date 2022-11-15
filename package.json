@@ -50,7 +50,7 @@
     "@emotion/serialize": "^1.1.1",
     "@lfai/egeria-js-commons": "^4.2.4",
     "@lfai/egeria-ui-core": "^4.2.5",
-    "@lfai/happi-graph": "^4.1.0",
+    "@lfai/happi-graph": "^4.1.2",
     "@mantine/core": "^5.6.3",
     "@mantine/hooks": "^5.6.3",
     "@mantine/notifications": "^5.6.4",
