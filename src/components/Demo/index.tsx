@@ -19,7 +19,7 @@ export function Demo() {
           <Route path={'/assets/:guid/details'} element={<EgeriaAssetDetails />} />
           <Route path={'/assets/:guid/details/print'} element={<EgeriaAssetDetailsPrint />} />
           <Route path={ ASSET_CATALOG_PATH } element={<EgeriaAssetCatalog  />} />
-          <Route path={'/glossary'} element={<EgeriaGlossary />} />
+          <Route path={'/glossary'} element={<EgeriaGlossary columnMinWidth={120} />} />
         </Routes>
       </Router>
     </div>
