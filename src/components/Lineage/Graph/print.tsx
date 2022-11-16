@@ -5,6 +5,8 @@ import {
   HappiGraphActions
 } from '@lfai/happi-graph';
 
+import { Title, Center} from '@mantine/core';
+
 import '@lfai/happi-graph/src/components/HappiGraph/happi-graph.scss';
 
 import './index.scss';
@@ -34,21 +36,22 @@ export function EgeriaLineageGraphPrint() {
 
   return (
     <>
-    {
-      <h3>
-        {lineageType} view for asset with guid: {guid}
-      </h3>
-    }
-    { !isLoading && <div className="print-lineage" style={{height: '100%'}}>
-        <HappiGraph rawData={{...rawData}}
-                    algorithm={'VISJS'}
-                    debug={false}
-                    printMode={true}
-                    graphDirection={'HORIZONTAL'}
-                    selectedNodeId={guid}
-                    actions={<HappiGraphActions rawData={{...rawData}}/>}
-                    onGraphRender={ () => window.print() } />
-      </div> }
+      {     
+        <Center>
+          <Title order={4}>{lineageType} view for asset with guid: {guid}</Title>
+        </Center>
+      }
+      { !isLoading && <div className="print-lineage" style={{height: '100%'}}>
+          <HappiGraph rawData={{...rawData}}
+                      algorithm={'VISJS'}
+                      debug={false}
+                      printMode={true}
+                      graphDirection={'HORIZONTAL'}
+                      selectedNodeId={guid}
+                      actions={<HappiGraphActions rawData={{...rawData}}/>}
+                      onGraphRender={ () => window.print() } />
+        </div>
+      }  
     </>
   );
 }
