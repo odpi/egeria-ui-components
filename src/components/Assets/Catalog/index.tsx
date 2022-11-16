@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Checkbox, TextInput, MultiSelect, Button, LoadingOverlay } from '@mantine/core';
+import {Checkbox, TextInput, MultiSelect, Button, LoadingOverlay} from '@mantine/core';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import { AgGridReact } from 'ag-grid-react';
+
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 
@@ -12,19 +13,32 @@ import DisplayNameCellRenderer from './displayNameCellRenderer';
 import {
   ASSET_CATALOG_PATH,
   PAGE_SIZE_INCREASE_VALUE,
-  formData,
-  getQueryParams,
-  getQueryParamsPath,
+  QUERY_MIN_LENGTH,
+  fetchRawData,
   fetchTypes,
-  fetchRawData
+  formData,
+  formIsValid,
+  getQueryParamsPath,
+  getQueryParams,
+  isArrayEmpty,
+  isStringLonger,
+  validateQueryAndTypes
 } from '@lfai/egeria-js-commons';
 
 /**
  * Initial empty form value.
  */
 const emptyForm: formData = {
-  q: '',
-  types: [] as any,
+  q: {
+    value : '',
+    isValid : false,
+    isPristine : true
+  },
+  types: {
+    value : [] as Array<string>,
+    isValid : false,
+    isPristine : true
+  },
   exactMatch: false,
   caseSensitive: false,
   pageSize: 25
@@ -36,24 +50,28 @@ const emptyForm: formData = {
 const emptyTypesData: Array<any> = [];
 
 export function EgeriaAssetCatalog() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const queryParams = getQueryParams(searchParams);
+  const [searchParams]: [any, any] = useSearchParams();
   const navigate = useNavigate();
 
   const [typesData, setTypesData] = useState({
     isLoading: false,
-    typesData: [...emptyTypesData, ...queryParams.types]
+    typesData: [...emptyTypesData]
   } as any);
 
-  const [form, setForm] = useState({
-    ...emptyForm,
-    ...queryParams
-  } as any);
+  const [form, setForm]: [formData, any] = useState({...emptyForm} as formData);
 
   const [rowData, setRowData] = useState({
     isLoading: false,
     rowData: [] as any
   });
+
+  useEffect(() => {
+    if(formIsValid(form)) {
+      console.log('valid form = ', form);
+    } else {
+      console.log('invalid form = ', form);
+    }
+  }, [form]);
 
   /*
    * Contains AGGrid data-table information and config.
@@ -97,55 +115,104 @@ export function EgeriaAssetCatalog() {
     }
   };
 
-  useEffect(() => {
-    const _queryParams = getQueryParams(searchParams);
-
-    setForm({
-      ..._queryParams
+  const queryData = async (newForm: formData) => {
+    const _rowData = await fetchRawData({
+      ...newForm
     });
 
-  }, [searchParams]);
+    setRowData({
+      isLoading: false,
+      rowData: [
+        ..._rowData
+      ]
+    });
 
+    setForm({
+      ...newForm
+    });
+  };
 
   useEffect(() => {
     setTypesData({...typesData, isLoading: true});
 
-    const bringTypes = async () => {
-      const rawTypesData = await fetchTypes();
-
+    fetchTypes().then((rawTypesData: any) => {
       setTypesData({
         isLoading: false,
         typesData: [...rawTypesData]
       });
-    };
-
-    bringTypes();
+    });
   }, []);
 
   useEffect(() => {
-    const _queryParams = getQueryParams(searchParams);
+    if (typesData.typesData.length > 0) {
+      const newForm: formData = validateQueryAndTypes(
+        getQueryParams(searchParams),
+        typesData.typesData
+      );
 
-    setRowData({...rowData, isLoading: true});
+      if(formIsValid(newForm)) {
+        setRowData({...rowData, isLoading: true});
 
-    const queryData = async () => {
-      const _rowData = await fetchRawData({...form, ..._queryParams});
+        queryData({
+          ...form,
+          ...newForm
+        });
+      } else {
+        setForm({
+          ...form,
+          ...newForm
+        });
+      }
+    }
+  }, [typesData]);
 
-      setRowData({
-        isLoading: false,
-        rowData: [
-          ..._rowData
-        ]
+  useEffect(() => {
+    const newForm: formData = validateQueryAndTypes(
+      getQueryParams(searchParams),
+      typesData.typesData
+    );
+
+    if(typesData.typesData.length && formIsValid(newForm)) {
+      setRowData({...rowData, isLoading: true});
+
+      queryData({
+        ...form,
+        ...newForm
       });
-    };
-
-    queryData();
+    }
   }, [searchParams]);
 
   /*
    * Submit handler for the main form.
    */
   const submit = () => {
-    setSearchParams(form);
+    setForm({
+      ...form,
+      q: {
+        ...form.q,
+        isPristine: false
+      },
+      types: {
+        ...form.types,
+        isPristine: false
+      }
+    } as formData);
+
+    if(formIsValid(form)) {
+      goTo(form);
+
+      const currentSearchParams = getQueryParamsPath(validateQueryAndTypes(
+        getQueryParams(searchParams),
+        typesData.typesData
+      ));
+
+      // Trigger new HTTP call if user clicks submit
+      if((getQueryParamsPath(form) === currentSearchParams) && formIsValid(form)) {
+        setRowData({...rowData, isLoading: true});
+
+        queryData(form);
+      }
+    }
   };
 
   /*
@@ -158,16 +225,11 @@ export function EgeriaAssetCatalog() {
   };
 
   /*
-   * Load more handler for loading more elements, pagintation.
+   * Load more handler for loading more elements, pagination.
    */
-  const loadMore = () => {
-    const newPageSize = form.pageSize + PAGE_SIZE_INCREASE_VALUE;
-    const newFormData = {...form, pageSize: newPageSize};
-
-    // TODO: check if last page (new array === last data array)
-    setForm({
-      ...newFormData
-    });
+  const loadMore = (_form: formData) => {
+    const newPageSize = (_form.pageSize ? _form.pageSize : 0) + PAGE_SIZE_INCREASE_VALUE;
+    const newFormData = {..._form, pageSize: newPageSize};
 
     goTo(newFormData);
   };
@@ -176,10 +238,11 @@ export function EgeriaAssetCatalog() {
    * Method used to update current browser's URL.
    */
   const goTo = (formData: formData) => {
-    const path = ASSET_CATALOG_PATH;
-    const queryParams = getQueryParamsPath(formData);
+    const newPath = getQueryParamsPath(formData);
 
-    navigate(`${path}${queryParams.length ? `?${queryParams.join('&')}` : ''}` );
+    const path = `${ASSET_CATALOG_PATH}${newPath ? `?${newPath}` : ''}`;
+
+    navigate(path);
   };
 
   return (
@@ -190,40 +253,80 @@ export function EgeriaAssetCatalog() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10}}>
         <TextInput mr="xl"
                    style={{minWidth: 180}}
+                   disabled={typesData.typesData.length === 0}
                    placeholder="Search"
-                   value={form.q}
+                   value={form.q?.value}
+                   required
+                   error={!form.q?.isPristine && !form.q?.isValid ? 'Query must be at least ' + QUERY_MIN_LENGTH + ' characters' : ''}
                    onKeyPress={handleEnterPress}
-                   onChange={(event: any) => setForm({...form, q: event.currentTarget.value})} />
+                   onChange={(event: any) => setForm({
+                     ...form,
+                     q: {
+                       ...form.q,
+                       value: event.currentTarget.value,
+                       isValid: isStringLonger(event.currentTarget.value, QUERY_MIN_LENGTH)
+                     }
+                   })}
+                  />
 
         <MultiSelect mr="xl"
                      style={{minWidth: 230}}
+                     disabled={typesData.typesData.length === 0}
                      data={typesData.typesData}
-                     value={form.types}
+                     value={form.types?.value}
+                     error={!form.types?.isPristine && !form.types?.isValid ? 'At least one type has to be selected' : ''}
                      placeholder="Types"
-                     onChange={(value) => setForm({...form, types: [...value]})} />
+                     onChange={(value) => setForm({
+                       ...form,
+                       types: {
+                         value: [...value],
+                         isPristine: false,
+                         isValid : !isArrayEmpty([...value])
+                       }
+                      })}
+                     />
 
         <Checkbox mr="xl"
                   label={'Exact match'}
+                  disabled={typesData.typesData.length === 0}
                   checked={form.exactMatch}
-                  onChange={(event) => setForm({...form, exactMatch: event.currentTarget.checked})} />
+                  onChange={(event) => setForm({
+                    ...form,
+                    exactMatch: event.currentTarget.checked
+                  })}
+                  />
 
         <Checkbox mr="xl"
                   label={'Case sensitive'}
+                  disabled={typesData.typesData.length === 0}
                   checked={form.caseSensitive}
-                  onChange={(event) => setForm({...form, caseSensitive: event.currentTarget.checked})} />
+                  onChange={(event) => setForm({
+                    ...form,
+                    caseSensitive: event.currentTarget.checked
+                  })}
+                  />
 
-        <Button onClick={() => submit()}>
+        <Button
+                onClick={() => submit()}
+                disabled={typesData.typesData.length === 0}
+                >
           Search
         </Button>
-      </div>
 
+      </div>
       <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
         <AgGridReact gridOptions={gridOptions}
                      rowData={rowData.rowData} />
       </div>
 
       <div>
-        <Button size="xs" compact fullWidth onClick={() => loadMore()} style={{marginBottom:1, marginTop:10}}>
+        <Button size="xs"
+                compact
+                fullWidth
+                onClick={() => loadMore(form)}
+                style={{marginBottom:1, marginTop:10}}
+                disabled={typesData.typesData.length === 0}
+                >
           Load more...
         </Button>
       </div>

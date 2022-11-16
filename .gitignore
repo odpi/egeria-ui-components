@@ -106,6 +106,6 @@ jitdump*dmp
 build/
 
 # dist folder
-#dist/
+dist
 
 node_modules
