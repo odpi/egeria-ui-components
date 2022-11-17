@@ -23,16 +23,16 @@ export function GlossaryData (props: Props) {
       headerName: 'Glossary'
     },
     {
-        field: 'status',
-        filter: true,
-        headerName: 'Status'
+      field: 'status',
+      filter: true,
+      headerName: 'Status'
     },
     {
-        headerName: '',
-        sortable: false,
-        cellRenderer: (params: any) => {
+      headerName: '',
+      sortable: false,
+      cellRenderer: () => {
         return <ActionIcon><ListDetails /></ActionIcon>;
-        }
+      }
     },
   ], columnMinWidth);
 
@@ -50,10 +50,10 @@ export function GlossaryData (props: Props) {
   return (
     <Paper shadow="xs" style={{height: '100%', position: 'relative'}}>
       <LoadingOverlay visible={!(glossaryData.length > 0)} />
-        <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
-          <AgGridReact gridOptions={gridOptionsGlossaryData}
-                      rowData={glossaryData} />
-        </div>
+      <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
+        <AgGridReact gridOptions={gridOptionsGlossaryData}
+                     rowData={glossaryData} />
+      </div>
     </Paper>
-  );
-};
+    );
+  };

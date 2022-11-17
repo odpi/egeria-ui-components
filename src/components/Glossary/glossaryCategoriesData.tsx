@@ -23,19 +23,19 @@ export function GlossaryCategoriesData (props: Props) {
       headerName: 'Glossary'
     },
     {
-        field: 'status',
-        filter: true,
-        headerName: 'Status'
+      field: 'status',
+      filter: true,
+      headerName: 'Status'
     },
     {
-        headerName: '',
-        sortable: false,
-        cellRenderer: (params: any) => {
+      headerName: '',
+      sortable: false,
+      cellRenderer: () => {
         return <ActionIcon><ListDetails /></ActionIcon>;
-        }
+      }
     },
   ], columnMinWidth);
-    
+
   useEffect(() => {
     glossaries.getGlossaryCategories().then((response: any) => response.json()).then((data: any) => {
       setGlossaryCategoriesData(data.map((d: any) => {
@@ -50,10 +50,10 @@ export function GlossaryCategoriesData (props: Props) {
   return (
     <Paper shadow="xs" style={{height: '100%', position: 'relative'}}>
       <LoadingOverlay visible={!(glossaryCategoriesData.length > 0)} />
-        <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
-          <AgGridReact gridOptions={gridOptionsGlossaryCategoriesData}
-                      rowData={glossaryCategoriesData} />
-        </div>
+      <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
+        <AgGridReact gridOptions={gridOptionsGlossaryCategoriesData}
+                     rowData={glossaryCategoriesData} />
+      </div>
     </Paper>
-  );
-};
+    );
+  };
