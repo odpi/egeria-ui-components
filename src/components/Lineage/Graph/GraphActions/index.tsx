@@ -25,5 +25,5 @@ export function EgeriaLineageGraphActions (props: Props) {
         <AiOutlinePrinter size={25} />
       </ActionIcon> 
     </>
-    );
+  );
 }
