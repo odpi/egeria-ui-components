@@ -35,23 +35,20 @@ export function EgeriaLineageGraphPrint() {
   }, []);
 
   return (
-    <>
-      {     
+    <div className="print-lineage">
+      { !isLoading && <div style={{height: '100%'}}>
         <Center>
           <Title order={4}>{lineageType} view for asset with guid: {guid}</Title>
         </Center>
-      }
-      { !isLoading && <div className="print-lineage" style={{height: '100%'}}>
-          <HappiGraph rawData={{...rawData}}
-                      algorithm={'VISJS'}
-                      debug={false}
-                      printMode={true}
-                      graphDirection={'HORIZONTAL'}
-                      selectedNodeId={guid}
-                      actions={<HappiGraphActions rawData={{...rawData}}/>}
-                      onGraphRender={ () => window.print() } />
-        </div>
-      }  
-    </>
+        <HappiGraph rawData={{...rawData}}
+                    algorithm={'VISJS'}
+                    debug={false}
+                    printMode={true}
+                    graphDirection={'HORIZONTAL'}
+                    selectedNodeId={guid}
+                    actions={<HappiGraphActions rawData={{...rawData}}/>}
+                    onGraphRender={ () => window.print() } />
+      </div> }  
+    </div>
   );
 }

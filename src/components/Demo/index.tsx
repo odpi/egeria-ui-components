@@ -13,13 +13,25 @@ import { EgeriaLineageGraphPrint } from '../Lineage/Graph/print';
 console.log('API_URL', process.env.REACT_APP_API_URL);
 
 export function Demo() {
+  const queryParams = window.location.search
+                        .replace('?', '')
+                        .split('&')
+                        .map((k) => {
+                          const data = k.split('=');
+                          return {
+                            [data[0]]: data[1]
+                          };
+                        });
+                        
+  const fullscreen = queryParams.filter((o) => Object.keys(o).includes('fullscreen')).length > 0;
+
   return (
-    <div className="custom-full">
+    <div className={fullscreen ? 'custom-full' : 'container'}>
       <EgeriaApp single={true} main={
         <Router basename={process.env.REACT_APP_ROOT_PATH}>
           <Routes>
             <Route path={'/asset-lineage/:guid/:lineageType'} element={<EgeriaLineageGraphRouteWrapper  />} />
-            <Route path={'/asset-lineage/:guid/:lineageType/print'} element={<EgeriaLineageGraphPrint  />} />
+            <Route path={'/asset-lineage/:guid/:lineageType/print'} element={<EgeriaLineageGraphPrint />} />
             <Route path={'/assets/:guid/details'} element={<EgeriaAssetDetails />} />
             <Route path={'/assets/:guid/details/print'} element={<EgeriaAssetDetailsPrint />} />
             <Route path={ ASSET_CATALOG_PATH } element={<EgeriaAssetCatalog  />} />
