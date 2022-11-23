@@ -20,7 +20,7 @@ export function GlossaryTermsData (props: Props) {
     {
       field: 'displayName',
       filter: true,
-      headerName: 'Glossary'
+      headerName: 'Terms'
     },
     {
       field: 'status',

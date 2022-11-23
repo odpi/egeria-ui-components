@@ -20,7 +20,7 @@ export function GlossaryCategoriesData (props: Props) {
     {
       field: 'displayName',
       filter: true,
-      headerName: 'Glossary'
+      headerName: 'Category'
     },
     {
       field: 'status',
@@ -32,6 +32,8 @@ export function GlossaryCategoriesData (props: Props) {
       sortable: false,
       cellRenderer: () => {
         return <ActionIcon><ListDetails /></ActionIcon>;
+        // on click will be here to link to terms
+        // should put relevant data in there depending on which one is clicked
       }
     },
   ], columnMinWidth);
@@ -42,6 +44,22 @@ export function GlossaryCategoriesData (props: Props) {
         return {
           displayName: d.displayName,
           status: d.status
+          /* when i click the button: i need to get data from the glossaryData it's attached to
+          so i can get the relevant data (example: get all categories linked to the displayName of glossaryData)
+          these should then show up in the category table/grid
+
+          >> should it be showing 'no rows to show'  when not clicked on any button?
+            > set a value of visibility to false until the data is requested then is true to show the data
+
+          the category data retrieved here (?) should be related to clicked glossary
+          do i put a filter?
+          glossaries.filter(glossaryCategories => glossaryCategories.includes()).map(relevantData =>({}))
+          or do i do something with return d.displayName / d.status where glossaryCategoriesData = glossaryData of pressed button
+          orrrrr work with key/item id's to be used as input for the filter?
+
+
+          */
+
         };
       }));
     })
