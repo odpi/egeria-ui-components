@@ -123,7 +123,7 @@ export function EgeriaAssetCatalog() {
     setRowData({
       isLoading: false,
       rowData: [
-        ..._rowData
+        ...(_rowData ? _rowData : [])
       ]
     });
 
@@ -271,6 +271,7 @@ export function EgeriaAssetCatalog() {
 
         <MultiSelect mr="xl"
                      style={{minWidth: 230}}
+                     searchable
                      disabled={typesData.typesData.length === 0}
                      data={typesData.typesData}
                      value={form.types?.value}
