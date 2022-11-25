@@ -1,9 +1,8 @@
 import { Modal, LoadingOverlay, Tabs, Text } from '@mantine/core';
-import { egeriaFetch, authHeader } from '@lfai/egeria-js-commons';
+import { egeriaFetch, authHeader, getAssetLineagePrintPath } from '@lfai/egeria-js-commons';
 
 import {
-  HappiGraph,
-  HappiGraphActions
+  HappiGraph
 } from '@lfai/happi-graph';
 
 import '@lfai/happi-graph/src/components/HappiGraph/happi-graph.scss';
@@ -13,6 +12,7 @@ import './index.scss';
 import { useEffect, useState } from 'react';
 import { EgeriaSelectedNode } from './SelectedNode';
 import { ArticleOff } from 'tabler-icons-react';
+import { EgeriaLineageGraphActions } from './GraphActions';
 
 enum LINEAGE {
   END_TO_END = 'end-to-end',
@@ -32,6 +32,10 @@ interface Props {
   navigateTo: any;
 }
 
+export const getApiDataUrl = (guid: any, lineageType: any) => {
+  return `/api/lineage/entities/${ guid }/${ lineageType }?includeProcesses=true`;
+};
+
 export function EgeriaLineageGraph(props: Props) {
   const {
     guid,
@@ -48,6 +52,8 @@ export function EgeriaLineageGraph(props: Props) {
 
   // TODO: extract URL to URL Map
   const uri = (lineageType: any) => `/api/lineage/entities/${ guid }/${ lineageType }?includeProcesses=true`;
+
+  const printUri = getAssetLineagePrintPath(guid, lineageType);
 
   const fetchData = async (uri: string) => {
     const res = await egeriaFetch(uri, 'GET', { ...authHeader() }, {});
@@ -110,7 +116,7 @@ export function EgeriaLineageGraph(props: Props) {
                           debug={false}
                           graphDirection={'HORIZONTAL'}
                           selectedNodeId={guid}
-                          actions={<HappiGraphActions rawData={{...rawData}}/>}
+                          actions={ <EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri}/> }
                           onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} /> }
           </Tabs.Panel>
           <Tabs.Panel value={ LINEAGE.VERTICAL_LINEAGE }>
@@ -119,7 +125,7 @@ export function EgeriaLineageGraph(props: Props) {
                             debug={false}
                             graphDirection={'VERTICAL'}
                             selectedNodeId={guid}
-                            actions={<HappiGraphActions rawData={{...rawData}}/>}
+                            actions={ <EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri}/> }
                             onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} /> }
           </Tabs.Panel>
           <Tabs.Panel value={ LINEAGE.ULTIMATE_SOURCE }>
@@ -128,7 +134,7 @@ export function EgeriaLineageGraph(props: Props) {
                             debug={false}
                             graphDirection={'HORIZONTAL'}
                             selectedNodeId={guid}
-                            actions={<HappiGraphActions rawData={{...rawData}}/>}
+                            actions={ <EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri}/> }
                             onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} /> }
           </Tabs.Panel>
           <Tabs.Panel value={ LINEAGE.ULTIMATE_DESTINATION }>
@@ -137,7 +143,7 @@ export function EgeriaLineageGraph(props: Props) {
                             debug={false}
                             graphDirection={'HORIZONTAL'}
                             selectedNodeId={guid}
-                            actions={<HappiGraphActions rawData={{...rawData}}/>}
+                            actions={ <EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri}/> }
                             onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} /> }
           </Tabs.Panel>
         </Tabs>
