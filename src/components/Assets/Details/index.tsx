@@ -69,8 +69,6 @@ export function EgeriaAssetDetails(props: Props) {
   }
 
   const fetchData = async (uri: string) => {
-    console.log('da');
-
     const res = await egeriaFetch(uri, 'GET', authHeader(), {});
 
     if(res) {
