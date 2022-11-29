@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { ListDetails } from 'tabler-icons-react';
 import { glossaries } from '@lfai/egeria-js-commons';
 import { AgGridReact } from 'ag-grid-react';
-import { GlossaryCategoriesData } from './glossaryCategoriesData';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -12,15 +11,12 @@ import { getGridOptionsGlossary } from './helpers';
 
 interface Props {
   columnMinWidth?: number;
+  onUserSelect: any;
 }
 
 export function GlossaryData (props: Props) {
-  const { columnMinWidth } = props;
+  const { columnMinWidth, onUserSelect } = props;
   const [glossaryData, setGlossaryData] = useState([]);
-
-  const handleClick = () => {
-    return <GlossaryCategoriesData/>};
-
   const gridOptionsGlossaryData = getGridOptionsGlossary([
     {
       field: 'displayName',
@@ -38,10 +34,8 @@ export function GlossaryData (props: Props) {
       headerName: 'Details',
       sortable: false,
       lockPosition: 'right',
-      cellRenderer: () => {
-        return <ActionIcon onClick={handleClick}><ListDetails /></ActionIcon>;
-        // on click will be here to link to categories
-        // should put relevant data in there depending on which one is clicked
+      cellRenderer: (object: any) => {
+        return <ActionIcon onClick={() => onUserSelect(object.data)}><ListDetails /></ActionIcon>;
       }
     },
   ], columnMinWidth);
