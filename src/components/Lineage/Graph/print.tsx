@@ -13,14 +13,17 @@ import './index.scss';
 import './print.scss';
 
 import { useEffect, useState } from 'react';
-import { getApiDataUrl } from './index';
+import { getApiDataUrl, LINEAGE } from './index';
 import { authHeader, egeriaFetch } from '@lfai/egeria-js-commons';
 
 export function EgeriaLineageGraphPrint() {
   const { guid, lineageType }: any = useParams();
   const [ isLoading, setIsLoading ] = useState(true);
+  const [label, setLabel] = useState<any[]>([]);
+  const [group, setGroup] = useState<any[]>([]);
 
   const [rawData, setRawData] = useState({nodes: [], edges: []});
+  const isVerticalLineage = lineageType == LINEAGE.VERTICAL_LINEAGE;
 
   const fetchData = async (uri: string) => {
     const res = await egeriaFetch(uri, 'GET', { ...authHeader() }, {});
@@ -28,6 +31,8 @@ export function EgeriaLineageGraphPrint() {
 
     setRawData(data);
     setIsLoading(false);
+    setLabel(data.nodes.filter((d: { [x: string]: any; }) => d['id'] == guid)[0]['label']);
+    setGroup(data.nodes.filter((d: { [x: string]: any; }) => d['id'] == guid)[0]['group']);
   };
 
   useEffect(() => {
@@ -38,17 +43,24 @@ export function EgeriaLineageGraphPrint() {
     <div className="print-lineage">
       { !isLoading && <div style={{height: '100%'}}>
         <Center>
-          <Title order={4}>{lineageType} view for asset with guid: {guid}</Title>
+          <Title order={4}>{lineageType} view for {group}: {label}</Title>
         </Center>
         <HappiGraph rawData={{...rawData}}
-                    algorithm={'VISJS'}
+                    algorithm={(isVerticalLineage) ? 'ELK' : 'VISJS'}
                     debug={false}
                     printMode={true}
-                    graphDirection={'HORIZONTAL'}
+                    graphDirection={(isVerticalLineage) ? 'VERTICAL' : 'HORIZONTAL'}
                     selectedNodeId={guid}
                     actions={<HappiGraphActions rawData={{...rawData}}/>}
-                    onGraphRender={ () => window.print() } />
-      </div> }  
+                    onGraphRender={ () => {
+                                            document.title =
+                                              String.prototype.toLowerCase.apply(
+                                                lineageType + '-' + label + '-' +
+                                                new Date().toLocaleString('nl-NL').replace(/-|:| /gi,''));
+                                            window.print();
+                                          }
+                                  } />
+      </div> }
     </div>
   );
 }
