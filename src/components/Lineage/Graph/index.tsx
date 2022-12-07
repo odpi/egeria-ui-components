@@ -14,7 +14,7 @@ import { EgeriaSelectedNode } from './SelectedNode';
 
 import { EgeriaLineageGraphActions } from './GraphActions';
 
-enum LINEAGE {
+export enum LINEAGE {
   END_TO_END = 'end-to-end',
   VERTICAL_LINEAGE = 'vertical-lineage',
   ULTIMATE_SOURCE = 'ultimate-source',
