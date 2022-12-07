@@ -1,5 +1,5 @@
 import {
-  ActionIcon 
+  ActionIcon
 } from '@mantine/core';
 
 import {
@@ -23,7 +23,7 @@ export function EgeriaLineageGraphActions (props: Props) {
       <HappiGraphActions rawData={{...rawData}}/>
       <ActionIcon title="Print" variant='subtle' size={35} onClick={() => window.open(printUri)}>
         <AiOutlinePrinter size={25} />
-      </ActionIcon> 
+      </ActionIcon>
     </>
   );
 }
