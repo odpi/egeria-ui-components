@@ -1,5 +1,5 @@
 import { Modal, LoadingOverlay, Tabs, Text } from '@mantine/core';
-import { egeriaFetch, authHeader, getAssetLineagePrintPath } from '@lfai/egeria-js-commons';
+import { egeriaFetch, authHeader, getAssetLineagePrintPath, LINEAGE_TYPES} from '@lfai/egeria-js-commons';
 
 import {
   HappiGraph
@@ -14,13 +14,6 @@ import { EgeriaSelectedNode } from './SelectedNode';
 import { ArticleOff } from 'tabler-icons-react';
 
 import { EgeriaLineageGraphActions } from './GraphActions';
-
-export enum LINEAGE {
-  END_TO_END = 'end-to-end',
-  VERTICAL_LINEAGE = 'vertical-lineage',
-  ULTIMATE_SOURCE = 'ultimate-source',
-  ULTIMATE_DESTINATION = 'ultimate-destination'
-}
 
 interface IGraphData {
   nodes: Array<any>;
@@ -99,19 +92,19 @@ export function EgeriaLineageGraph(props: Props) {
           <EgeriaSelectedNode selectedNode={selectedNodeData} />
         </Modal>
 
-        <Tabs defaultValue={ LINEAGE.END_TO_END }
+        <Tabs defaultValue={ LINEAGE_TYPES.END_TO_END }
               keepMounted={false}
               value={lineageType}
               onTabChange={(value) => onTabChange(value)}
               style={{height: '100%'}}>
           <Tabs.List grow>
-            <Tabs.Tab value={ LINEAGE.END_TO_END }>{ LINEAGE.END_TO_END }</Tabs.Tab>
-            <Tabs.Tab value={ LINEAGE.VERTICAL_LINEAGE }>{ LINEAGE.VERTICAL_LINEAGE }</Tabs.Tab>
-            <Tabs.Tab value={ LINEAGE.ULTIMATE_SOURCE }>{ LINEAGE.ULTIMATE_SOURCE }</Tabs.Tab>
-            <Tabs.Tab value={ LINEAGE.ULTIMATE_DESTINATION }>{ LINEAGE.ULTIMATE_DESTINATION }</Tabs.Tab>
+            <Tabs.Tab value={ LINEAGE_TYPES.END_TO_END }>{ LINEAGE_TYPES.END_TO_END }</Tabs.Tab>
+            <Tabs.Tab value={ LINEAGE_TYPES.VERTICAL_LINEAGE }>{ LINEAGE_TYPES.VERTICAL_LINEAGE }</Tabs.Tab>
+            <Tabs.Tab value={ LINEAGE_TYPES.ULTIMATE_SOURCE }>{ LINEAGE_TYPES.ULTIMATE_SOURCE }</Tabs.Tab>
+            <Tabs.Tab value={ LINEAGE_TYPES.ULTIMATE_DESTINATION }>{ LINEAGE_TYPES.ULTIMATE_DESTINATION }</Tabs.Tab>
           </Tabs.List>
 
-          <Tabs.Panel value={ LINEAGE.END_TO_END }>
+          <Tabs.Panel value={ LINEAGE_TYPES.END_TO_END }>
             { !loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
                           algorithm={'VISJS'}
                           debug={false}
@@ -120,7 +113,7 @@ export function EgeriaLineageGraph(props: Props) {
                           actions={ <EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri}/> }
                           onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} /> }
           </Tabs.Panel>
-          <Tabs.Panel value={ LINEAGE.VERTICAL_LINEAGE }>
+          <Tabs.Panel value={ LINEAGE_TYPES.VERTICAL_LINEAGE }>
             { !loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
                             algorithm={'ELK'}
                             debug={false}
@@ -129,7 +122,7 @@ export function EgeriaLineageGraph(props: Props) {
                             actions={ <EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri}/> }
                             onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} /> }
           </Tabs.Panel>
-          <Tabs.Panel value={ LINEAGE.ULTIMATE_SOURCE }>
+          <Tabs.Panel value={ LINEAGE_TYPES.ULTIMATE_SOURCE }>
             { !loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
                             algorithm={'VISJS'}
                             debug={false}
@@ -138,7 +131,7 @@ export function EgeriaLineageGraph(props: Props) {
                             actions={ <EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri}/> }
                             onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} /> }
           </Tabs.Panel>
-          <Tabs.Panel value={ LINEAGE.ULTIMATE_DESTINATION }>
+          <Tabs.Panel value={ LINEAGE_TYPES.ULTIMATE_DESTINATION }>
             { !loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
                             algorithm={'VISJS'}
                             debug={false}

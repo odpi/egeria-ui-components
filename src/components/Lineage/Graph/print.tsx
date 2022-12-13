@@ -13,8 +13,8 @@ import './index.scss';
 import './print.scss';
 
 import { useEffect, useState } from 'react';
-import { getApiDataUrl, LINEAGE } from './index';
-import { authHeader, egeriaFetch } from '@lfai/egeria-js-commons';
+import { getApiDataUrl} from './index';
+import { authHeader, egeriaFetch, getFormattedDate, LINEAGE_TYPES} from '@lfai/egeria-js-commons';
 
 export function EgeriaLineageGraphPrint() {
   const { guid, lineageType }: any = useParams();
@@ -23,7 +23,7 @@ export function EgeriaLineageGraphPrint() {
   const [group, setGroup] = useState<any[]>([]);
 
   const [rawData, setRawData] = useState({nodes: [], edges: []});
-  const isVerticalLineage = lineageType == LINEAGE.VERTICAL_LINEAGE;
+  const isVerticalLineage = lineageType == LINEAGE_TYPES.VERTICAL_LINEAGE;
 
   const fetchData = async (uri: string) => {
     const res = await egeriaFetch(uri, 'GET', { ...authHeader() }, {});
@@ -53,13 +53,20 @@ export function EgeriaLineageGraphPrint() {
                     selectedNodeId={guid}
                     actions={<HappiGraphActions rawData={{...rawData}}/>}
                     onGraphRender={ () => {
+                                            const currentDate = getFormattedDate(new Date());
                                             document.title =
-                                              String.prototype.toLowerCase.apply(
-                                                lineageType + '-' + label + '-' +
-                                                new Date().toLocaleString('nl-NL').replace(/-|:| /gi,''));
+                                            String.prototype.toLowerCase.apply(
+                                              lineageType + '_' + label + '_' +
+                                              currentDate.day + '-' +
+                                              currentDate.month + '-' +
+                                              currentDate.year + '_' +
+                                              currentDate.hour +
+                                              currentDate.minutes +
+                                              currentDate.seconds
+                                              );
                                             window.print();
                                           }
-                                  } />
+                                    } />
       </div> }
     </div>
   );
