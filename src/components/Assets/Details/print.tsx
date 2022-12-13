@@ -39,12 +39,13 @@ export function EgeriaAssetDetailsPrint(props: Props) {
       const currentDate = getFormattedDate(new Date());
       document.title =
         String.prototype.toLowerCase.apply(
+          'asset-details' + '_' +
           itemName(asset) + '_' +
           currentDate.day + '-' +
           currentDate.month + '-' +
           currentDate.year + '_' +
-          currentDate.hour +
-          currentDate.minutes +
+          currentDate.hour + '-' +
+          currentDate.minutes + '-' +
           currentDate.seconds
           );
       window.print();
