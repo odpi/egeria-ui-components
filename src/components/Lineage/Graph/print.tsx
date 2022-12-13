@@ -41,7 +41,7 @@ export function EgeriaLineageGraphPrint() {
 
   return (
     <div className="print-lineage">
-      { !isLoading && <div style={{height: '100%'}}>
+      { !isLoading && <div className="print-alignment">
         <Center>
           <Title order={4}>{lineageType} view for {group}: {label}</Title>
         </Center>
@@ -60,8 +60,8 @@ export function EgeriaLineageGraphPrint() {
                                               currentDate.day + '-' +
                                               currentDate.month + '-' +
                                               currentDate.year + '_' +
-                                              currentDate.hour +
-                                              currentDate.minutes +
+                                              currentDate.hour + '-' +
+                                              currentDate.minutes + '-' +
                                               currentDate.seconds
                                               );
                                             window.print();
