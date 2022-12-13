@@ -52,21 +52,15 @@ export function EgeriaLineageGraphPrint() {
                     graphDirection={(isVerticalLineage) ? 'VERTICAL' : 'HORIZONTAL'}
                     selectedNodeId={guid}
                     actions={<HappiGraphActions rawData={{...rawData}}/>}
-                    onGraphRender={ () => {
-                                            const currentDate = getFormattedDate(new Date());
-                                            document.title =
-                                            String.prototype.toLowerCase.apply(
-                                              lineageType + '_' + label + '_' +
-                                              currentDate.day + '-' +
-                                              currentDate.month + '-' +
-                                              currentDate.year + '_' +
-                                              currentDate.hour + '-' +
-                                              currentDate.minutes + '-' +
-                                              currentDate.seconds
-                                              );
-                                            window.print();
-                                          }
-                                    } />
+                    onGraphRender={ () =>
+                                    {
+                                      const { day, month, year, hour, minutes, seconds } = getFormattedDate(new Date());
+                                      document.title =
+                                      String.prototype.toLowerCase.apply(
+                                        `${lineageType}_${label}_${day}-${month}-${year}_${hour}-${minutes}-${seconds}`);
+                                      window.print();
+                                    }
+                                  } />
       </div> }
     </div>
   );

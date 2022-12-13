@@ -36,18 +36,10 @@ export function EgeriaAssetDetailsPrint(props: Props) {
 
   useEffect(() => {
     if(asset) {
-      const currentDate = getFormattedDate(new Date());
+      const { day, month, year, hour, minutes, seconds } = getFormattedDate(new Date());
       document.title =
         String.prototype.toLowerCase.apply(
-          'asset-details' + '_' +
-          itemName(asset) + '_' +
-          currentDate.day + '-' +
-          currentDate.month + '-' +
-          currentDate.year + '_' +
-          currentDate.hour + '-' +
-          currentDate.minutes + '-' +
-          currentDate.seconds
-          );
+          `asset-details_${itemName(asset)}_${day}-${month}-${year}_${hour}-${minutes}-${seconds}`);
       window.print();
     }
   }, [asset]);
