@@ -8,6 +8,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './index.scss';
 import { getGridOptionsGlossary } from './helpers';
+import { GridOptions } from 'ag-grid-community';
 
 interface Props {
   columnMinWidth?: number;
@@ -17,23 +18,20 @@ interface Props {
 export function GlossaryData (props: Props) {
   const { columnMinWidth, onUserSelect } = props;
   const [glossaryData, setGlossaryData] = useState([]);
-  const gridOptionsGlossaryData = getGridOptionsGlossary([
+  const gridOptionsGlossaryData: GridOptions<any> = getGridOptionsGlossary([
     {
       field: 'displayName',
       filter: true,
       headerName: 'Glossary',
-      lockPosition: 'left',
     },
     {
       field: 'status',
       filter: true,
       headerName: 'Status',
-      suppressMovable: true
     },
     {
       headerName: 'Details',
       sortable: false,
-      lockPosition: 'right',
       cellRenderer: (object: any) => {
         return <ActionIcon onClick={() => onUserSelect(object.data)}><ListDetails /></ActionIcon>;
       }
@@ -45,11 +43,12 @@ export function GlossaryData (props: Props) {
       setGlossaryData(data.map((d: any) => {
         return {
           displayName: d.displayName,
-          status: d.status
+          status: d.status,
+          guid: d.guid
         }
       }));
     });
-  });
+  }, []);
 
   return (
     <Paper shadow="xs" style={{height: '100%', position: 'relative'}}>

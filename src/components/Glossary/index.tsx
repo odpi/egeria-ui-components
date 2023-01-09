@@ -16,36 +16,40 @@ export function EgeriaGlossary (props: Props) {
   const [terms, setTerms] = useState([]);
   const [termIsLoading, setTermIsLoading] = useState(false);
 
-  const onUserSelectGlossaryData = (id: string) => {
-    console.log('onUserSelectGlossaryData', id);
+  const onUserSelectGlossaryData = (data: any) => {
+    console.log('onUserSelectGlossaryData', data);
     setCategoryIsLoading(true);
-
-    glossaries.getGlossaryCategories().then((response: any) => response.json()).then((data: any) => {
+    glossaries.getGlossaryCategories(data.guid).then((response: any) => response.json()).then((data: any) => {
         setCategories(data.map((d: any) => {
             return {
                 displayName: d.displayName,
-                status: d.status
+                status: d.status,
+                guid: d.guid
             };
         }));
     setCategoryIsLoading(false);
     });
   };
 
-
-  const onUserSelectTermData = (id: string) => {
-    console.log('onUserSelectTermData', id);
+  const onUserSelectCategoryData = (data: any) => {
+    console.log('onUserSelectCategoryData', data);
     setTermIsLoading(true);
 
-    glossaries.getGlossaryTerms().then((response: any) => response.json()).then((data: any) => {
+    glossaries.getGlossaryTerms(data.guid).then((response: any) => response.json()).then((data: any) => {
         setTerms(data.map((d: any) => {
             return {
                 displayName: d.displayName,
-                status: d.status
+                status: d.status,
+                guid: d.guid
             };
         }));
         setTermIsLoading(false);
     });
   };
+
+  const onUserSelectTerms = (data: any) => {
+    console.log('onUserSelectTerms', data);
+  }
 
   return (
     <Grid grow gutter="xs" style={{height:'100%'}} className="egeria-glossary" >
@@ -57,12 +61,13 @@ export function EgeriaGlossary (props: Props) {
         <GlossaryCategoriesData columnMinWidth={columnMinWidth}
                                 data={categories}
                                 isLoading={categoryIsLoading}
-                                onUserSelect={(id: string) => onUserSelectTermData(id)}/>
+                                onUserSelect={(id: string) => onUserSelectCategoryData(id)}/>
       </Grid.Col>
       <Grid.Col span={4}>
         <GlossaryTermsData columnMinWidth={columnMinWidth}
                            data={terms}
-                           isLoading={termIsLoading}/>
+                           isLoading={termIsLoading}
+                           onUserSelect={(id: string) => onUserSelectTerms(id)}/>
       </Grid.Col>
     </Grid>
   );
