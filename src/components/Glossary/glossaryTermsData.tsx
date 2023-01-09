@@ -7,19 +7,16 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './index.scss';
 import { getGridOptionsGlossary } from './helpers';
 
-// interface GlossaryCategory {
-//   displayName: string;
-// 	status: string;
-// }
-
 interface Props {
   columnMinWidth?: number;
   data: any;
   isLoading: boolean;
+  onUserSelect: any;
+  guid?: any;
 }
 
 export function GlossaryTermsData (props: Props) {
-  const { columnMinWidth, data, isLoading } = props;
+  const { columnMinWidth, data, isLoading, onUserSelect, guid } = props;
   const gridOptionsGlossaryTermsData = getGridOptionsGlossary([
     {
       field: 'displayName',
@@ -34,9 +31,10 @@ export function GlossaryTermsData (props: Props) {
     {
       headerName: 'Details',
       sortable: false,
-      lockPosition: 'right',
-      cellRenderer: () => {
-        return <ActionIcon><ListDetails /></ActionIcon>;
+      cellRenderer: (object:any) => {
+        return <a href={`/assets/${guid}/details`} target="_blank" rel="noreferrer">
+                        <ActionIcon onClick={() => onUserSelect(object.data)}><ListDetails /></ActionIcon>
+               </a>;
       }
     },
   ], columnMinWidth);

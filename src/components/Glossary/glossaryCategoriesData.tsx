@@ -6,22 +6,18 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './index.scss';
 import { getGridOptionsGlossary } from './helpers';
-
-// interface GlossaryCategory {
-//   displayName: string;
-// 	status: string;
-// }
+import { GridOptions } from 'ag-grid-community';
 
 interface Props {
   columnMinWidth?: number;
-	data: any;
+  data: any;
   isLoading: boolean;
   onUserSelect: any;
 }
 
 export function GlossaryCategoriesData (props: Props) {
-	const { columnMinWidth, data, isLoading, onUserSelect } = props;
-  const gridOptionsGlossaryCategoriesData = getGridOptionsGlossary([
+  const { columnMinWidth, data, isLoading, onUserSelect } = props;
+  const gridOptionsGlossaryCategoriesData: GridOptions<any> = getGridOptionsGlossary([
     {
       field: 'displayName',
       filter: true,
@@ -35,7 +31,6 @@ export function GlossaryCategoriesData (props: Props) {
     {
       headerName: 'Details',
       sortable: false,
-      lockPosition: 'right',
       cellRenderer: (object: any) => {
         return <ActionIcon onClick={() => onUserSelect(object.data)}><ListDetails /></ActionIcon>;
       }
