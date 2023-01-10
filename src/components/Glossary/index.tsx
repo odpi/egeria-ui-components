@@ -7,6 +7,7 @@ import { glossaries } from '@lfai/egeria-js-commons';
 
 interface Props {
   columnMinWidth?: number;
+  guid?: any;
 }
 
 export function EgeriaGlossary (props: Props) {
@@ -67,7 +68,8 @@ export function EgeriaGlossary (props: Props) {
         <GlossaryTermsData columnMinWidth={columnMinWidth}
                            data={terms}
                            isLoading={termIsLoading}
-                           onUserSelect={(id: string) => onUserSelectTerms(id)}/>
+                           onUserSelect={(id: string) => onUserSelectTerms(id)}
+/>
       </Grid.Col>
     </Grid>
   );

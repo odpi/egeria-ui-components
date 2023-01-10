@@ -1,8 +1,9 @@
-import { authHeader, egeriaFetch } from '@lfai/egeria-js-commons';
+import { authHeader, egeriaFetch, getFormattedDate } from '@lfai/egeria-js-commons';
 import { LoadingOverlay, Paper } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { renderTable } from '.';
+import { itemName } from '../Catalog/helpers';
 
 interface Props {
   guid?: any;
@@ -35,6 +36,10 @@ export function EgeriaAssetDetailsPrint(props: Props) {
 
   useEffect(() => {
     if(asset) {
+      const { day, month, year, hour, minutes, seconds } = getFormattedDate(new Date());
+      document.title =
+        String.prototype.toLowerCase.apply(
+          `asset-details_${itemName(asset)}_${day}-${month}-${year}_${hour}-${minutes}-${seconds}`);
       window.print();
     }
   }, [asset]);
