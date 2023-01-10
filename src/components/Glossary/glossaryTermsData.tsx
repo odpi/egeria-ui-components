@@ -1,7 +1,5 @@
 import { ActionIcon, LoadingOverlay, Paper } from '@mantine/core';
-import { useEffect, useState } from 'react';
 import { ListDetails } from 'tabler-icons-react';
-import { glossaries } from '@lfai/egeria-js-commons';
 import { AgGridReact } from 'ag-grid-react';
 
 import 'ag-grid-community/styles/ag-grid.css';
@@ -11,16 +9,18 @@ import { getGridOptionsGlossary } from './helpers';
 
 interface Props {
   columnMinWidth?: number;
+  data: any;
+  isLoading: boolean;
+  onUserSelect: any;
 }
 
 export function GlossaryTermsData (props: Props) {
-  const { columnMinWidth } = props;
-  const [glossaryTermsData, setGlossaryTermsData] = useState([])
+  const { columnMinWidth, data, isLoading, onUserSelect} = props;
   const gridOptionsGlossaryTermsData = getGridOptionsGlossary([
     {
       field: 'displayName',
       filter: true,
-      headerName: 'Glossary'
+      headerName: 'Terms'
     },
     {
       field: 'status',
@@ -28,31 +28,22 @@ export function GlossaryTermsData (props: Props) {
       headerName: 'Status'
     },
     {
-      headerName: '',
+      headerName: 'Details',
       sortable: false,
-      cellRenderer: () => {
-        return <ActionIcon><ListDetails /></ActionIcon>;
+      cellRenderer: (object:any) => {
+        return <a href={`/assets/${object.data.guid}/details`} target="_blank" rel="noreferrer">
+                        <ActionIcon><ListDetails /></ActionIcon>
+               </a>;
       }
     },
   ], columnMinWidth);
 
-  useEffect(() => {
-    glossaries.getGlossaryTerms().then((response: any) => response.json()).then((data: any) => {
-      setGlossaryTermsData(data.map((d: any) => {
-        return {
-          displayName: d.displayName,
-          status: d.status
-        };
-      }));
-    })
-  });
-
   return (
     <Paper shadow="xs" style={{height: '100%', position: 'relative'}}>
-      <LoadingOverlay visible={!(glossaryTermsData.length > 0)} />
+      <LoadingOverlay visible={isLoading} />
       <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
         <AgGridReact gridOptions={gridOptionsGlossaryTermsData}
-                     rowData={glossaryTermsData} />
+                     rowData={data} />
       </div>
     </Paper>
     );
