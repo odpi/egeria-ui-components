@@ -32,7 +32,7 @@ export function GlossaryTermsData (props: Props) {
       sortable: false,
       cellRenderer: (object:any) => {
         return <a href={`/assets/${object.data.guid}/details`} target="_blank" rel="noreferrer">
-                        <ActionIcon><ListDetails /></ActionIcon>
+                        <ActionIcon onClick={() => onUserSelect(object.data)}><ListDetails /></ActionIcon>
                </a>;
       }
     },
