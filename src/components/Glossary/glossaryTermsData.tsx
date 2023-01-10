@@ -31,15 +31,10 @@ export function GlossaryTermsData (props: Props) {
       headerName: 'Details',
       sortable: false,
       cellRenderer: (object:any) => {
-        console.log(object)
         return <a href={`/assets/${object.data.guid}/details`} target="_blank" rel="noreferrer">
                         <ActionIcon><ListDetails /></ActionIcon>
                </a>;
       }
-      // onclick doesnt need to be there???? if i delete it'll still do the same. probably because it just opens link
-      // the ${guid} comes back as undefined ... why?
-      // --> value is undefined if no values are passed. so ${guid} has no value
-      // add value to guid by making it the glossary term guid (which is found in the index??)
     },
   ], columnMinWidth);
 
