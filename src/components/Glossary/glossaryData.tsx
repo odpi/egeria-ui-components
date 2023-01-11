@@ -8,30 +8,32 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './index.scss';
 import { getGridOptionsGlossary } from './helpers';
+import { GridOptions } from 'ag-grid-community';
 
 interface Props {
   columnMinWidth?: number;
+  onUserSelect: any;
 }
 
 export function GlossaryData (props: Props) {
-  const { columnMinWidth } = props;
+  const { columnMinWidth, onUserSelect } = props;
   const [glossaryData, setGlossaryData] = useState([]);
-  const gridOptionsGlossaryData = getGridOptionsGlossary([
+  const gridOptionsGlossaryData: GridOptions<any> = getGridOptionsGlossary([
     {
       field: 'displayName',
       filter: true,
-      headerName: 'Glossary'
+      headerName: 'Glossary',
     },
     {
       field: 'status',
       filter: true,
-      headerName: 'Status'
+      headerName: 'Status',
     },
     {
-      headerName: '',
+      headerName: 'Details',
       sortable: false,
-      cellRenderer: () => {
-        return <ActionIcon><ListDetails /></ActionIcon>;
+      cellRenderer: (object: any) => {
+        return <ActionIcon onClick={() => onUserSelect(object.data)}><ListDetails /></ActionIcon>;
       }
     },
   ], columnMinWidth);
@@ -41,11 +43,12 @@ export function GlossaryData (props: Props) {
       setGlossaryData(data.map((d: any) => {
         return {
           displayName: d.displayName,
-          status: d.status
+          status: d.status,
+          guid: d.guid
         }
       }));
     });
-  });
+  }, []);
 
   return (
     <Paper shadow="xs" style={{height: '100%', position: 'relative'}}>

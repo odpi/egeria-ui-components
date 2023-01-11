@@ -1,26 +1,27 @@
 import { ActionIcon, LoadingOverlay, Paper } from '@mantine/core';
-import { useEffect, useState } from 'react';
 import { ListDetails } from 'tabler-icons-react';
-import { glossaries } from '@lfai/egeria-js-commons';
 import { AgGridReact } from 'ag-grid-react';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './index.scss';
 import { getGridOptionsGlossary } from './helpers';
+import { GridOptions } from 'ag-grid-community';
 
 interface Props {
   columnMinWidth?: number;
+  data: any;
+  isLoading: boolean;
+  onUserSelect: any;
 }
 
 export function GlossaryCategoriesData (props: Props) {
-  const { columnMinWidth } = props;
-  const [glossaryCategoriesData, setGlossaryCategoriesData] = useState([]);
-  const gridOptionsGlossaryCategoriesData = getGridOptionsGlossary([
+  const { columnMinWidth, data, isLoading, onUserSelect } = props;
+  const gridOptionsGlossaryCategoriesData: GridOptions<any> = getGridOptionsGlossary([
     {
       field: 'displayName',
       filter: true,
-      headerName: 'Glossary'
+      headerName: 'Category'
     },
     {
       field: 'status',
@@ -28,31 +29,20 @@ export function GlossaryCategoriesData (props: Props) {
       headerName: 'Status'
     },
     {
-      headerName: '',
+      headerName: 'Details',
       sortable: false,
-      cellRenderer: () => {
-        return <ActionIcon><ListDetails /></ActionIcon>;
+      cellRenderer: (object: any) => {
+        return <ActionIcon onClick={() => onUserSelect(object.data)}><ListDetails /></ActionIcon>;
       }
     },
   ], columnMinWidth);
 
-  useEffect(() => {
-    glossaries.getGlossaryCategories().then((response: any) => response.json()).then((data: any) => {
-      setGlossaryCategoriesData(data.map((d: any) => {
-        return {
-          displayName: d.displayName,
-          status: d.status
-        };
-      }));
-    })
-  });
-
   return (
     <Paper shadow="xs" style={{height: '100%', position: 'relative'}}>
-      <LoadingOverlay visible={!(glossaryCategoriesData.length > 0)} />
+      <LoadingOverlay visible={isLoading} />
       <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
         <AgGridReact gridOptions={gridOptionsGlossaryCategoriesData}
-                     rowData={glossaryCategoriesData} />
+                     rowData={data} />
       </div>
     </Paper>
     );
