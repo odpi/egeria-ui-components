@@ -1,4 +1,4 @@
-import { Modal, LoadingOverlay, Tabs, Text } from '@mantine/core';
+import { Modal, LoadingOverlay, Tabs } from '@mantine/core';
 import { egeriaFetch, authHeader, getAssetLineagePrintPath } from '@lfai/egeria-js-commons';
 
 import {
@@ -11,9 +11,9 @@ import './index.scss';
 
 import { useEffect, useState } from 'react';
 import { EgeriaSelectedNode } from './SelectedNode';
-import { ArticleOff } from 'tabler-icons-react';
 
 import { EgeriaLineageGraphActions } from './GraphActions';
+import { EgeriaCantDisplay } from './CantDisplay';
 
 enum LINEAGE {
   END_TO_END = 'end-to-end',
@@ -62,6 +62,8 @@ export function EgeriaLineageGraph(props: Props) {
       const data = await res.json();
 
       setRawData(data);
+    } else {
+      setRawData({...initialData});
     }
 
     setLoading(false);
@@ -88,7 +90,7 @@ export function EgeriaLineageGraph(props: Props) {
     <div className="egeria-lineage">
       { loading && <div style={{height: '100%', position: 'relative'}}><LoadingOverlay visible/></div> }
 
-      { !loading && (rawData.nodes.length > 0) && <>
+      { !loading && <>
         <Modal
           opened={opened}
           onClose={() => setOpened(false)}
@@ -112,6 +114,7 @@ export function EgeriaLineageGraph(props: Props) {
           </Tabs.List>
 
           <Tabs.Panel value={ LINEAGE.END_TO_END }>
+            { !loading && (rawData.nodes.length === 0) && <EgeriaCantDisplay /> }
             { !loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
                           algorithm={'VISJS'}
                           debug={false}
@@ -121,6 +124,7 @@ export function EgeriaLineageGraph(props: Props) {
                           onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} /> }
           </Tabs.Panel>
           <Tabs.Panel value={ LINEAGE.VERTICAL_LINEAGE }>
+            { !loading && (rawData.nodes.length === 0) && <EgeriaCantDisplay /> }
             { !loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
                             algorithm={'ELK'}
                             debug={false}
@@ -130,6 +134,7 @@ export function EgeriaLineageGraph(props: Props) {
                             onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} /> }
           </Tabs.Panel>
           <Tabs.Panel value={ LINEAGE.ULTIMATE_SOURCE }>
+            { !loading && (rawData.nodes.length === 0) && <EgeriaCantDisplay /> }
             { !loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
                             algorithm={'VISJS'}
                             debug={false}
@@ -139,6 +144,7 @@ export function EgeriaLineageGraph(props: Props) {
                             onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} /> }
           </Tabs.Panel>
           <Tabs.Panel value={ LINEAGE.ULTIMATE_DESTINATION }>
+            { !loading && (rawData.nodes.length === 0) && <EgeriaCantDisplay /> }
             { !loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
                             algorithm={'VISJS'}
                             debug={false}
@@ -149,12 +155,6 @@ export function EgeriaLineageGraph(props: Props) {
           </Tabs.Panel>
         </Tabs>
       </> }
-
-      { !loading && (rawData.nodes.length === 0) && <div style={{display: 'flex', height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-        <ArticleOff size={48} strokeWidth={2} />
-
-        <Text>Data can&apos;t be loaded or it wasn&apos;t provided.</Text>
-      </div> }
     </div>
   );
 }
