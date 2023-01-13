@@ -68,9 +68,9 @@ export function EgeriaGlossary (props: Props) {
         <GlossaryTermsData columnMinWidth={columnMinWidth}
                            data={terms}
                            isLoading={termIsLoading}
-                           onUserSelect={(id: string) => onUserSelectTerms(id)}
-/>
+                           onUserSelect={(id: string) => onUserSelectTerms(id)}/>
       </Grid.Col>
     </Grid>
   );
 }
+

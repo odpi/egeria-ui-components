@@ -22,7 +22,7 @@ export function Demo() {
                             [data[0]]: data[1]
                           };
                         });
-                        
+
   const fullscreen = queryParams.filter((o) => Object.keys(o).includes('fullscreen')).length > 0;
 
   return (

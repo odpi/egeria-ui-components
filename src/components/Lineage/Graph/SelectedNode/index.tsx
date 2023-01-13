@@ -1,4 +1,3 @@
-
 import { EgeriaAssetTools } from '../AssetTools';
 import { EgeriaPropsTable } from '../PropsTable';
 
