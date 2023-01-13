@@ -5,13 +5,23 @@ interface Props {
   items: any;
 }
 
+const customCellRenderer = (property: any) => {
+    const { key, value } = property;
+    switch(key) {
+    case 'Guid':
+        return <a href= {`/assets/${property.value}/details`}>{`${property.value}`}</a>
+    default:
+        return value;
+    }
+};
+
 export function EgeriaPropsTable(props: Props) {
   const { title, items } = props;
 
   const rows = items.map((property: any, index: any) => (
     <tr key={index}>
       <td>{property.key}</td>
-      <td>{property.value}</td>
+      <td>{customCellRenderer(property)}</td>
     </tr>
   ));
 
