@@ -9,7 +9,7 @@ const customCellRenderer = (property: any) => {
     const { key, value } = property;
     switch(key) {
     case 'Guid':
-        return <a href= {`/assets/${property.value}/details`}>{`${property.value}`}</a>
+        return <a href= {`/assets/${property.value}/details`} target="_blank" rel="noreferrer">{`${property.value}`}</a>
     default:
         return value;
     }
