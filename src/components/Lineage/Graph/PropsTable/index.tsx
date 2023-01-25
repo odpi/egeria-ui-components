@@ -5,7 +5,7 @@ interface Props {
   items: any;
 }
 
-const customCellRenderer = (property: any) => {
+export const customCellRenderer = (property: any) => {
     const { key, value } = property;
     switch(key) {
         case 'Guid':
