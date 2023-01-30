@@ -19,9 +19,9 @@ const getGridOptionsGlossary = (columnDefs: any, columnMinWidth?: number) => {
     onSelectionChanged: onSelectionChanged,
 
     onGridReady: (params: any) => {
-        params.api!.sizeColumnsToFit({
-            defaultMinWidth: _columnMinWidth
-        });
+      params.api ? params.api.sizeColumnsToFit({
+        defaultMinWidth: _columnMinWidth
+      }) : 0;
     },
     onFirstDataRendered: (params: any) => {
       const allColumnIds: string[] = [];
@@ -33,7 +33,7 @@ const getGridOptionsGlossary = (columnDefs: any, columnMinWidth?: number) => {
   };
 
   function onSelectionChanged (params: any) {
-    const selectedRows = params.api!.getSelectedRows();
+    const selectedRows = params.api ? params.api.getSelectedRows() : 0;
     (document.querySelector('#selectedRows') as any).innerHTML =
       selectedRows.length === 1 ? selectedRows[0].any : '';
   }

@@ -1,4 +1,4 @@
-import { Modal, LoadingOverlay, Tabs, Text } from '@mantine/core';
+import { Modal, LoadingOverlay, Tabs } from '@mantine/core';
 import { egeriaFetch, authHeader, getAssetLineagePrintPath, LINEAGE_TYPES} from '@lfai/egeria-js-commons';
 
 import {
