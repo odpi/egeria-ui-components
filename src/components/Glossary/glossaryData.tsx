@@ -17,6 +17,7 @@ interface Props {
 
 export function GlossaryData (props: Props) {
   const { columnMinWidth, onUserSelect } = props;
+  const [glossaryDataIsLoading, setGlossaryDataIsLoading] = useState(false);
   const [glossaryData, setGlossaryData] = useState([]);
   const gridOptionsGlossaryData: GridOptions<any> = getGridOptionsGlossary([
     {
@@ -38,8 +39,12 @@ export function GlossaryData (props: Props) {
     },
   ], columnMinWidth);
 
-  useEffect(() => {
-    glossaries.getAll().then((response: any) => response.json()).then((data: any) => {
+  const handleApi = async () => {
+    const res = await glossaries.getAll();
+
+    if(res) {
+      const data = await res.json();
+
       setGlossaryData(data.map((d: any) => {
         return {
           displayName: d.displayName,
@@ -47,12 +52,20 @@ export function GlossaryData (props: Props) {
           guid: d.guid
         }
       }));
-    });
+    }
+
+    setGlossaryDataIsLoading(false);
+  };
+
+  useEffect(() => {
+    setGlossaryDataIsLoading(true);
+
+    handleApi();
   }, []);
 
   return (
     <Paper shadow="xs" style={{height: '100%', position: 'relative'}}>
-      <LoadingOverlay visible={!(glossaryData.length > 0)} />
+      <LoadingOverlay visible={glossaryDataIsLoading} />
       <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
         <AgGridReact gridOptions={gridOptionsGlossaryData}
                      rowData={glossaryData} />

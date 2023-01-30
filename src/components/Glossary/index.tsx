@@ -17,59 +17,75 @@ export function EgeriaGlossary (props: Props) {
   const [terms, setTerms] = useState([]);
   const [termIsLoading, setTermIsLoading] = useState(false);
 
+  const handleGlossaryCategoriesApi = async (guid: string) => {
+    const res = await glossaries.getGlossaryCategories(guid);
+
+    if(res) {
+      const data = await res.json();
+
+      setCategories(data.map((d: any) => {
+        return {
+          displayName: d.displayName,
+          status: d.status,
+          guid: d.guid
+        };
+      }));
+    }
+
+    setTermIsLoading(false);
+  };
+
+  const handleGlossaryTermsApi = async (guid: string) => {
+    const res = await glossaries.getGlossaryTerms(guid);
+
+    if(res) {
+      const data = await res.json();
+
+      setTerms(data.map((d: any) => {
+        return {
+          displayName: d.displayName,
+          status: d.status,
+          guid: d.guid
+        };
+      }));
+    }
+
+    setTermIsLoading(false);
+  };
+
   const onUserSelectGlossaryData = (data: any) => {
-    console.log('onUserSelectGlossaryData', data);
     setCategoryIsLoading(true);
-    glossaries.getGlossaryCategories(data.guid).then((response: any) => response.json()).then((data: any) => {
-        setCategories(data.map((d: any) => {
-            return {
-                displayName: d.displayName,
-                status: d.status,
-                guid: d.guid
-            };
-        }));
-    setCategoryIsLoading(false);
-    });
+
+    handleGlossaryCategoriesApi(data.guid);
   };
 
   const onUserSelectCategoryData = (data: any) => {
-    console.log('onUserSelectCategoryData', data);
     setTermIsLoading(true);
 
-    glossaries.getGlossaryTerms(data.guid).then((response: any) => response.json()).then((data: any) => {
-        setTerms(data.map((d: any) => {
-            return {
-                displayName: d.displayName,
-                status: d.status,
-                guid: d.guid
-            };
-        }));
-        setTermIsLoading(false);
-    });
+    handleGlossaryTermsApi(data.guid);
   };
 
   const onUserSelectTerms = (data: any) => {
     console.log('onUserSelectTerms', data);
-  }
+  };
 
   return (
     <Grid grow gutter="xs" style={{height:'100%'}} className="egeria-glossary" >
       <Grid.Col span={4}>
         <GlossaryData columnMinWidth={columnMinWidth}
-                      onUserSelect={(id: string) => onUserSelectGlossaryData(id)}/>
+                      onUserSelect={(id: string) => onUserSelectGlossaryData(id)} />
       </Grid.Col>
       <Grid.Col span={4}>
         <GlossaryCategoriesData columnMinWidth={columnMinWidth}
                                 data={categories}
                                 isLoading={categoryIsLoading}
-                                onUserSelect={(id: string) => onUserSelectCategoryData(id)}/>
+                                onUserSelect={(id: string) => onUserSelectCategoryData(id)} />
       </Grid.Col>
       <Grid.Col span={4}>
         <GlossaryTermsData columnMinWidth={columnMinWidth}
                            data={terms}
                            isLoading={termIsLoading}
-                           onUserSelect={(id: string) => onUserSelectTerms(id)}
-/>
+                           onUserSelect={(id: string) => onUserSelectTerms(id)} />
       </Grid.Col>
     </Grid>
   );

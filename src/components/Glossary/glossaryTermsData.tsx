@@ -15,7 +15,7 @@ interface Props {
 }
 
 export function GlossaryTermsData (props: Props) {
-  const { columnMinWidth, data, isLoading, onUserSelect} = props;
+  const { columnMinWidth, data, isLoading} = props;
   const gridOptionsGlossaryTermsData = getGridOptionsGlossary([
     {
       field: 'displayName',
