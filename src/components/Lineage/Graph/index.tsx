@@ -36,10 +36,10 @@ export function EgeriaLineageGraph(props: Props) {
   const {
     guid,
     lineageType,
-    navigateTo,
+    navigateTo
   } = props;
 
-  const initialData: IGraphData = { nodes: [], edges: [] };
+  const initialData: IGraphData = {nodes: [], edges: []};
   const navigate = useNavigate();
 
   const [rawData, setRawData] = useState(initialData);
@@ -112,7 +112,7 @@ export function EgeriaLineageGraph(props: Props) {
           keepMounted={false}
           value={lineageType}
           onTabChange={(value) => onTabChange(value)}
-          style={{ height: '100%' }}>
+          style={{height: '100%'}}>
           <Tabs.List grow>
             {hasTab(selectedNodeGroup, LINEAGE_TYPES.END_TO_END) &&
               <Tabs.Tab value={LINEAGE_TYPES.END_TO_END}>{LINEAGE_TYPES.END_TO_END}</Tabs.Tab>}
@@ -126,45 +126,45 @@ export function EgeriaLineageGraph(props: Props) {
 
           <Tabs.Panel value={LINEAGE_TYPES.END_TO_END}>
             {!loading && (rawData.nodes.length === 0) && <EgeriaCantDisplay />}
-            {!loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{ ...rawData }}
+            {!loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
               algorithm={'VISJS'}
               debug={false}
               graphDirection={'HORIZONTAL'}
               selectedNodeId={guid}
-              actions={<EgeriaLineageGraphActions rawData={{ ...rawData }} printUri={printUri} />}
+              actions={<EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri} />}
               onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} />}
           </Tabs.Panel>
 
           <Tabs.Panel value={LINEAGE_TYPES.VERTICAL_LINEAGE}>
             {!loading && (rawData.nodes.length === 0) && <EgeriaCantDisplay />}
-            {!loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{ ...rawData }}
+            {!loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
               algorithm={'ELK'}
               debug={false}
               graphDirection={'VERTICAL'}
               selectedNodeId={guid}
-              actions={<EgeriaLineageGraphActions rawData={{ ...rawData }} printUri={printUri} />}
+              actions={<EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri} />}
               onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} />}
           </Tabs.Panel>
 
           <Tabs.Panel value={LINEAGE_TYPES.ULTIMATE_SOURCE}>
             {!loading && (rawData.nodes.length === 0) && <EgeriaCantDisplay />}
-            {!loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{ ...rawData }}
+            {!loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
               algorithm={'VISJS'}
               debug={false}
               graphDirection={'HORIZONTAL'}
               selectedNodeId={guid}
-              actions={<EgeriaLineageGraphActions rawData={{ ...rawData }} printUri={printUri} />}
+              actions={<EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri} />}
               onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} />}
           </Tabs.Panel>
 
           <Tabs.Panel value={LINEAGE_TYPES.ULTIMATE_DESTINATION}>
             {!loading && (rawData.nodes.length === 0) && <EgeriaCantDisplay />}
-            {!loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{ ...rawData }}
+            {!loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
               algorithm={'VISJS'}
               debug={false}
               graphDirection={'HORIZONTAL'}
               selectedNodeId={guid}
-              actions={<EgeriaLineageGraphActions rawData={{ ...rawData }} printUri={printUri} />}
+              actions={<EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri} />}
               onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} />}
           </Tabs.Panel>
         </Tabs>
