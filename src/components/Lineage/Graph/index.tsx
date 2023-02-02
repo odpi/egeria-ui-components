@@ -15,7 +15,6 @@ import { EgeriaSelectedNode } from './SelectedNode';
 import { EgeriaLineageGraphActions } from './GraphActions';
 import { EgeriaCantDisplay, LineageTypeNotAvailable } from './CantDisplay';
 import { hasTab } from './AssetTools';
-import { useNavigate } from 'react-router-dom';
 
 interface IGraphData {
   nodes: Array<any>;
@@ -40,7 +39,6 @@ export function EgeriaLineageGraph(props: Props) {
   } = props;
 
   const initialData: IGraphData = {nodes: [], edges: []};
-  const navigate = useNavigate();
 
   const [rawData, setRawData] = useState(initialData);
   const [loading, setLoading] = useState(false);
@@ -79,13 +77,6 @@ export function EgeriaLineageGraph(props: Props) {
   };
 
   useEffect(() => {
-
-    if (!Object.values(LINEAGE_TYPES).includes(lineageType)) {
-      const assetDetailsPath = `/assets/${guid}/details`;
-      navigate(assetDetailsPath);
-      return;
-    }
-
     setLoading(true);
 
     fetchData(uri(lineageType));

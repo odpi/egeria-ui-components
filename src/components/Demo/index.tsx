@@ -22,7 +22,7 @@ export function Demo() {
                             [data[0]]: data[1]
                           };
                         });
-                        
+
   const fullscreen = queryParams.filter((o) => Object.keys(o).includes('fullscreen')).length > 0;
 
   return (
@@ -30,7 +30,10 @@ export function Demo() {
       <EgeriaApp single={true} main={
         <Router basename={process.env.REACT_APP_ROOT_PATH}>
           <Routes>
-            <Route path={'/asset-lineage/:guid/:lineageType'} element={<EgeriaLineageGraphRouteWrapper  />} />
+            <Route path={'/asset-lineage/:guid/vertical-lineage'} element={<EgeriaLineageGraphRouteWrapper  />} />
+            <Route path={'/asset-lineage/:guid/end-to-end'} element={<EgeriaLineageGraphRouteWrapper  />} />
+            <Route path={'/asset-lineage/:guid/ultimate-source'} element={<EgeriaLineageGraphRouteWrapper  />} />
+            <Route path={'/asset-lineage/:guid/ultimate-destination'} element={<EgeriaLineageGraphRouteWrapper  />} />
             <Route path={'/asset-lineage/:guid/:lineageType/print'} element={<EgeriaLineageGraphPrint />} />
             <Route path={'/assets/:guid/details'} element={<EgeriaAssetDetails />} />
             <Route path={'/assets/:guid/details/print'} element={<EgeriaAssetDetailsPrint />} />
@@ -38,6 +41,8 @@ export function Demo() {
             <Route path={'/glossary'} element={<EgeriaGlossary columnMinWidth={120}/>} />
 
             <Route path={'/login'} element={<EgeriaLogin loginCallback={ goHome }/>} />
+            {/* //TODO show not found page */}
+            {/* <Route path={'/asset-lineage/:guid/*'} element={<> HI </>} /> */}
           </Routes>
         </Router> } />
     </div>
