@@ -5,7 +5,7 @@ interface Props {
   selectedNode: any;
 }
 
-const hasTab = (type: string, tabName: string) => {
+export const hasTab = (type: string, tabName: string) => {
   if (Object.keys(lineageViewsTypesMapping).includes(type)) {
     return lineageViewsTypesMapping[type].includes(tabName);
   } else {
