@@ -61,7 +61,7 @@ export function EgeriaLineageGraph(props: Props) {
       setRawData(data);
       setSelectedNodeGroup(data.nodes.find((d: any) => d.id == guid).group);
     } else {
-      setRawData({ ...initialData });
+      setRawData({...initialData});
     }
 
     setLoading(false);
