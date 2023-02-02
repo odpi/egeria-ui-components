@@ -39,7 +39,7 @@ export function EgeriaLineageGraph(props: Props) {
     navigateTo,
   } = props;
 
-  const initialData: IGraphData = {nodes: [], edges: []};
+  const initialData: IGraphData = { nodes: [], edges: [] };
   const navigate = useNavigate();
 
   const [rawData, setRawData] = useState(initialData);
