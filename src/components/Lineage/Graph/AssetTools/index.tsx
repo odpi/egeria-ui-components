@@ -1,17 +1,9 @@
+import { hasTab } from '@lfai/egeria-js-commons';
 import { Button, SimpleGrid } from '@mantine/core';
-import { lineageViewsTypesMapping } from '@lfai/egeria-js-commons';
 
 interface Props {
   selectedNode: any;
 }
-
-const hasTab = (type: string, tabName: string) => {
-  if (Object.keys(lineageViewsTypesMapping).includes(type)) {
-    return lineageViewsTypesMapping[type].includes(tabName);
-  } else {
-    return false;
-  }
-};
 
 export function EgeriaAssetTools(props: Props) {
   const { selectedNode } = props;
