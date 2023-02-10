@@ -1,5 +1,5 @@
 import { Modal, LoadingOverlay, Tabs } from '@mantine/core';
-import { egeriaFetch, authHeader, getAssetLineagePrintPath, LINEAGE_TYPES } from '@lfai/egeria-js-commons';
+import { egeriaFetch, authHeader, getAssetLineagePrintPath, LINEAGE_TYPES, hasTab } from '@lfai/egeria-js-commons';
 
 import {
   HappiGraph
@@ -14,7 +14,6 @@ import { EgeriaSelectedNode } from './SelectedNode';
 
 import { EgeriaLineageGraphActions } from './GraphActions';
 import { EgeriaCantDisplay, LineageTypeNotAvailable } from './CantDisplay';
-import { hasTab } from './AssetTools';
 
 interface IGraphData {
   nodes: Array<any>;
