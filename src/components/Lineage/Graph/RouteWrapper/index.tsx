@@ -6,7 +6,7 @@ export function EgeriaLineageGraphRouteWrapper() {
   const { guid } = useParams();
   const location = useLocation();
 
-  const lineageType = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+  const lineageType = location.pathname.replace(/\/+$/, '').split('/').pop();
 
   const navigate = useNavigate();
 
