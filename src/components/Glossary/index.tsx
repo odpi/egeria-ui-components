@@ -32,7 +32,7 @@ export function EgeriaGlossary (props: Props) {
       }));
     }
 
-    setTermIsLoading(false);
+    setCategoryIsLoading(false);
   };
 
   const handleGlossaryTermsApi = async (guid: string) => {
