@@ -25,6 +25,8 @@ jobs:
           npm -v
       - name: Install Dependencies
         run: npm install
+      - name: Run tests
+        run: npm run test
       - name: Build
         run: npm run build
         env:
