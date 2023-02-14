@@ -1,13 +1,15 @@
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { EgeriaLineageGraph } from '..';
 
+export const getUrlLastSubdirectory = (path:string) => {
+  return path.replace(/\/+$/, '').split('/').pop();
+}
 
 export function EgeriaLineageGraphRouteWrapper() {
   const { guid } = useParams();
   const location = useLocation();
 
-  const lineageType = location.pathname.replace(/\/+$/, '').split('/').pop();
-
+  const lineageType = getUrlLastSubdirectory(location.pathname);
   const navigate = useNavigate();
 
   return <EgeriaLineageGraph guid={guid}
