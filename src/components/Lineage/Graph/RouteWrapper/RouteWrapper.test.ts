@@ -4,7 +4,11 @@ import { getUrlLastSubdirectory } from '../RouteWrapper';
 
 
 describe('getUrlLastSubdirectory', () => {
-    it('returns the last subdirectory of a url with one or more tailing forward slashes', () => {
+    it('returns the last subdirectory of a url with only one tailing forward slash', () => {
+      const url = '/asset-lineage/abc123/vertical-lineage/';
+      expect(getUrlLastSubdirectory(url)).toBe('vertical-lineage');
+    });
+    it('returns the last subdirectory of a url with more than one tailing forward slashes', () => {
       const url = '/asset-lineage/abc123/vertical-lineage/////';
       expect(getUrlLastSubdirectory(url)).toBe('vertical-lineage');
     });
