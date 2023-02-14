@@ -20,7 +20,7 @@
     "build": "tsc -p tsconfig.lib.json",
     "postbuild": "npm run copy:assets",
     "copy:assets": "cpx 'src/**/**.scss' 'dist/esm/'",
-    "test": "react-scripts test --watchAll=false --passWithNoTests",
+    "test": "react-scripts test --watchAll=false --passWithNoTests --transformIgnorePatterns 'node_modules/(?!@lfai)/'",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx,json}'",
     "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json}'",
