@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { egeriaFetch, authHeader } from '@lfai/egeria-js-commons';
+import { egeriaFetch, authHeader, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
 import { Accordion, LoadingOverlay, Table, Paper, Divider, Button, SimpleGrid, Text } from '@mantine/core';
 import { EgeriaAssetTools } from '../../Lineage/Graph/AssetTools';
 import { ArticleOff, Printer } from 'tabler-icons-react';
+import { RequirePermissions } from '@lfai/egeria-ui-core';
 
 const getProperties = (object: any) => {
   if(object) {
@@ -106,7 +107,7 @@ export function EgeriaAssetDetails(props: Props) {
 
         <Divider my="sm" variant="dashed" />
 
-        <SimpleGrid cols={4}>
+        <RequirePermissions component={VISIBLE_COMPONENTS.ASSETS_DETAILS_PRINT} element={<SimpleGrid cols={4}>
           <Button leftIcon={<Printer size={20} />}
                   color="gray"
                   component="a"
@@ -114,9 +115,9 @@ export function EgeriaAssetDetails(props: Props) {
                   href={`/assets/${guid}/details/print`}>
             Print
           </Button>
-        </SimpleGrid>
 
-        <Divider my="sm" variant="dashed" />
+          <Divider my="sm" variant="dashed" />
+        </SimpleGrid>} />
       </> }
     </div> }
 
