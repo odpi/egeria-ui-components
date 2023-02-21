@@ -1,4 +1,4 @@
-import { hasComponent, hasTab, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
+import { hasTab, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
 import { RequirePermissions } from '@lfai/egeria-ui-core';
 import { Button, SimpleGrid } from '@mantine/core';
 
