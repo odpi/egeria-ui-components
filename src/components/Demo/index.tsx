@@ -5,7 +5,7 @@ import { EgeriaAssetDetailsPrint } from '../Assets/Details/print';
 import { EgeriaGlossary } from '../Glossary';
 import { EgeriaLineageGraphRouteWrapper } from '../Lineage/Graph/RouteWrapper';
 import { ASSET_CATALOG_PATH, goHome, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
-import { EgeriaApp, EgeriaLogin, RequirePermissions } from '@lfai/egeria-ui-core';
+import { EgeriaApp, EgeriaLogin, EgeriaPageNotFound, RequirePermissions } from '@lfai/egeria-ui-core';
 
 import './index.scss';
 import { EgeriaLineageGraphPrint } from '../Lineage/Graph/print';
@@ -49,7 +49,8 @@ export function Demo() {
             <Route path={'/glossary'} element={<RequirePermissions component={VISIBLE_COMPONENTS.GLOSSARY}
               showAccessDenied={true} element={<EgeriaGlossary columnMinWidth={120}/>} /> } />
             <Route path={'/login'} element={<EgeriaLogin loginCallback={ goHome }/>} />
-            {/* //TODO show not found page */}
+            <Route path={'/*'} element={<EgeriaPageNotFound />} />
+
             {/* <Route path={'/asset-lineage/:guid/*'} element={<> HI </>} /> */}
           </Routes>
         </Router> } />
