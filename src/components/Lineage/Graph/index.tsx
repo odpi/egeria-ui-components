@@ -1,5 +1,5 @@
 import { Modal, LoadingOverlay, Tabs } from '@mantine/core';
-import { egeriaFetch, authHeader, getAssetLineagePrintPath, LINEAGE_TYPES, hasTab } from '@lfai/egeria-js-commons';
+import { egeriaFetch, authHeader, getAssetLineagePrintPath, LINEAGE_TYPES, hasTab, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
 
 import {
   HappiGraph
@@ -14,6 +14,7 @@ import { EgeriaSelectedNode } from './SelectedNode';
 
 import { EgeriaLineageGraphActions } from './GraphActions';
 import { EgeriaCantDisplay, LineageTypeNotAvailable } from './CantDisplay';
+import { RequirePermissions } from '@lfai/egeria-ui-core';
 
 interface IGraphData {
   nodes: Array<any>;
@@ -104,14 +105,14 @@ export function EgeriaLineageGraph(props: Props) {
           onTabChange={(value) => onTabChange(value)}
           style={{height: '100%'}}>
           <Tabs.List grow>
-            {hasTab(selectedNodeGroup, LINEAGE_TYPES.END_TO_END) &&
-              <Tabs.Tab value={LINEAGE_TYPES.END_TO_END}>{LINEAGE_TYPES.END_TO_END}</Tabs.Tab>}
-            {hasTab(selectedNodeGroup, LINEAGE_TYPES.VERTICAL_LINEAGE) &&
-              <Tabs.Tab value={LINEAGE_TYPES.VERTICAL_LINEAGE}>{LINEAGE_TYPES.VERTICAL_LINEAGE}</Tabs.Tab>}
-            {hasTab(selectedNodeGroup, LINEAGE_TYPES.ULTIMATE_SOURCE) &&
-              <Tabs.Tab value={LINEAGE_TYPES.ULTIMATE_SOURCE}>{LINEAGE_TYPES.ULTIMATE_SOURCE}</Tabs.Tab>}
-            {hasTab(selectedNodeGroup, LINEAGE_TYPES.ULTIMATE_DESTINATION) &&
-              <Tabs.Tab value={LINEAGE_TYPES.ULTIMATE_DESTINATION}>{LINEAGE_TYPES.ULTIMATE_DESTINATION}</Tabs.Tab>}
+            <RequirePermissions component={VISIBLE_COMPONENTS.END_TO_END} element={ hasTab(selectedNodeGroup, LINEAGE_TYPES.END_TO_END) &&
+              <Tabs.Tab value={LINEAGE_TYPES.END_TO_END}>{LINEAGE_TYPES.END_TO_END}</Tabs.Tab>} />
+            <RequirePermissions component={VISIBLE_COMPONENTS.VERTICAL_LINEAGE} element={ hasTab(selectedNodeGroup, LINEAGE_TYPES.VERTICAL_LINEAGE) &&
+              <Tabs.Tab value={LINEAGE_TYPES.VERTICAL_LINEAGE}>{LINEAGE_TYPES.VERTICAL_LINEAGE}</Tabs.Tab>} />
+            <RequirePermissions component={VISIBLE_COMPONENTS.ULTIMATE_SOURCE} element={ hasTab(selectedNodeGroup, LINEAGE_TYPES.ULTIMATE_SOURCE) &&
+              <Tabs.Tab value={LINEAGE_TYPES.ULTIMATE_SOURCE}>{LINEAGE_TYPES.ULTIMATE_SOURCE}</Tabs.Tab>} />
+            <RequirePermissions component={VISIBLE_COMPONENTS.ULTIMATE_DESTINATION} element={ hasTab(selectedNodeGroup, LINEAGE_TYPES.ULTIMATE_DESTINATION) &&
+              <Tabs.Tab value={LINEAGE_TYPES.ULTIMATE_DESTINATION}>{LINEAGE_TYPES.ULTIMATE_DESTINATION}</Tabs.Tab>} />
           </Tabs.List>
 
           <Tabs.Panel value={LINEAGE_TYPES.END_TO_END}>
