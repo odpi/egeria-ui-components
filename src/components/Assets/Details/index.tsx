@@ -115,9 +115,9 @@ export function EgeriaAssetDetails(props: Props) {
                   href={`/assets/${guid}/details/print`}>
             Print
           </Button>
-        </SimpleGrid>} />
 
-        <Divider my="sm" variant="dashed" />
+          <Divider my="sm" variant="dashed" />
+        </SimpleGrid>} />
       </> }
     </div> }
 
