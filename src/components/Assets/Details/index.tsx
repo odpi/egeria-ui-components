@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { egeriaFetch, authHeader, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
-import { Accordion, LoadingOverlay, Table, Paper, Divider, Button, SimpleGrid, Text } from '@mantine/core';
+import { Accordion, LoadingOverlay, Table, Paper, Divider, Button, SimpleGrid, Text, Flex } from '@mantine/core';
 import { EgeriaAssetTools } from '../../Lineage/Graph/AssetTools';
 import { ArticleOff, Printer } from 'tabler-icons-react';
 import { RequirePermissions } from '@lfai/egeria-ui-core';
@@ -107,17 +107,22 @@ export function EgeriaAssetDetails(props: Props) {
 
         <Divider my="sm" variant="dashed" />
 
-        <RequirePermissions component={VISIBLE_COMPONENTS.ASSETS_DETAILS_PRINT} element={<SimpleGrid cols={4}>
-          <Button leftIcon={<Printer size={20} />}
-                  color="gray"
-                  component="a"
-                  target="_blank"
-                  href={`/assets/${guid}/details/print`}>
-            Print
-          </Button>
+        <RequirePermissions component={VISIBLE_COMPONENTS.ASSETS_DETAILS_PRINT} element={
+          <Flex direction="column">
+            <SimpleGrid cols={4}>
+              <Button
+                leftIcon={<Printer size={20} />}
+                color="gray"
+                component="a"
+                target="_blank"
+                href={`/assets/${guid}/details/print`}
+              >
+                Print
+              </Button>
+            </SimpleGrid>
+            <Divider mt="sm" variant="dashed" />
+          </Flex>} />
 
-          <Divider my="sm" variant="dashed" />
-        </SimpleGrid>} />
       </> }
     </div> }
 
