@@ -105,20 +105,24 @@ export function EgeriaAssetDetails(props: Props) {
       { asset && <>
         <EgeriaAssetTools selectedNode={selectedNode} />
 
+        {/* TODO: redesign the dividers */}
         <Divider my="sm" variant="dashed" />
 
-        <RequirePermissions component={VISIBLE_COMPONENTS.ASSETS_DETAILS_PRINT} element={<SimpleGrid cols={4}>
-          <Button leftIcon={<Printer size={20} />}
-                  color="gray"
-                  component="a"
-                  target="_blank"
-                  href={`/assets/${guid}/details/print`}>
-            Print
-          </Button>
+        <RequirePermissions component={VISIBLE_COMPONENTS.ASSETS_DETAILS_PRINT} element={
+          <>
+            <SimpleGrid cols={4}>
+              <Button
+                leftIcon={<Printer size={20} />}
+                color="gray"
+                component="a"
+                target="_blank"
+                href={`/assets/${guid}/details/print`}>
+                Print
+              </Button>
+            </SimpleGrid>
+            <Divider my="sm" variant="dashed" />
+          </> }/> </>}
 
-          <Divider my="sm" variant="dashed" />
-        </SimpleGrid>} />
-      </> }
     </div> }
 
     { !loading && asset && <>
