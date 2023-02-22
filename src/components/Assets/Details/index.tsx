@@ -109,21 +109,19 @@ export function EgeriaAssetDetails(props: Props) {
         <Divider my="sm" variant="dashed" />
 
         <RequirePermissions component={VISIBLE_COMPONENTS.ASSETS_DETAILS_PRINT} element={
-          <SimpleGrid cols={4}>
-            <Button
-              leftIcon={<Printer size={20} />}
-              color="gray"
-              component="a"
-              target="_blank"
-              href={`/assets/${guid}/details/print`}>
-              Print
-            </Button>
-          </SimpleGrid>} />
-        </> }
-
-        <RequirePermissions component={VISIBLE_COMPONENTS.ASSETS_DETAILS_PRINT} element={
-          <Divider mt="sm" variant="dashed" />
-        }/>
+          <>
+            <SimpleGrid cols={4}>
+              <Button
+                leftIcon={<Printer size={20} />}
+                color="gray"
+                component="a"
+                target="_blank"
+                href={`/assets/${guid}/details/print`}>
+                Print
+              </Button>
+            </SimpleGrid>
+            <Divider my="sm" variant="dashed" />
+          </> }/> </>}
 
     </div> }
 
