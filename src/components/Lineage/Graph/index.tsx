@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import { Modal, LoadingOverlay, Tabs } from '@mantine/core';
 import { egeriaFetch, authHeader, getAssetLineagePrintPath, LINEAGE_TYPES, hasTab, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
-=======
-import { Modal, LoadingOverlay, Tabs, Switch } from '@mantine/core';
-import { egeriaFetch, authHeader, getAssetLineagePrintPath, LINEAGE_TYPES, hasTab } from '@lfai/egeria-js-commons';
->>>>>>> 2033a1f (added includeProcesses toggle in lineagegraph)
 
 import {
   HappiGraph
@@ -19,11 +14,8 @@ import { EgeriaSelectedNode } from './SelectedNode';
 
 import { EgeriaLineageGraphActions } from './GraphActions';
 import { EgeriaCantDisplay, LineageTypeNotAvailable } from './CantDisplay';
-<<<<<<< HEAD
 import { RequirePermissions } from '@lfai/egeria-ui-core';
-=======
 import { useSearchParams } from 'react-router-dom';
->>>>>>> 2033a1f (added includeProcesses toggle in lineagegraph)
 
 interface IGraphData {
   nodes: Array<any>;
@@ -144,8 +136,12 @@ export function EgeriaLineageGraph(props: Props) {
               debug={false}
               graphDirection={'HORIZONTAL'}
               selectedNodeId={guid}
-              actions={<><EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri} />
-                         <Switch label="Processes" size="xs" disabled={selectedNodeGroup === 'Process'} checked={includeProcess} onChange={() => onSwitchChange(lineageType, !includeProcess)}/></>}
+              actions={<EgeriaLineageGraphActions rawData={{...rawData}}
+                                                  printUri={printUri}
+                                                  selectedNodeGroup={selectedNodeGroup}
+                                                  includeProcess={includeProcess}
+                                                  lineageType={lineageType}
+                                                  onSwitchChange={onSwitchChange}/>}
               onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} />}
           </Tabs.Panel>
 
@@ -156,8 +152,12 @@ export function EgeriaLineageGraph(props: Props) {
               debug={false}
               graphDirection={'VERTICAL'}
               selectedNodeId={guid}
-              actions={<><EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri} />
-                         <Switch label="Processes" size="xs" disabled={selectedNodeGroup === 'Process'} checked={includeProcess} onChange={() => onSwitchChange(lineageType, !includeProcess)}/></>}
+              actions={<EgeriaLineageGraphActions rawData={{...rawData}}
+                                                  printUri={printUri}
+                                                  selectedNodeGroup={selectedNodeGroup}
+                                                  includeProcess={includeProcess}
+                                                  lineageType={lineageType}
+                                                  onSwitchChange={onSwitchChange}/>}
               onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} />}
           </Tabs.Panel>
 
@@ -168,8 +168,12 @@ export function EgeriaLineageGraph(props: Props) {
               debug={false}
               graphDirection={'HORIZONTAL'}
               selectedNodeId={guid}
-              actions={<><EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri} />
-                         <Switch label="Processes" size="xs" disabled={selectedNodeGroup === 'Process'} checked={includeProcess} onChange={() => onSwitchChange(lineageType, !includeProcess)}/></>}
+              actions={<EgeriaLineageGraphActions rawData={{...rawData}}
+                                                  printUri={printUri}
+                                                  selectedNodeGroup={selectedNodeGroup}
+                                                  includeProcess={includeProcess}
+                                                  lineageType={lineageType}
+                                                  onSwitchChange={onSwitchChange}/>}
               onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} />}
           </Tabs.Panel>
 
@@ -180,8 +184,12 @@ export function EgeriaLineageGraph(props: Props) {
               debug={false}
               graphDirection={'HORIZONTAL'}
               selectedNodeId={guid}
-              actions={<><EgeriaLineageGraphActions rawData={{...rawData}} printUri={printUri} />
-                         <Switch label="Processes" size="xs" disabled={selectedNodeGroup === 'Process'} checked={includeProcess} onChange={() => onSwitchChange(lineageType, !includeProcess)}/></>}
+              actions={<EgeriaLineageGraphActions rawData={{...rawData}}
+                                                  printUri={printUri}
+                                                  selectedNodeGroup={selectedNodeGroup}
+                                                  includeProcess={includeProcess}
+                                                  lineageType={lineageType}
+                                                  onSwitchChange={onSwitchChange}/>}
               onNodeClick={(d: any) => { setSelectedNodeData(d); setOpened(true); }} />}
           </Tabs.Panel>
         </Tabs>
