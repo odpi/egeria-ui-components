@@ -1,5 +1,5 @@
 import {
-  ActionIcon, Switch, Tooltip
+  ActionIcon, Tooltip
 } from '@mantine/core';
 
 import {
@@ -9,12 +9,12 @@ import {
 import {
   AiOutlinePrinter
 } from 'react-icons/ai';
+import { RequirePermissions } from '@lfai/egeria-ui-core';
+import { VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
 
 import '@lfai/happi-graph/src/components/HappiGraph/happi-graph.scss';
 import '../index.scss';
 import { ToggleLeft, ToggleRight } from 'tabler-icons-react';
-import { RequirePermissions } from '@lfai/egeria-ui-core';
-import { VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
 
 interface Props {
   rawData: any;
@@ -37,12 +37,12 @@ export function EgeriaLineageGraphActions (props: Props) {
   return (
     <>
       <HappiGraphActions rawData={{...rawData}}/>
-        <Tooltip label="Print" position="right">
-          <RequirePermissions component={VISIBLE_COMPONENTS.ASSET_LINEAGE_PRINT} element={<ActionIcon variant="subtle" size={35} onClick={() => window.open(printUri)}>
+      <RequirePermissions component={VISIBLE_COMPONENTS.ASSET_LINEAGE_PRINT} element={ <Tooltip label="Print" position="right">
+          <ActionIcon variant="subtle" size={35} onClick={() => window.open(printUri)}>
             <AiOutlinePrinter size={25}/>
-          </ActionIcon>} />
-        </Tooltip>
-        { selectedNodeGroup !== 'Process' && <Tooltip label="Processes" position="right">
+          </ActionIcon>
+        </Tooltip>} />
+      { selectedNodeGroup !== 'Process' && <Tooltip label="Processes" position="right">
           <ActionIcon variant="subtle" size={35} onClick={() => onSwitchChange(lineageType, !includeProcess)}>
             { includeProcess ? <ToggleRight size={25} color="var(--happi-graph-primary-color)"/> : <ToggleLeft size={25} /> }
           </ActionIcon>
