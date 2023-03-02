@@ -17,7 +17,7 @@ import { getApiDataUrl} from './index';
 import { authHeader, egeriaFetch, getFormattedDate, LINEAGE_TYPES} from '@lfai/egeria-js-commons';
 
 export function EgeriaLineageGraphPrint() {
-  const { guid, lineageType }: any = useParams();
+  const { guid, lineageType, includeProcess }: any = useParams();
   const [ isLoading, setIsLoading ] = useState(true);
   const [label, setLabel] = useState<any[]>([]);
   const [group, setGroup] = useState<any[]>([]);
@@ -36,7 +36,7 @@ export function EgeriaLineageGraphPrint() {
   };
 
   useEffect(() => {
-    fetchData(getApiDataUrl(guid, lineageType));
+    fetchData(getApiDataUrl(guid, lineageType, includeProcess));
   }, []);
 
   return (
