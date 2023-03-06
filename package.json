@@ -1,6 +1,6 @@
 {
   "name": "@lfai/egeria-ui-components",
-  "version": "4.2.20",
+  "version": "4.2.21",
   "description": "Encapsulated reactjs components with business logic inside.",
   "license": "Apache-2.0",
   "repository": {

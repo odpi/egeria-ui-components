@@ -40,7 +40,7 @@ export function EgeriaLineageGraph(props: Props) {
   } = props;
 
   const [searchParams] = useSearchParams();
-  const includeProcess = searchParams.get('includeProcess') === 'true';
+  const includeProcess = !(searchParams.get('includeProcess') === 'false');
   const initialData: IGraphData = {nodes: [], edges: []};
 
   const [rawData, setRawData] = useState(initialData);
@@ -71,7 +71,7 @@ export function EgeriaLineageGraph(props: Props) {
   const onTabChange = async (value: any) => {
     setLoading(true);
 
-    await fetchData(uri(value,'false'));
+    await fetchData(uri(value,'true'));
 
     // TODO: extract URL to URL Map
     const path = `/asset-lineage/${guid}/${value}`;
