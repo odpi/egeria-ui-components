@@ -54,6 +54,8 @@ export function EgeriaGlossary (props: Props) {
   };
 
   const onUserSelectGlossaryData = (data: any) => {
+    setTerms([]);
+
     setCategoryIsLoading(true);
 
     handleGlossaryCategoriesApi(data.guid);
