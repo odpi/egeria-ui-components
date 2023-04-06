@@ -132,7 +132,7 @@ export function EgeriaLineageGraph(props: Props) {
           <Tabs.Panel value={LINEAGE_TYPES.END_TO_END}>
             {!loading && (rawData.nodes.length === 0) && <EgeriaCantDisplay />}
             {!loading && (rawData.nodes.length > 0) && <HappiGraph rawData={{...rawData}}
-              algorithm={'VISJS'}
+              algorithm={'ELK'}
               debug={false}
               graphDirection={'HORIZONTAL'}
               selectedNodeId={guid}
