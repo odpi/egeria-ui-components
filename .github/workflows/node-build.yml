@@ -25,7 +25,9 @@ jobs:
           npm -v
       - name: Install Dependencies
         run: npm install
-      - name: Run tests
+      - name: Lint
+        run: npm run lint
+      - name: Test
         run: npm run test
       - name: Build
         run: npm run build

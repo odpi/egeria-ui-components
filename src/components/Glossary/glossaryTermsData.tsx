@@ -47,4 +47,4 @@ export function GlossaryTermsData (props: Props) {
       </div>
     </Paper>
     );
-  };
+}

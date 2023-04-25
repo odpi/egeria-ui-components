@@ -23,10 +23,13 @@ jobs:
       - name: Install dependencies
         if: steps.check.outputs.changed == 'true'
         run: npm install
-      - name: Run tests
+      - name: Lint
+        if: steps.check.outputs.changed == 'true'
+        run: npm run lint
+      - name: Test
         if: steps.check.outputs.changed == 'true'
         run: npm run test
-      - name: Run build
+      - name: Build
         if: steps.check.outputs.changed == 'true'
         run: npm run build
       - name: Publish package to NPM
