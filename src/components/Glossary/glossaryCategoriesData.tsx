@@ -46,4 +46,4 @@ export function GlossaryCategoriesData (props: Props) {
       </div>
     </Paper>
     );
-  };
+}
