@@ -27,13 +27,15 @@ export function EgeriaLineageGraphPrint() {
 
   const fetchData = async (uri: string) => {
     const res = await egeriaFetch(uri, 'GET', { ...authHeader() }, {});
-    const data = await res.json();
-
-    setRawData(data);
-    setIsLoading(false);
-    setLabel(data.nodes.filter((d: { [x: string]: any; }) => d['id'] == guid)[0]['label']);
-    setGroup(data.nodes.filter((d: { [x: string]: any; }) => d['id'] == guid)[0]['group']);
+    if (res) {
+      const data = await res.json();
+      setRawData(data);
+      setIsLoading(false);
+      setLabel(data.nodes.filter((d: { [x: string]: any; }) => d['id'] == guid)[0]['label']);
+      setGroup(data.nodes.filter((d: { [x: string]: any; }) => d['id'] == guid)[0]['group']);
+   }
   };
+
 
   useEffect(() => {
     fetchData(getApiDataUrl(guid, lineageType, includeProcess));

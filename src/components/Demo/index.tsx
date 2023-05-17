@@ -54,7 +54,7 @@ export function Demo() {
                                   element={<EgeriaLineageGraphRouteWrapper />} />
             </RequireAuth> } />
 
-            <Route path={'/asset-lineage/:guid/:lineageType/print'} element={<RequireAuth>
+            <Route path={'/asset-lineage/:guid/:lineageType/:includeProcess/print'} element={<RequireAuth>
               <RequirePermissions component={VISIBLE_COMPONENTS.ASSET_LINEAGE_PRINT}
                                   showAccessDenied={true}
                                   element={<EgeriaLineageGraphPrint />} />
