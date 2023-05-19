@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import {
   HappiGraph,
@@ -17,10 +17,13 @@ import { getApiDataUrl} from './index';
 import { authHeader, egeriaFetch, getFormattedDate, LINEAGE_TYPES} from '@lfai/egeria-js-commons';
 
 export function EgeriaLineageGraphPrint() {
-  const { guid, lineageType, includeProcess }: any = useParams();
+  const { guid, lineageType }: any = useParams();
   const [ isLoading, setIsLoading ] = useState(true);
   const [label, setLabel] = useState<any[]>([]);
   const [group, setGroup] = useState<any[]>([]);
+
+  const [searchParams] = useSearchParams();
+  const includeProcess = searchParams.get('includeProcesses');
 
   const [rawData, setRawData] = useState({nodes: [], edges: []});
   const isVerticalLineage = lineageType == LINEAGE_TYPES.VERTICAL_LINEAGE;
@@ -29,13 +32,14 @@ export function EgeriaLineageGraphPrint() {
     const res = await egeriaFetch(uri, 'GET', { ...authHeader() }, {});
     if (res) {
       const data = await res.json();
+
       setRawData(data);
       setIsLoading(false);
+
       setLabel(data.nodes.filter((d: { [x: string]: any; }) => d['id'] == guid)[0]['label']);
       setGroup(data.nodes.filter((d: { [x: string]: any; }) => d['id'] == guid)[0]['group']);
    }
   };
-
 
   useEffect(() => {
     fetchData(getApiDataUrl(guid, lineageType, includeProcess));

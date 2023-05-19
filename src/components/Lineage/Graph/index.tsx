@@ -28,7 +28,7 @@ interface Props {
   navigateTo: any;
 }
 
-export const getApiDataUrl = (guid: any, lineageType: any, includeProcess: boolean) => {
+export const getApiDataUrl = (guid: any, lineageType: any, includeProcess: any) => {
   return `/api/lineage/entities/${guid}/${lineageType}?includeProcesses=${includeProcess}`;
 };
 
@@ -42,7 +42,6 @@ export function EgeriaLineageGraph(props: Props) {
   const [searchParams] = useSearchParams();
   const includeProcess = !(searchParams.get('includeProcess') === 'false');
   const initialData: IGraphData = {nodes: [], edges: []};
-
   const [rawData, setRawData] = useState(initialData);
   const [loading, setLoading] = useState(false);
   const [opened, setOpened] = useState(false);
@@ -53,7 +52,7 @@ export function EgeriaLineageGraph(props: Props) {
   const uri = (lineageType: any, includeProcess:any) => `/api/lineage/entities/${guid}/${lineageType}?includeProcesses=${includeProcess}`;
 
   const getAssetLineagePrintPath = (guid: any, lineageType: any, includeProcess: any) => {
-    return `/asset-lineage/${ guid }/${ lineageType }/${includeProcess}/print`;
+    return `/asset-lineage/${ guid }/${ lineageType }/print?includeProcesses=${includeProcess}`;
   };
 
   const printUri = getAssetLineagePrintPath(guid, lineageType, includeProcess);
