@@ -1,5 +1,5 @@
 import { Modal, LoadingOverlay, Tabs } from '@mantine/core';
-import { egeriaFetch, authHeader, getAssetLineagePrintPath, LINEAGE_TYPES, hasTab, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
+import { egeriaFetch, authHeader, LINEAGE_TYPES, hasTab, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
 
 import {
   HappiGraph
@@ -42,7 +42,6 @@ export function EgeriaLineageGraph(props: Props) {
   const [searchParams] = useSearchParams();
   const includeProcess = !(searchParams.get('includeProcess') === 'false');
   const initialData: IGraphData = {nodes: [], edges: []};
-
   const [rawData, setRawData] = useState(initialData);
   const [loading, setLoading] = useState(false);
   const [opened, setOpened] = useState(false);
@@ -52,7 +51,11 @@ export function EgeriaLineageGraph(props: Props) {
   // TODO: extract URL to URL Map
   const uri = (lineageType: any, includeProcess:any) => `/api/lineage/entities/${guid}/${lineageType}?includeProcesses=${includeProcess}`;
 
-  const printUri = getAssetLineagePrintPath(guid, lineageType);
+  const getAssetLineagePrintPath = (guid: any, lineageType: any, includeProcess: any) => {
+    return `/asset-lineage/${ guid }/${ lineageType }/print?includeProcesses=${includeProcess}`;
+  };
+
+  const printUri = getAssetLineagePrintPath(guid, lineageType, includeProcess);
 
   const fetchData = async (uri: string) => {
     const res = await egeriaFetch(uri, 'GET', { ...authHeader() }, {});
