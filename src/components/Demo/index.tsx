@@ -81,7 +81,7 @@ export function Demo() {
             <Route path={'/glossary'} element={<RequireAuth>
               <RequirePermissions component={VISIBLE_COMPONENTS.GLOSSARY}
                                   showAccessDenied={true}
-                                  element={<EgeriaGlossary columnMinWidth={120}/>} />
+                                  element={<EgeriaGlossary />} />
             </RequireAuth> } />
 
             <Route path={'/login'} element={

@@ -1,16 +1,15 @@
 
-const getGridOptionsGlossary = (columnDefs: any, columnMinWidth?: number) => {
-  const _columnMinWidth = columnMinWidth ? columnMinWidth : 120;
+const getGridOptionsGlossary = (columnDefs: any, onUserSelect: any) => {
+  const _columnMinWidth = 50;
 
   return {
     suppressCellFocus: true,
     defaultColDef: {
       sortable: true,
       resizable: true,
-      minWidth: _columnMinWidth,
       suppressMovable: true,
-      rowSelection: 'single',
     },
+      suppressRowDeselection: true,
 
     columnDefs: [
       ...columnDefs
@@ -23,6 +22,7 @@ const getGridOptionsGlossary = (columnDefs: any, columnMinWidth?: number) => {
         defaultMinWidth: _columnMinWidth
       }) : 0;
     },
+
     onFirstDataRendered: (params: any) => {
       const allColumnIds: string[] = [];
       params.columnApi.getColumns()?.forEach((column: any) => {
@@ -32,10 +32,9 @@ const getGridOptionsGlossary = (columnDefs: any, columnMinWidth?: number) => {
     },
   };
 
-  function onSelectionChanged (params: any) {
-    const selectedRows = params.api ? params.api.getSelectedRows() : 0;
-    (document.querySelector('#selectedRows') as any).innerHTML =
-      selectedRows.length === 1 ? selectedRows[0].any : '';
+function onSelectionChanged (params: any) {
+  const selectedRows = params.api.getSelectedRows();
+  onUserSelect(selectedRows[0].guid);
   }
 }
 

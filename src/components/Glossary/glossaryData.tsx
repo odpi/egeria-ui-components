@@ -11,12 +11,11 @@ import { getGridOptionsGlossary } from './helpers';
 import { GridOptions } from 'ag-grid-community';
 
 interface Props {
-  columnMinWidth?: number;
   onUserSelect: any;
 }
 
 export function GlossaryData (props: Props) {
-  const { columnMinWidth, onUserSelect } = props;
+  const { onUserSelect } = props;
   const [glossaryDataIsLoading, setGlossaryDataIsLoading] = useState(false);
   const [glossaryData, setGlossaryData] = useState([]);
   const gridOptionsGlossaryData: GridOptions<any> = getGridOptionsGlossary([
@@ -28,16 +27,9 @@ export function GlossaryData (props: Props) {
     {
       field: 'status',
       filter: true,
-      headerName: 'Status',
+      headerName: 'Status'
     },
-    {
-      headerName: 'Details',
-      sortable: false,
-      cellRenderer: (object: any) => {
-        return <ActionIcon onClick={() => onUserSelect(object.data)}><ListDetails /></ActionIcon>;
-      }
-    },
-  ], columnMinWidth);
+  ], onUserSelect);
 
   const handleApi = async () => {
     const res = await glossaries.getAll();
@@ -68,6 +60,7 @@ export function GlossaryData (props: Props) {
       <LoadingOverlay visible={glossaryDataIsLoading} />
       <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
         <AgGridReact gridOptions={gridOptionsGlossaryData}
+                     rowSelection='single'
                      rowData={glossaryData} />
       </div>
     </Paper>
