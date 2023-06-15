@@ -16,7 +16,7 @@ import {
   QUERY_MIN_LENGTH,
   fetchRawData,
   fetchTypes,
-  formData,
+  // formData,
   formIsValid,
   getQueryParamsPath,
   getQueryParams,
@@ -24,6 +24,23 @@ import {
   isStringLonger,
   validateQueryAndTypes
 } from '@lfai/egeria-js-commons';
+
+
+interface formData {
+  caseSensitive?: boolean;
+  exactMatch?: boolean;
+  pageSize: number;
+  q?: {
+      value: string;
+      isValid: boolean;
+      isPristine: boolean;
+  };
+  types?: {
+      value: Array<string>;
+      isValid: boolean;
+      isPristine: boolean;
+  };
+}
 
 /**
  * Initial empty form value.
@@ -41,7 +58,7 @@ const emptyForm: formData = {
   },
   exactMatch: false,
   caseSensitive: false,
-  pageSize: 25
+  pageSize: 1
 };
 
 /**
@@ -245,6 +262,10 @@ export function EgeriaAssetCatalog() {
     navigate(path);
   };
 
+  console.log(typesData.typesData.length)
+  console.log(rowData.rowData.length)
+  console.log(form.pageSize)
+
   return (
     <>
     <div style={{ display: 'flex', alignItems: 'stretch', flexDirection: 'column', position: 'relative', height: '100%', }}>
@@ -321,15 +342,15 @@ export function EgeriaAssetCatalog() {
       </div>
 
       <div>
-        <Button size="xs"
+        {(rowData.rowData.length > form.pageSize) &&
+            <Button size="xs"
                 compact
                 fullWidth
                 onClick={() => loadMore(form)}
                 style={{marginBottom:1, marginTop:10}}
-                disabled={typesData.typesData.length === 0}
                 >
           Load more...
-        </Button>
+        </Button>}
       </div>
     </div>
     </>
