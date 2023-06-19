@@ -27,7 +27,8 @@ export function GlossaryData (props: Props) {
     {
       field: 'status',
       filter: true,
-      headerName: 'Status'
+      headerName: 'Status',
+      maxWidth: 100
     },
   ], onUserSelect);
 
@@ -56,9 +57,9 @@ export function GlossaryData (props: Props) {
   }, []);
 
   return (
-    <Paper shadow="xs" style={{height: '100%', position: 'relative'}}>
+    <Paper shadow="xs" style={{height: '100%', position: 'relative', width: 'auto'}}>
       <LoadingOverlay visible={glossaryDataIsLoading} />
-      <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
+      <div className="ag-theme-alpine" style={{width: 'auto', height: '100%'}}>
         <AgGridReact gridOptions={gridOptionsGlossaryData}
                      rowSelection='single'
                      rowData={glossaryData} />

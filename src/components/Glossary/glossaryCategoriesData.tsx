@@ -20,12 +20,13 @@ export function GlossaryCategoriesData (props: Props) {
     {
       field: 'displayName',
       filter: true,
-      headerName: 'Category'
+      headerName: 'Category',
     },
     {
       field: 'status',
       filter: true,
-      headerName: 'Status'
+      headerName: 'Status',
+      maxWidth: 100
     },
   ], onUserSelect);
 
