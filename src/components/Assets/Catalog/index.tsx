@@ -58,7 +58,7 @@ const emptyForm: formData = {
   },
   exactMatch: false,
   caseSensitive: false,
-  pageSize: 1
+  pageSize: 25
 };
 
 /**
