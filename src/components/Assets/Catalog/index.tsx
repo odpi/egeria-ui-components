@@ -262,10 +262,6 @@ export function EgeriaAssetCatalog() {
     navigate(path);
   };
 
-  console.log(typesData.typesData.length)
-  console.log(rowData.rowData.length)
-  console.log(form.pageSize)
-
   return (
     <>
     <div style={{ display: 'flex', alignItems: 'stretch', flexDirection: 'column', position: 'relative', height: '100%', }}>
