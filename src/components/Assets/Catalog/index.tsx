@@ -16,7 +16,7 @@ import {
   QUERY_MIN_LENGTH,
   fetchRawData,
   fetchTypes,
-  // formData,
+  formData,
   formIsValid,
   getQueryParamsPath,
   getQueryParams,
@@ -24,23 +24,6 @@ import {
   isStringLonger,
   validateQueryAndTypes
 } from '@lfai/egeria-js-commons';
-
-
-interface formData {
-  caseSensitive?: boolean;
-  exactMatch?: boolean;
-  pageSize: number;
-  q?: {
-      value: string;
-      isValid: boolean;
-      isPristine: boolean;
-  };
-  types?: {
-      value: Array<string>;
-      isValid: boolean;
-      isPristine: boolean;
-  };
-}
 
 /**
  * Initial empty form value.
