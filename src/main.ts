@@ -5,6 +5,7 @@ import { EgeriaAssetDetails } from './components/Assets/Details';
 import { EgeriaAssetDetailsPrint } from './components/Assets/Details/print';
 import { EgeriaAssetCatalog } from './components/Assets/Catalog';
 import { EgeriaLineageGraphPrint } from './components/Lineage/Graph/print';
+import { EgeriaProfile } from './components/Profile';
 
 export {
   // components
@@ -14,5 +15,6 @@ export {
   EgeriaGlossary,
   EgeriaLineageGraph,
   EgeriaLineageGraphRouteWrapper,
-  EgeriaLineageGraphPrint
+  EgeriaLineageGraphPrint,
+  EgeriaProfile
 }
