@@ -1,5 +1,5 @@
 import { Modal, LoadingOverlay, Tabs } from '@mantine/core';
-import { egeriaFetch, authHeader, LINEAGE_TYPES, hasTab, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
+import { egeriaFetch, authHeader, LINEAGE_TYPES, hasTab, VISIBLE_COMPONENTS, getAssetLineagePrintPath } from '@lfai/egeria-js-commons';
 
 import {
   HappiGraph
@@ -50,10 +50,6 @@ export function EgeriaLineageGraph(props: Props) {
 
   // TODO: extract URL to URL Map
   const uri = (lineageType: any, includeProcess:any) => `/api/lineage/entities/${guid}/${lineageType}?includeProcesses=${includeProcess}`;
-
-  const getAssetLineagePrintPath = (guid: any, lineageType: any, includeProcess: any) => {
-    return `/asset-lineage/${ guid }/${ lineageType }/print?includeProcesses=${includeProcess}`;
-  };
 
   const printUri = getAssetLineagePrintPath(guid, lineageType, includeProcess);
 

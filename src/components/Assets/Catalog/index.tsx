@@ -321,15 +321,15 @@ export function EgeriaAssetCatalog() {
       </div>
 
       <div>
-        <Button size="xs"
+        {(rowData.rowData.length > form.pageSize) &&
+            <Button size="xs"
                 compact
                 fullWidth
                 onClick={() => loadMore(form)}
                 style={{marginBottom:1, marginTop:10}}
-                disabled={typesData.typesData.length === 0}
                 >
           Load more...
-        </Button>
+        </Button>}
       </div>
     </div>
     </>
