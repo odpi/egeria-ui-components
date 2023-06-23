@@ -19,7 +19,11 @@ const getGridOptionsGlossary = (columnDefs: any, onUserSelect: any) => {
 
     onGridReady: (params: any) => {
       params.api.sizeColumnsToFit()
-    },
+
+    window.addEventListener('resize', function () {
+        params.api.sizeColumnsToFit();
+    });
+  },
 
     onFirstDataRendered: (params: any) => {
       params.api.sizeColumnsToFit()
