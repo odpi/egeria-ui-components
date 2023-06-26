@@ -26,7 +26,8 @@ export function GlossaryCategoriesData (props: Props) {
       field: 'status',
       filter: true,
       headerName: 'Status',
-      maxWidth: 100
+      maxWidth: 100,
+      resizable: false
     },
   ], onUserSelect);
 
