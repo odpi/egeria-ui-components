@@ -4,11 +4,12 @@ import { EgeriaAssetDetails } from '../Assets/Details';
 import { EgeriaAssetDetailsPrint } from '../Assets/Details/print';
 import { EgeriaGlossary } from '../Glossary';
 import { EgeriaLineageGraphRouteWrapper } from '../Lineage/Graph/RouteWrapper';
-import { ASSET_CATALOG_PATH, eNavigateTo, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
+import { ASSET_CATALOG_PATH, eNavigateTo, token, VISIBLE_COMPONENTS } from '@lfai/egeria-js-commons';
 import { EgeriaApp, EgeriaLogin, EgeriaPageNotFound, RequireAuth, RequirePermissions } from '@lfai/egeria-ui-core';
 
 import './index.scss';
 import { EgeriaLineageGraphPrint } from '../Lineage/Graph/print';
+import { EgeriaProfile } from '../Profile';
 
 console.log('API_URL', process.env.REACT_APP_API_URL);
 
@@ -81,7 +82,13 @@ export function Demo() {
             <Route path={'/glossary'} element={<RequireAuth>
               <RequirePermissions component={VISIBLE_COMPONENTS.GLOSSARY}
                                   showAccessDenied={true}
-                                  element={<EgeriaGlossary columnMinWidth={120}/>} />
+                                  element={<EgeriaGlossary />} />
+            </RequireAuth> } />
+
+            <Route path={'/profile'} element={<RequireAuth>
+              <RequirePermissions component={token.getValue() ? '*' : null}
+                                  showAccessDenied={true}
+                                  element={<EgeriaProfile />} />
             </RequireAuth> } />
 
             <Route path={'/login'} element={

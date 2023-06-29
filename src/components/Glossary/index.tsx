@@ -6,12 +6,10 @@ import { useState } from 'react';
 import { glossaries } from '@lfai/egeria-js-commons';
 
 interface Props {
-  columnMinWidth?: number;
   guid?: any;
 }
 
 export function EgeriaGlossary (props: Props) {
-  const { columnMinWidth } = props;
   const [categories, setCategories] = useState([]);
   const [categoryIsLoading, setCategoryIsLoading] = useState(false);
   const [terms, setTerms] = useState([]);
@@ -55,13 +53,13 @@ export function EgeriaGlossary (props: Props) {
 
   const onUserSelectGlossaryData = (data: any) => {
     setTerms([]);
-
     setCategoryIsLoading(true);
 
     handleGlossaryCategoriesApi(data.guid);
   };
 
   const onUserSelectCategoryData = (data: any) => {
+    setTerms([]);
     setTermIsLoading(true);
 
     handleGlossaryTermsApi(data.guid);
@@ -69,22 +67,23 @@ export function EgeriaGlossary (props: Props) {
 
   const onUserSelectTerms = (data: any) => {
     console.log('onUserSelectTerms', data);
+    window.open(`/assets/${data}/details`, "_blank", "noreferrer")
   };
 
   return (
     <Grid grow gutter="xs" style={{height:'100%'}} className="egeria-glossary" >
       <Grid.Col span={4}>
-        <GlossaryData columnMinWidth={columnMinWidth}
+        <GlossaryData
                       onUserSelect={(id: string) => onUserSelectGlossaryData(id)} />
       </Grid.Col>
       <Grid.Col span={4}>
-        <GlossaryCategoriesData columnMinWidth={columnMinWidth}
+        <GlossaryCategoriesData
                                 data={categories}
                                 isLoading={categoryIsLoading}
                                 onUserSelect={(id: string) => onUserSelectCategoryData(id)} />
       </Grid.Col>
       <Grid.Col span={4}>
-        <GlossaryTermsData columnMinWidth={columnMinWidth}
+        <GlossaryTermsData
                            data={terms}
                            isLoading={termIsLoading}
                            onUserSelect={(id: string) => onUserSelectTerms(id)} />

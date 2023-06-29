@@ -1,7 +1,11 @@
 .egeria-glossary {
   .ag-row .ag-cell {
-    display: flex;
     justify-content: left;
     align-items: center;
+    max-width: fit-content;
   }
+}
+
+.ag-center-cols-container {
+  width: 100% !important;
 }

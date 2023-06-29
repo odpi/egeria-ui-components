@@ -6,17 +6,17 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './index.scss';
 import { getGridOptionsGlossary } from './helpers';
+import { GridOptions } from 'ag-grid-community';
 
 interface Props {
-  columnMinWidth?: number;
   data: any;
   isLoading: boolean;
   onUserSelect: any;
 }
 
 export function GlossaryTermsData (props: Props) {
-  const { columnMinWidth, data, isLoading} = props;
-  const gridOptionsGlossaryTermsData = getGridOptionsGlossary([
+  const { data, isLoading, onUserSelect } = props;
+  const gridOptionsGlossaryTermsData: GridOptions<any> = getGridOptionsGlossary([
     {
       field: 'displayName',
       filter: true,
@@ -25,24 +25,18 @@ export function GlossaryTermsData (props: Props) {
     {
       field: 'status',
       filter: true,
-      headerName: 'Status'
+      headerName: 'Status',
+      maxWidth: 100,
+      resizable: false
     },
-    {
-      headerName: 'Details',
-      sortable: false,
-      cellRenderer: (object:any) => {
-        return <a href={`/assets/${object.data.guid}/details`} target="_blank" rel="noreferrer">
-                        <ActionIcon><ListDetails /></ActionIcon>
-               </a>;
-      }
-    },
-  ], columnMinWidth);
+  ], onUserSelect);
 
   return (
     <Paper shadow="xs" style={{height: '100%', position: 'relative'}}>
       <LoadingOverlay visible={isLoading} />
       <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
         <AgGridReact gridOptions={gridOptionsGlossaryTermsData}
+                     rowSelection='single'
                      rowData={data} />
       </div>
     </Paper>

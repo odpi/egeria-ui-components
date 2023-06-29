@@ -9,39 +9,34 @@ import { getGridOptionsGlossary } from './helpers';
 import { GridOptions } from 'ag-grid-community';
 
 interface Props {
-  columnMinWidth?: number;
   data: any;
   isLoading: boolean;
   onUserSelect: any;
 }
 
 export function GlossaryCategoriesData (props: Props) {
-  const { columnMinWidth, data, isLoading, onUserSelect } = props;
+  const { data, isLoading, onUserSelect } = props;
   const gridOptionsGlossaryCategoriesData: GridOptions<any> = getGridOptionsGlossary([
     {
       field: 'displayName',
       filter: true,
-      headerName: 'Category'
+      headerName: 'Category',
     },
     {
       field: 'status',
       filter: true,
-      headerName: 'Status'
+      headerName: 'Status',
+      maxWidth: 100,
+      resizable: false
     },
-    {
-      headerName: 'Details',
-      sortable: false,
-      cellRenderer: (object: any) => {
-        return <ActionIcon onClick={() => onUserSelect(object.data)}><ListDetails /></ActionIcon>;
-      }
-    },
-  ], columnMinWidth);
+  ], onUserSelect);
 
   return (
     <Paper shadow="xs" style={{height: '100%', position: 'relative'}}>
       <LoadingOverlay visible={isLoading} />
       <div className="ag-theme-alpine" style={{width: '100%', height: '100%'}}>
         <AgGridReact gridOptions={gridOptionsGlossaryCategoriesData}
+                     rowSelection='single'
                      rowData={data} />
       </div>
     </Paper>
