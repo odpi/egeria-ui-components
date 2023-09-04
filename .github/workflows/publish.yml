@@ -10,7 +10,7 @@ jobs:
     if: github.repository == 'odpi/egeria-ui-components'
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v4.0.0
       - name: Check if version has been updated
         id: check
         uses: EndBug/version-check@v2
